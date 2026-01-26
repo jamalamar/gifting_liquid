@@ -1,0 +1,12 @@
+{
+  "sections": {
+    "main": {
+      "type": "main-404",
+      "settings": {
+        "title": "¡Ups! Esta página se nos perdió",
+        "text": "Parece que llegaste a un lugar que no existe. ¿Te llevamos de regreso al inicio?"
+      }
+    }
+  },
+  "order": ["main"]
+}

@@ -1,0 +1,259 @@
+[
+  {
+    "name": "theme_info",
+    "theme_name": "Gifting Marketplace",
+    "theme_version": "1.0.0",
+    "theme_author": "DigiHoriz",
+    "theme_documentation_url": "https://digihoriz.com",
+    "theme_support_url": "https://digihoriz.com/support"
+  },
+  {
+    "name": "Colores de marca",
+    "settings": [
+      {
+        "type": "header",
+        "content": "Colores principales"
+      },
+      {
+        "type": "color",
+        "id": "color_primary",
+        "label": "Color primario (Terracotta)",
+        "default": "#ac5134"
+      },
+      {
+        "type": "color",
+        "id": "color_secondary",
+        "label": "Color secundario (Coral)",
+        "default": "#ac5b3c"
+      },
+      {
+        "type": "color",
+        "id": "color_accent",
+        "label": "Color acento (Dusty Pink)",
+        "default": "#dcae9c"
+      },
+      {
+        "type": "color",
+        "id": "color_navy",
+        "label": "Color azul oscuro",
+        "default": "#3c4c6c"
+      },
+      {
+        "type": "color",
+        "id": "color_navy_light",
+        "label": "Color azul claro",
+        "default": "#5c6484"
+      },
+      {
+        "type": "color",
+        "id": "color_brown",
+        "label": "Color café",
+        "default": "#713c27"
+      },
+      {
+        "type": "header",
+        "content": "Colores de fondo"
+      },
+      {
+        "type": "color",
+        "id": "color_background",
+        "label": "Fondo principal",
+        "default": "#faf8f5"
+      },
+      {
+        "type": "color",
+        "id": "color_background_alt",
+        "label": "Fondo alternativo",
+        "default": "#f5f0eb"
+      },
+      {
+        "type": "header",
+        "content": "Colores de texto"
+      },
+      {
+        "type": "color",
+        "id": "color_text",
+        "label": "Texto principal",
+        "default": "#2d2d2d"
+      },
+      {
+        "type": "color",
+        "id": "color_text_light",
+        "label": "Texto secundario",
+        "default": "#666666"
+      }
+    ]
+  },
+  {
+    "name": "Tipografias",
+    "settings": [
+      {
+        "type": "font_picker",
+        "id": "font_heading",
+        "label": "Fuente de titulos",
+        "default": "playfair_display_n4"
+      },
+      {
+        "type": "font_picker",
+        "id": "font_body",
+        "label": "Fuente de cuerpo",
+        "default": "work_sans_n4"
+      },
+      {
+        "type": "font_picker",
+        "id": "font_accent",
+        "label": "Fuente de acento (handwritten)",
+        "default": "pacifico_n4"
+      }
+    ]
+  },
+  {
+    "name": "Logo y branding",
+    "settings": [
+      {
+        "type": "image_picker",
+        "id": "logo",
+        "label": "Logo principal"
+      },
+      {
+        "type": "range",
+        "id": "logo_width",
+        "label": "Ancho del logo",
+        "min": 50,
+        "max": 300,
+        "step": 10,
+        "default": 150,
+        "unit": "px"
+      },
+      {
+        "type": "image_picker",
+        "id": "favicon",
+        "label": "Favicon"
+      }
+    ]
+  },
+  {
+    "name": "Redes sociales",
+    "settings": [
+      {
+        "type": "text",
+        "id": "social_instagram",
+        "label": "Instagram",
+        "default": "@gifting.mexico"
+      },
+      {
+        "type": "text",
+        "id": "social_facebook",
+        "label": "Facebook",
+        "default": "/giftingMX"
+      },
+      {
+        "type": "text",
+        "id": "social_tiktok",
+        "label": "TikTok",
+        "default": "@gifting.mx"
+      },
+      {
+        "type": "text",
+        "id": "social_whatsapp",
+        "label": "WhatsApp",
+        "default": "477 176 7465"
+      }
+    ]
+  },
+  {
+    "name": "Contacto",
+    "settings": [
+      {
+        "type": "text",
+        "id": "contact_email",
+        "label": "Email",
+        "default": "gifting.mex@gmail.com"
+      },
+      {
+        "type": "text",
+        "id": "contact_phone",
+        "label": "Telefono",
+        "default": "477 176 7465"
+      },
+      {
+        "type": "text",
+        "id": "contact_location",
+        "label": "Ubicacion",
+        "default": "CDMX, Mexico"
+      },
+      {
+        "type": "text",
+        "id": "contact_hours",
+        "label": "Horario de atencion",
+        "default": "Lunes a Viernes de 9:00 AM a 6:00 PM"
+      }
+    ]
+  },
+  {
+    "name": "Envios",
+    "settings": [
+      {
+        "type": "text",
+        "id": "free_shipping_threshold",
+        "label": "Envio gratis a partir de",
+        "default": "3000"
+      },
+      {
+        "type": "text",
+        "id": "shipping_cost",
+        "label": "Costo de envio estandar",
+        "default": "150"
+      },
+      {
+        "type": "text",
+        "id": "express_shipping_cost",
+        "label": "Costo de envio express",
+        "default": "250"
+      }
+    ]
+  },
+  {
+    "name": "Estilo collage",
+    "settings": [
+      {
+        "type": "header",
+        "content": "Elementos decorativos"
+      },
+      {
+        "type": "checkbox",
+        "id": "show_collage_elements",
+        "label": "Mostrar elementos de collage",
+        "default": true
+      },
+      {
+        "type": "checkbox",
+        "id": "show_paper_textures",
+        "label": "Mostrar texturas de papel",
+        "default": true
+      },
+      {
+        "type": "checkbox",
+        "id": "show_tape_elements",
+        "label": "Mostrar elementos de cinta adhesiva",
+        "default": true
+      },
+      {
+        "type": "checkbox",
+        "id": "show_sticker_effects",
+        "label": "Mostrar efectos de sticker",
+        "default": true
+      },
+      {
+        "type": "range",
+        "id": "collage_rotation_max",
+        "label": "Rotacion maxima de elementos",
+        "min": 0,
+        "max": 15,
+        "step": 1,
+        "default": 5,
+        "unit": "deg"
+      }
+    ]
+  }
+]

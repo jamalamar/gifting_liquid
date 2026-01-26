@@ -1,0 +1,168 @@
+<section class="cart collage-section" data-section-id="{{ section.id }}">
+  <div class="container">
+    <h1 class="cart__title collage-heading">Tu caja de regalo</h1>
+
+    {%- if cart.item_count > 0 -%}
+      <div class="cart__wrapper">
+        <div class="cart__items collage-paper collage-paper--large">
+          <div class="cart__items-tape collage-element collage-element--tape"></div>
+
+          <form action="{{ routes.cart_url }}" method="post" class="cart__form" data-cart-form>
+            <div class="cart__items-list">
+              {%- for item in cart.items -%}
+                <div class="cart__item collage-card collage-card--cart" data-cart-item data-key="{{ item.key }}">
+                  <div class="cart__item-image collage-polaroid collage-polaroid--small">
+                    {%- if item.image -%}
+                      <img
+                        src="{{ item.image | image_url: width: 200 }}"
+                        alt="{{ item.title }}"
+                        width="100"
+                        height="100"
+                        loading="lazy"
+                      >
+                    {%- else -%}
+                      <div class="cart__item-placeholder">
+                        {% render 'icon-gift' %}
+                      </div>
+                    {%- endif -%}
+                  </div>
+
+                  <div class="cart__item-details">
+                    <h3 class="cart__item-title">
+                      <a href="{{ item.url }}" class="collage-link">{{ item.product.title }}</a>
+                    </h3>
+                    {%- if item.product.has_only_default_variant == false -%}
+                      <p class="cart__item-variant">{{ item.variant.title }}</p>
+                    {%- endif -%}
+                    {%- if item.vendor -%}
+                      <p class="cart__item-vendor collage-handwritten">{{ item.vendor }}</p>
+                    {%- endif -%}
+                  </div>
+
+                  <div class="cart__item-quantity">
+                    <div class="cart__item-quantity-selector collage-input-group">
+                      <button type="button" class="cart__quantity-btn" data-quantity-minus data-key="{{ item.key }}">-</button>
+                      <input
+                        type="number"
+                        name="updates[]"
+                        value="{{ item.quantity }}"
+                        min="0"
+                        class="cart__quantity-input collage-input"
+                        data-quantity-input
+                        data-key="{{ item.key }}"
+                      >
+                      <button type="button" class="cart__quantity-btn" data-quantity-plus data-key="{{ item.key }}">+</button>
+                    </div>
+                  </div>
+
+                  <div class="cart__item-price">
+                    {%- if item.original_line_price != item.final_line_price -%}
+                      <span class="cart__item-price-compare">{{ item.original_line_price | money }}</span>
+                    {%- endif -%}
+                    <span class="cart__item-price-current">{{ item.final_line_price | money }}</span>
+                  </div>
+
+                  <button type="button" class="cart__item-remove collage-icon-btn" data-remove-item data-key="{{ item.key }}" aria-label="Eliminar">
+                    {% render 'icon-close' %}
+                  </button>
+                </div>
+              {%- endfor -%}
+            </div>
+          </form>
+        </div>
+
+        <div class="cart__sidebar">
+          <div class="cart__summary collage-paper collage-paper--note">
+            <div class="cart__summary-pin collage-pin"></div>
+
+            <h2 class="cart__summary-title">Resumen</h2>
+
+            <div class="cart__summary-row">
+              <span>Subtotal</span>
+              <span data-cart-subtotal>{{ cart.total_price | money }}</span>
+            </div>
+
+            {%- if cart.cart_level_discount_applications.size > 0 -%}
+              {%- for discount in cart.cart_level_discount_applications -%}
+                <div class="cart__summary-row cart__summary-row--discount">
+                  <span>{{ discount.title }}</span>
+                  <span>-{{ discount.total_allocated_amount | money }}</span>
+                </div>
+              {%- endfor -%}
+            {%- endif -%}
+
+            <div class="cart__summary-shipping">
+              {%- assign threshold = settings.free_shipping_threshold | times: 100 -%}
+              {%- assign remaining = threshold | minus: cart.total_price -%}
+              {%- if remaining > 0 -%}
+                <p class="cart__shipping-message">
+                  {% render 'icon-truck' %}
+                  <span>Te faltan <strong>{{ remaining | money }}</strong> para envio gratis</span>
+                </p>
+                <div class="cart__shipping-progress">
+                  <div class="cart__shipping-progress-bar" style="width: {{ cart.total_price | times: 100 | divided_by: threshold }}%"></div>
+                </div>
+              {%- else -%}
+                <p class="cart__shipping-message cart__shipping-message--free">
+                  {% render 'icon-check' %}
+                  <span>¡Tienes envio gratis!</span>
+                </p>
+              {%- endif -%}
+            </div>
+
+            <div class="cart__summary-total">
+              <span>Total</span>
+              <span data-cart-total>{{ cart.total_price | money }}</span>
+            </div>
+
+            <p class="cart__summary-taxes">Impuestos incluidos. Envio calculado en checkout.</p>
+          </div>
+
+          <div class="cart__gift-message collage-paper collage-paper--small collage-paper--accent">
+            <h3 class="cart__gift-title">
+              {% render 'icon-gift' %}
+              <span>Agregar mensaje personalizado</span>
+            </h3>
+            <textarea
+              name="note"
+              class="cart__gift-textarea collage-input"
+              placeholder="Escribe tu mensaje aqui... (lo incluimos en una tarjeta bonita)"
+              form="cart-form"
+            >{{ cart.note }}</textarea>
+          </div>
+
+          <a href="{{ routes.checkout_url }}" class="cart__checkout btn btn--primary btn--large collage-button">
+            Continuar al checkout
+            {% render 'icon-arrow-right' %}
+          </a>
+
+          <a href="{{ routes.all_products_collection_url }}" class="cart__continue-shopping collage-link">
+            {% render 'icon-arrow-left' %}
+            <span>Seguir comprando</span>
+          </a>
+        </div>
+      </div>
+    {%- else -%}
+      <div class="cart__empty collage-paper collage-paper--large">
+        <div class="cart__empty-icon collage-sticker collage-sticker--large">
+          {% render 'icon-cart' %}
+        </div>
+        <h2 class="cart__empty-title">Tu carrito esta vacio... por ahora</h2>
+        <p class="cart__empty-text">¿Ya viste todo lo que tenemos? Hay algo esperando a ser el regalo perfecto.</p>
+        <a href="{{ routes.all_products_collection_url }}" class="btn btn--primary collage-button">
+          Explorar productos
+          {% render 'icon-arrow-right' %}
+        </a>
+      </div>
+    {%- endif -%}
+  </div>
+</section>
+
+{% schema %}
+{
+  "name": "Carrito principal",
+  "tag": "section",
+  "class": "section-main-cart",
+  "settings": []
+}
+{% endschema %}

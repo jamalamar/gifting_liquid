@@ -1,0 +1,83 @@
+{%- comment -%}
+  Collection filters sidebar
+  Usage: {% render 'collection-filters', collection: collection %}
+{%- endcomment -%}
+
+<div class="collection-filters">
+  {%- for filter in collection.filters -%}
+    <div class="collection-filter" data-filter-group>
+      <button class="collection-filter__toggle collage-button collage-button--text" data-filter-toggle-group aria-expanded="true">
+        <span>{{ filter.label }}</span>
+        {% render 'icon-chevron-down' %}
+      </button>
+
+      <div class="collection-filter__content" data-filter-content>
+        {%- case filter.type -%}
+          {%- when 'list' -%}
+            <ul class="collection-filter__list">
+              {%- for value in filter.values -%}
+                <li class="collection-filter__item">
+                  <label class="collection-filter__checkbox collage-checkbox">
+                    <input
+                      type="checkbox"
+                      name="{{ value.param_name }}"
+                      value="{{ value.value }}"
+                      {% if value.active %}checked{% endif %}
+                      {% if value.count == 0 and value.active == false %}disabled{% endif %}
+                      data-filter-checkbox
+                    >
+                    <span class="collection-filter__checkmark"></span>
+                    <span class="collection-filter__label">
+                      {{ value.label }}
+                      <span class="collection-filter__count">({{ value.count }})</span>
+                    </span>
+                  </label>
+                </li>
+              {%- endfor -%}
+            </ul>
+
+          {%- when 'price_range' -%}
+            <div class="collection-filter__price-range">
+              <div class="collection-filter__price-inputs">
+                <div class="collection-filter__price-input">
+                  <span class="collection-filter__price-currency">{{ cart.currency.symbol }}</span>
+                  <input
+                    type="number"
+                    name="{{ filter.min_value.param_name }}"
+                    value="{{ filter.min_value.value | money_without_currency | replace: ',', '' }}"
+                    min="0"
+                    max="{{ filter.range_max | money_without_currency | replace: ',', '' }}"
+                    placeholder="{{ filter.min_value.value | money_without_currency }}"
+                    class="collage-input"
+                    data-filter-price-min
+                  >
+                </div>
+                <span class="collection-filter__price-separator">-</span>
+                <div class="collection-filter__price-input">
+                  <span class="collection-filter__price-currency">{{ cart.currency.symbol }}</span>
+                  <input
+                    type="number"
+                    name="{{ filter.max_value.param_name }}"
+                    value="{{ filter.max_value.value | money_without_currency | replace: ',', '' }}"
+                    min="0"
+                    max="{{ filter.range_max | money_without_currency | replace: ',', '' }}"
+                    placeholder="{{ filter.range_max | money_without_currency }}"
+                    class="collage-input"
+                    data-filter-price-max
+                  >
+                </div>
+              </div>
+            </div>
+        {%- endcase -%}
+      </div>
+    </div>
+  {%- endfor -%}
+
+  {%- if collection.filters.size > 0 -%}
+    <div class="collection-filters__actions">
+      <a href="{{ collection.url }}" class="collection-filters__clear collage-link">
+        Limpiar filtros
+      </a>
+    </div>
+  {%- endif -%}
+</div>

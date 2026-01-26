@@ -1,0 +1,32 @@
+{
+  "sections": {
+    "main": {
+      "type": "page-about",
+      "settings": {
+        "headline": "Somos el match entre quien quiere regalar y quien sabe crear",
+        "story_title": "Nuestra Historia",
+        "story_text": "<p>Todo empezó con una pregunta que seguro te ha pasado: \"¿Qué le regalo?\"</p><p>Esa duda que te da vueltas en la cabeza cuando quieres dar algo especial pero todo lo que encuentras es... lo mismo de siempre.</p><p>Ahí nació Gifting: un espacio donde puedes armar regalos únicos con productos de emprendedores mexicanos que le ponen el corazón a lo que hacen.</p><p>No somos una tienda más. Somos el punto de encuentro entre las ganas de regalar algo inolvidable y las manos que crean cosas increíbles.</p>",
+        "why_title": "Creemos que...",
+        "why_text": "Un regalo bien elegido puede decir lo que a veces las palabras no alcanzan. Y quienes crean con amor merecen un espacio para ser encontrados.",
+        "how_title": "¿Cómo lo hacemos?",
+        "how_text": "Unimos a quienes quieren regalar con intención con manos creadoras. Juntos, damos forma a cajas de regalo personalizadas llenas de historia y significado.",
+        "what_title": "¿Qué somos?",
+        "what_text": "Una plataforma donde nacen regalos únicos a partir de productos de emprendedores locales, pensados para emocionar y compartir.",
+        "values_title": "Nuestros Valores",
+        "team_title": "El Equipo",
+        "team_text": "<p>Somos un equipo pequeño pero matón, basado en CDMX. Nos mueve la idea de que regalar puede ser una experiencia chida, no un estrés.</p><p>Detrás de cada caja que armamos hay risas, café y muchas ganas de que tu regalo sea exactamente lo que imaginaste.</p>",
+        "cta_title": "¿Listo para armar algo especial?",
+        "cta_text": "Ver productos"
+      },
+      "blocks": {
+        "value-1": { "type": "value", "settings": { "name": "Creatividad", "description": "Aquí lo diferente es lo que manda. Buscamos productos que sorprendan." } },
+        "value-2": { "type": "value", "settings": { "name": "Calidad", "description": "Solo trabajamos con creadores que cuidan cada detalle de lo que hacen." } },
+        "value-3": { "type": "value", "settings": { "name": "Servicio", "description": "Somos tu compa que te ayuda a encontrar el regalo perfecto, siempre." } },
+        "value-4": { "type": "value", "settings": { "name": "Confianza", "description": "Lo que ves es lo que recibes. Sin letras chiquitas, sin sorpresas feas." } },
+        "value-5": { "type": "value", "settings": { "name": "Diversidad", "description": "Cada persona es diferente, cada regalo también. Aquí hay para todos los gustos." } }
+      },
+      "block_order": ["value-1", "value-2", "value-3", "value-4", "value-5"]
+    }
+  },
+  "order": ["main"]
+}

@@ -1,0 +1,163 @@
+<section class="occasions collage-section collage-section--alt" data-section-id="{{ section.id }}">
+  <div class="container">
+    <div class="section-header">
+      <h2 class="section-title collage-heading">
+        {{ section.settings.title | default: 'Siempre hay un buen pretexto para regalar' }}
+      </h2>
+      <p class="section-subtitle">
+        {{ section.settings.subtitle | default: 'Ya sea San Valentin, cumpleanos, Dia de las Madres o un "porque si", aqui encuentras algo especial para cada momento.' }}
+      </p>
+    </div>
+
+    <div class="occasions__carousel" data-carousel>
+      <div class="occasions__track">
+        {%- for block in section.blocks -%}
+          <a href="{{ block.settings.link | default: '#' }}" class="occasion-card collage-card collage-card--occasion" {{ block.shopify_attributes }}>
+            <div class="occasion-card__inner collage-paper collage-paper--torn">
+              <div class="occasion-card__image-wrapper">
+                {%- if block.settings.image != blank -%}
+                  <img
+                    src="{{ block.settings.image | image_url: width: 400 }}"
+                    alt="{{ block.settings.name }}"
+                    width="280"
+                    height="200"
+                    loading="lazy"
+                    class="occasion-card__image"
+                  >
+                {%- else -%}
+                  <div class="occasion-card__placeholder collage-placeholder">
+                    {%- case block.settings.icon -%}
+                      {%- when 'heart' -%}
+                        {% render 'icon-heart' %}
+                      {%- when 'cake' -%}
+                        {% render 'icon-cake' %}
+                      {%- when 'flower' -%}
+                        {% render 'icon-flower' %}
+                      {%- when 'gift' -%}
+                        {% render 'icon-gift' %}
+                      {%- when 'tree' -%}
+                        {% render 'icon-tree' %}
+                      {%- when 'grad' -%}
+                        {% render 'icon-grad' %}
+                      {%- when 'baby' -%}
+                        {% render 'icon-baby' %}
+                      {%- when 'sparkle' -%}
+                        {% render 'icon-sparkle' %}
+                      {%- else -%}
+                        {% render 'icon-calendar' %}
+                    {%- endcase -%}
+                  </div>
+                {%- endif -%}
+                <div class="occasion-card__sticker collage-sticker">
+                  {% render 'icon-arrow-right' %}
+                </div>
+              </div>
+              <div class="occasion-card__content">
+                <h3 class="occasion-card__name">{{ block.settings.name }}</h3>
+                <p class="occasion-card__tagline">{{ block.settings.tagline }}</p>
+              </div>
+            </div>
+          </a>
+        {%- endfor -%}
+      </div>
+
+      <div class="occasions__navigation">
+        <button class="carousel-btn carousel-btn--prev collage-icon-btn" aria-label="Anterior" data-carousel-prev>
+          {% render 'icon-chevron-left' %}
+        </button>
+        <button class="carousel-btn carousel-btn--next collage-icon-btn" aria-label="Siguiente" data-carousel-next>
+          {% render 'icon-chevron-right' %}
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <div class="occasions__decorations">
+    <div class="collage-element collage-element--confetti occasions-confetti-1"></div>
+    <div class="collage-element collage-element--stamp occasions-stamp-1"></div>
+  </div>
+</section>
+
+{% schema %}
+{
+  "name": "Ocasiones",
+  "tag": "section",
+  "class": "section-occasions",
+  "settings": [
+    {
+      "type": "text",
+      "id": "title",
+      "label": "Titulo",
+      "default": "Siempre hay un buen pretexto para regalar"
+    },
+    {
+      "type": "textarea",
+      "id": "subtitle",
+      "label": "Subtitulo",
+      "default": "Ya sea San Valentin, cumpleanos, Dia de las Madres o un 'porque si', aqui encuentras algo especial para cada momento."
+    }
+  ],
+  "blocks": [
+    {
+      "type": "occasion",
+      "name": "Ocasion",
+      "settings": [
+        {
+          "type": "text",
+          "id": "name",
+          "label": "Nombre",
+          "default": "San Valentin"
+        },
+        {
+          "type": "text",
+          "id": "tagline",
+          "label": "Tagline",
+          "default": "Dilo con mas que flores"
+        },
+        {
+          "type": "image_picker",
+          "id": "image",
+          "label": "Imagen"
+        },
+        {
+          "type": "select",
+          "id": "icon",
+          "label": "Icono (si no hay imagen)",
+          "options": [
+            { "value": "heart", "label": "Corazon (San Valentin)" },
+            { "value": "cake", "label": "Pastel (Cumpleanos)" },
+            { "value": "flower", "label": "Flor (Dia de las Madres)" },
+            { "value": "gift", "label": "Regalo (General)" },
+            { "value": "tree", "label": "Arbol (Navidad)" },
+            { "value": "grad", "label": "Birrete (Graduacion)" },
+            { "value": "baby", "label": "Bebe (Baby Shower)" },
+            { "value": "sparkle", "label": "Destello (Porque si)" }
+          ],
+          "default": "gift"
+        },
+        {
+          "type": "url",
+          "id": "link",
+          "label": "Enlace"
+        }
+      ]
+    }
+  ],
+  "presets": [
+    {
+      "name": "Ocasiones",
+      "blocks": [
+        { "type": "occasion", "settings": { "name": "San Valentin", "tagline": "Dilo con mas que flores", "icon": "heart" } },
+        { "type": "occasion", "settings": { "name": "Cumpleanos", "tagline": "Que soplen las velas con estilo", "icon": "cake" } },
+        { "type": "occasion", "settings": { "name": "Dia de las Madres", "tagline": "Para la que siempre da todo", "icon": "flower" } },
+        { "type": "occasion", "settings": { "name": "Dia del Padre", "tagline": "Para el jefe de la casa", "icon": "gift" } },
+        { "type": "occasion", "settings": { "name": "Aniversario", "tagline": "Celebra el amor a lo grande", "icon": "heart" } },
+        { "type": "occasion", "settings": { "name": "Navidad", "tagline": "El regalo bajo el arbol que todos quieren", "icon": "tree" } },
+        { "type": "occasion", "settings": { "name": "Graduacion", "tagline": "Celebra ese logro como se merece", "icon": "grad" } },
+        { "type": "occasion", "settings": { "name": "Baby Shower", "tagline": "Para darle la bienvenida al nuevo integrante", "icon": "baby" } },
+        { "type": "occasion", "settings": { "name": "Porque si", "tagline": "A veces no necesitas una razon", "icon": "sparkle" } }
+      ]
+    }
+  ]
+}
+{% endschema %}

@@ -1,0 +1,27 @@
+{
+  "sections": {
+    "main": {
+      "type": "page-faqs",
+      "settings": {
+        "headline": "Las dudas más comunes (y sus respuestas)",
+        "subtitle": "Si tu pregunta no está aquí, escríbenos por WhatsApp y te ayudamos al tiro.",
+        "cta_title": "¿Tienes otra duda?",
+        "cta_text": "Escríbenos por WhatsApp y te ayudamos"
+      },
+      "blocks": {
+        "faq-1": { "type": "faq", "settings": { "question": "¿Cuánto tarda en llegar mi pedido?", "answer": "<p>En CDMX, entre 24 y 48 horas. Si necesitas que llegue el mismo día, tenemos envío express por $250 MXN extra (sujeto a disponibilidad del producto). Solo avísanos con tiempo para que no andemos corriendo.</p>" } },
+        "faq-2": { "type": "faq", "settings": { "question": "¿Puedo agregar una tarjeta con mensaje?", "answer": "<p>¡Obvio! Todas las cajas incluyen una tarjeta personalizada sin costo extra. Escribe tu mensaje durante la compra y nosotros nos encargamos de que se vea bonito.</p>" } },
+        "faq-3": { "type": "faq", "settings": { "question": "¿Qué pasa si no hay nadie en casa cuando llegue el regalo?", "answer": "<p>Intentamos contactar al destinatario antes de llegar. Si no hay nadie, podemos dejarlo con el portero (si nos autorizas) o reprogramamos la entrega. Eso sí, reprogramar tiene un costo adicional.</p>" } },
+        "faq-4": { "type": "faq", "settings": { "question": "¿Los precios ya incluyen IVA?", "answer": "<p>Sip, todos los precios que ves ya tienen el 16% de IVA incluido. Lo que ves es lo que pagas, sin sorpresas al final.</p>" } },
+        "faq-5": { "type": "faq", "settings": { "question": "¿Cómo sé en qué va mi pedido?", "answer": "<p>Escríbenos por WhatsApp y te damos el status al momento. Estamos al pendiente de cada pedido como si fuera nuestro propio regalo.</p>" } },
+        "faq-6": { "type": "faq", "settings": { "question": "¿Puedo hacer un pedido sorpresa?", "answer": "<p>¡Claro que sí! Somos expertos en entregas sorpresa. Solo dinos en las notas del pedido y el equipo se encarga de que sea un momento épico.</p>" } },
+        "faq-7": { "type": "faq", "settings": { "question": "¿Cuántos productos puedo meter en una caja?", "answer": "<p>Los que quieras. Si agregas más de 7 productos, te regalamos la caja extra. El equipo de armado se encarga de acomodar todo para que llegue perfecto.</p>" } },
+        "faq-8": { "type": "faq", "settings": { "question": "¿Puedo devolver algo si no me gustó?", "answer": "<p>Aceptamos devoluciones dentro de los primeros 7 días después de la entrega, siempre que el producto esté en su empaque original y sin usar. Ojo: flores, chocolates y cosas perecederas no aplican para devolución porque... bueno, ya sabes.</p>" } },
+        "faq-9": { "type": "faq", "settings": { "question": "¿Hacen envíos fuera de CDMX?", "answer": "<p>Por ahora solo estamos en CDMX, pero andamos creciendo. Síguenos en redes para enterarte cuando lleguemos a tu ciudad.</p>" } },
+        "faq-10": { "type": "faq", "settings": { "question": "¿Cómo puedo vender mis productos en Gifting?", "answer": "<p>¡Nos encanta sumar creadores! Llena el formulario en nuestra página 'Vende con Nosotros' y nos ponemos en contacto contigo.</p>" } }
+      },
+      "block_order": ["faq-1", "faq-2", "faq-3", "faq-4", "faq-5", "faq-6", "faq-7", "faq-8", "faq-9", "faq-10"]
+    }
+  },
+  "order": ["main"]
+}

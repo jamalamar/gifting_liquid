@@ -1,0 +1,718 @@
+/* ============================================
+   Gifting Marketplace - Collage Styles
+   Digital Collage Theme Elements
+   ============================================ */
+
+/* ===== Collage Paper Effects ===== */
+.collage-paper {
+  background-color: var(--color-white);
+  border-radius: var(--radius-sm);
+  box-shadow: var(--shadow-collage);
+  position: relative;
+}
+
+.collage-paper::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background:
+    linear-gradient(90deg, transparent 0%, transparent 50%, rgba(0,0,0,0.02) 50%),
+    linear-gradient(transparent 0%, transparent 50%, rgba(0,0,0,0.01) 50%);
+  background-size: 4px 4px;
+  pointer-events: none;
+  border-radius: inherit;
+}
+
+.collage-paper--note {
+  background: linear-gradient(to bottom, #fffef5 0%, #fff9e6 100%);
+  box-shadow: 3px 3px 0 rgba(var(--color-navy-rgb), 0.1);
+}
+
+.collage-paper--large {
+  padding: var(--spacing-lg);
+}
+
+@media screen and (min-width: 750px) {
+  .collage-paper--large {
+    padding: var(--spacing-xl);
+  }
+}
+
+.collage-paper--small {
+  padding: var(--spacing-md);
+}
+
+.collage-paper--tilted {
+  transform: rotate(-1deg);
+}
+
+.collage-paper--accent {
+  background: linear-gradient(135deg, rgba(var(--color-accent-rgb), 0.3) 0%, rgba(var(--color-accent-rgb), 0.1) 100%);
+}
+
+.collage-paper--torn {
+  clip-path: polygon(
+    0% 2%, 8% 0%, 15% 3%, 25% 1%, 35% 4%, 45% 0%, 55% 3%, 65% 1%, 75% 4%, 85% 0%, 92% 2%, 100% 0%,
+    100% 98%, 92% 100%, 85% 97%, 75% 99%, 65% 96%, 55% 100%, 45% 97%, 35% 99%, 25% 96%, 15% 100%, 8% 97%, 0% 100%
+  );
+}
+
+/* ===== Collage Photo Effects ===== */
+.collage-photo {
+  background: var(--color-white);
+  padding: 8px;
+  box-shadow: var(--shadow-sticker);
+  position: relative;
+  transition: transform var(--transition-base);
+}
+
+.collage-photo:hover {
+  transform: scale(1.02) rotate(1deg);
+}
+
+.collage-photo--tape::before,
+.collage-photo--tape::after {
+  content: '';
+  position: absolute;
+  width: 40px;
+  height: 20px;
+  background: linear-gradient(to bottom, rgba(255,255,255,0.6) 0%, rgba(200,200,200,0.4) 100%);
+  opacity: 0.9;
+  z-index: 2;
+}
+
+.collage-photo--tape::before {
+  top: -8px;
+  left: 20%;
+  transform: rotate(-5deg);
+}
+
+.collage-photo--tape::after {
+  top: -8px;
+  right: 20%;
+  transform: rotate(5deg);
+}
+
+.collage-photo--pin::before {
+  content: '';
+  position: absolute;
+  top: -12px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 20px;
+  height: 20px;
+  background: radial-gradient(circle at 30% 30%, var(--color-primary), var(--color-secondary));
+  border-radius: 50%;
+  box-shadow: 2px 2px 4px rgba(0,0,0,0.3);
+  z-index: 2;
+}
+
+.collage-photo--style-1 { transform: rotate(-2deg); }
+.collage-photo--style-2 { transform: rotate(1.5deg); }
+.collage-photo--style-3 { transform: rotate(-1deg); }
+.collage-photo--style-4 { transform: rotate(2deg); }
+
+/* ===== Polaroid Effect ===== */
+.collage-polaroid {
+  background: var(--color-white);
+  padding: 12px 12px 40px;
+  box-shadow: var(--shadow-sticker);
+  position: relative;
+  transition: transform var(--transition-base);
+}
+
+.collage-polaroid:hover {
+  transform: scale(1.03) rotate(2deg);
+}
+
+.collage-polaroid__caption {
+  position: absolute;
+  bottom: 10px;
+  left: 0;
+  right: 0;
+  text-align: center;
+  font-family: var(--font-accent);
+  font-size: 0.875rem;
+  color: var(--color-navy);
+}
+
+.collage-polaroid--small {
+  padding: 6px 6px 28px;
+}
+
+.collage-polaroid--tiny {
+  padding: 4px 4px 4px;
+}
+
+.collage-polaroid--1 { transform: rotate(-3deg); }
+.collage-polaroid--2 { transform: rotate(2deg); }
+.collage-polaroid--3 { transform: rotate(-1deg); }
+
+/* ===== Sticker Effect ===== */
+.collage-sticker {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  background: var(--color-primary);
+  color: var(--color-white);
+  padding: 0.5rem 1rem;
+  border-radius: var(--radius-full);
+  font-size: 0.875rem;
+  font-weight: 600;
+  box-shadow: var(--shadow-sticker);
+  transform: rotate(-2deg);
+}
+
+.collage-sticker--small {
+  padding: 0.25rem 0.5rem;
+  font-size: 0.75rem;
+}
+
+.collage-sticker--large {
+  padding: 1rem 1.5rem;
+  font-size: 1rem;
+}
+
+.collage-sticker--circle {
+  width: 50px;
+  height: 50px;
+  padding: 0;
+  border-radius: 50%;
+  font-size: 1.25rem;
+  font-weight: 700;
+}
+
+.collage-sticker--handwritten {
+  font-family: var(--font-accent);
+  background: var(--color-accent);
+  color: var(--color-navy);
+}
+
+.collage-sticker .icon {
+  width: 1rem;
+  height: 1rem;
+}
+
+/* ===== Tape Effect ===== */
+.collage-tape {
+  background: linear-gradient(to bottom, rgba(255,255,255,0.7) 0%, rgba(220,220,220,0.5) 100%);
+  padding: 0.75rem 1.5rem;
+}
+
+.collage-element--tape {
+  position: absolute;
+  width: 60px;
+  height: 25px;
+  background: linear-gradient(to bottom, rgba(255,255,255,0.6) 0%, rgba(200,200,200,0.4) 100%);
+  opacity: 0.85;
+  z-index: 10;
+}
+
+.collage-element--tape-1 { transform: rotate(-15deg); }
+.collage-element--tape-2 { transform: rotate(10deg); }
+.collage-element--tape-3 { transform: rotate(-5deg); }
+.collage-element--tape-4 { transform: rotate(8deg); }
+
+/* ===== Pin Effect ===== */
+.collage-pin {
+  position: absolute;
+  top: -10px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 24px;
+  height: 24px;
+}
+
+.collage-pin::before {
+  content: '';
+  position: absolute;
+  width: 20px;
+  height: 20px;
+  background: radial-gradient(circle at 30% 30%, var(--color-primary), var(--color-brown));
+  border-radius: 50%;
+  box-shadow: 2px 2px 4px rgba(0,0,0,0.3);
+}
+
+/* ===== Badge Effect ===== */
+.collage-badge {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 22px;
+  height: 22px;
+  padding: 0 6px;
+  background: var(--color-primary);
+  color: var(--color-white);
+  font-size: 0.75rem;
+  font-weight: 700;
+  border-radius: var(--radius-full);
+}
+
+/* ===== Handwritten Text ===== */
+.collage-handwritten {
+  font-family: var(--font-accent);
+  color: var(--color-navy);
+}
+
+/* ===== Collage Heading ===== */
+.collage-heading {
+  position: relative;
+  display: inline-block;
+}
+
+.collage-heading--underline::after {
+  content: '';
+  position: absolute;
+  bottom: -5px;
+  left: 0;
+  width: 100%;
+  height: 3px;
+  background: linear-gradient(90deg, var(--color-primary), var(--color-accent));
+  border-radius: var(--radius-full);
+  transform: rotate(-1deg);
+}
+
+.collage-heading--handwritten {
+  font-family: var(--font-accent);
+}
+
+/* ===== Collage Link ===== */
+.collage-link {
+  position: relative;
+  color: var(--color-navy);
+  transition: color var(--transition-fast);
+}
+
+.collage-link::after {
+  content: '';
+  position: absolute;
+  bottom: -2px;
+  left: 0;
+  width: 100%;
+  height: 2px;
+  background: var(--color-accent);
+  transform: scaleX(0);
+  transform-origin: right;
+  transition: transform var(--transition-base);
+}
+
+.collage-link:hover {
+  color: var(--color-primary);
+}
+
+.collage-link:hover::after {
+  transform: scaleX(1);
+  transform-origin: left;
+}
+
+/* ===== Collage Button ===== */
+.collage-button {
+  position: relative;
+  overflow: visible;
+}
+
+.collage-button::before {
+  content: '';
+  position: absolute;
+  top: -3px;
+  left: -3px;
+  right: -3px;
+  bottom: -3px;
+  border: 2px dashed var(--color-accent);
+  border-radius: inherit;
+  opacity: 0;
+  transition: opacity var(--transition-fast);
+}
+
+.collage-button:hover::before {
+  opacity: 1;
+}
+
+.collage-button--tape::after {
+  content: '';
+  position: absolute;
+  top: -10px;
+  right: 15%;
+  width: 35px;
+  height: 18px;
+  background: linear-gradient(to bottom, rgba(255,255,255,0.6) 0%, rgba(200,200,200,0.4) 100%);
+  transform: rotate(5deg);
+  opacity: 0.8;
+}
+
+/* ===== Collage Icon Button ===== */
+.collage-icon-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 44px;
+  height: 44px;
+  border-radius: var(--radius-md);
+  background: transparent;
+  color: var(--color-navy);
+  transition: all var(--transition-fast);
+}
+
+.collage-icon-btn:hover {
+  background: var(--color-background-alt);
+  color: var(--color-primary);
+  transform: scale(1.1);
+}
+
+.collage-icon-btn .icon {
+  width: 1.25rem;
+  height: 1.25rem;
+}
+
+/* ===== Collage Card ===== */
+.collage-card {
+  position: relative;
+  transition: transform var(--transition-base);
+}
+
+.collage-card:hover {
+  transform: translateY(-5px);
+}
+
+.collage-card--1 { transform: rotate(-1deg); }
+.collage-card--2 { transform: rotate(0.5deg); }
+.collage-card--3 { transform: rotate(-0.5deg); }
+.collage-card--4 { transform: rotate(1deg); }
+
+.collage-card:hover.collage-card--1 { transform: rotate(-1deg) translateY(-5px); }
+.collage-card:hover.collage-card--2 { transform: rotate(0.5deg) translateY(-5px); }
+.collage-card:hover.collage-card--3 { transform: rotate(-0.5deg) translateY(-5px); }
+.collage-card:hover.collage-card--4 { transform: rotate(1deg) translateY(-5px); }
+
+/* ===== Collage Section ===== */
+.collage-section {
+  position: relative;
+  overflow: hidden;
+}
+
+.collage-section--alt {
+  background-color: var(--color-background-alt);
+}
+
+.collage-section--accent {
+  background: linear-gradient(135deg, rgba(var(--color-accent-rgb), 0.2) 0%, rgba(var(--color-accent-rgb), 0.05) 100%);
+}
+
+/* ===== Global Decorations ===== */
+.collage-decorations {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
+  z-index: -1;
+  overflow: hidden;
+}
+
+.collage-deco {
+  position: absolute;
+  opacity: 0.1;
+}
+
+.collage-deco--paper-1 {
+  top: 10%;
+  left: -50px;
+  width: 150px;
+  height: 200px;
+  background: var(--color-accent);
+  transform: rotate(-15deg);
+}
+
+.collage-deco--paper-2 {
+  bottom: 20%;
+  right: -30px;
+  width: 120px;
+  height: 160px;
+  background: var(--color-navy-light);
+  transform: rotate(10deg);
+}
+
+.collage-deco--tape-1 {
+  top: 30%;
+  right: 5%;
+  width: 80px;
+  height: 30px;
+  background: var(--color-primary);
+  transform: rotate(45deg);
+  opacity: 0.15;
+}
+
+.collage-deco--tape-2 {
+  bottom: 40%;
+  left: 3%;
+  width: 60px;
+  height: 25px;
+  background: var(--color-secondary);
+  transform: rotate(-30deg);
+  opacity: 0.15;
+}
+
+.collage-deco--star-1,
+.collage-deco--star-2 {
+  color: var(--color-accent);
+  animation: float 6s ease-in-out infinite;
+}
+
+.collage-deco--star-1 {
+  top: 15%;
+  right: 10%;
+  width: 30px;
+  height: 30px;
+}
+
+.collage-deco--star-2 {
+  bottom: 25%;
+  left: 8%;
+  width: 20px;
+  height: 20px;
+  animation-delay: 3s;
+}
+
+.collage-deco--dot-1,
+.collage-deco--dot-2,
+.collage-deco--dot-3 {
+  border-radius: 50%;
+  background: var(--color-primary);
+}
+
+.collage-deco--dot-1 {
+  top: 50%;
+  left: 2%;
+  width: 8px;
+  height: 8px;
+  opacity: 0.2;
+}
+
+.collage-deco--dot-2 {
+  top: 70%;
+  right: 3%;
+  width: 12px;
+  height: 12px;
+  opacity: 0.15;
+}
+
+.collage-deco--dot-3 {
+  top: 25%;
+  left: 90%;
+  width: 6px;
+  height: 6px;
+  opacity: 0.25;
+}
+
+/* ===== Doodle Elements ===== */
+.doodle {
+  color: var(--color-accent);
+}
+
+.doodle--text {
+  font-family: var(--font-accent);
+  font-size: 1rem;
+  color: var(--color-navy-light);
+  transform: rotate(-10deg);
+}
+
+/* ===== Collage Decorations within sections ===== */
+.collage-element {
+  position: absolute;
+  pointer-events: none;
+}
+
+.collage-element--paper-airplane {
+  color: var(--color-navy-light);
+  opacity: 0.3;
+  animation: float 8s ease-in-out infinite;
+}
+
+.collage-element--paper-airplane svg,
+.collage-element--paper-airplane .icon {
+  width: 80px;
+  height: 80px;
+}
+
+.collage-element--confetti {
+  width: 100%;
+  height: 100%;
+  background-image:
+    radial-gradient(circle, var(--color-primary) 2px, transparent 2px),
+    radial-gradient(circle, var(--color-accent) 2px, transparent 2px),
+    radial-gradient(circle, var(--color-navy-light) 2px, transparent 2px);
+  background-size: 80px 80px, 60px 60px, 100px 100px;
+  background-position: 0 0, 30px 30px, 15px 60px;
+  opacity: 0.1;
+}
+
+.collage-element--star {
+  color: var(--color-accent);
+  opacity: 0.2;
+}
+
+.collage-element--star svg {
+  width: 30px;
+  height: 30px;
+}
+
+.collage-element--question-mark {
+  font-family: var(--font-accent);
+  font-size: 4rem;
+  color: var(--color-accent);
+  opacity: 0.15;
+}
+
+.collage-element--heart {
+  color: var(--color-primary);
+  opacity: 0.2;
+  animation: float 5s ease-in-out infinite;
+}
+
+.collage-element--heart svg,
+.collage-element--heart .icon {
+  width: 40px;
+  height: 40px;
+}
+
+/* ===== List Items ===== */
+.collage-list-item {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  padding: 0.5rem 0;
+}
+
+.collage-list-item .icon {
+  width: 1.25rem;
+  height: 1.25rem;
+  color: var(--color-primary);
+  flex-shrink: 0;
+}
+
+/* ===== Checkbox ===== */
+.collage-checkbox {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  cursor: pointer;
+  position: relative;
+}
+
+.collage-checkbox input {
+  position: absolute;
+  opacity: 0;
+  width: 0;
+  height: 0;
+}
+
+.collage-checkbox .collection-filter__checkmark {
+  width: 20px;
+  height: 20px;
+  border: 2px solid var(--color-accent);
+  border-radius: var(--radius-sm);
+  background: var(--color-white);
+  position: relative;
+  transition: all var(--transition-fast);
+}
+
+.collage-checkbox input:checked + .collection-filter__checkmark {
+  background: var(--color-primary);
+  border-color: var(--color-primary);
+}
+
+.collage-checkbox input:checked + .collection-filter__checkmark::after {
+  content: '';
+  position: absolute;
+  top: 3px;
+  left: 6px;
+  width: 5px;
+  height: 10px;
+  border: solid var(--color-white);
+  border-width: 0 2px 2px 0;
+  transform: rotate(45deg);
+}
+
+/* ===== Radio Buttons ===== */
+.collage-radio {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0.5rem 1rem;
+  border: 2px solid var(--color-accent);
+  border-radius: var(--radius-md);
+  cursor: pointer;
+  transition: all var(--transition-fast);
+}
+
+.collage-radio input {
+  position: absolute;
+  opacity: 0;
+  width: 0;
+  height: 0;
+}
+
+.collage-radio:hover {
+  border-color: var(--color-primary);
+}
+
+.collage-radio.is-selected,
+.collage-radio input:checked + span {
+  background: var(--color-primary);
+  border-color: var(--color-primary);
+  color: var(--color-white);
+}
+
+/* ===== Input Group ===== */
+.collage-input-group {
+  display: flex;
+  align-items: center;
+  border: 2px solid var(--color-accent);
+  border-radius: var(--radius-md);
+  overflow: hidden;
+}
+
+.collage-input-group input {
+  border: none;
+  text-align: center;
+  width: 60px;
+  padding: 0.5rem;
+}
+
+.collage-input-group input:focus {
+  outline: none;
+}
+
+.collage-input-group button {
+  padding: 0.5rem 0.75rem;
+  background: var(--color-background-alt);
+  color: var(--color-navy);
+  font-size: 1.25rem;
+  transition: background var(--transition-fast);
+}
+
+.collage-input-group button:hover {
+  background: var(--color-accent);
+}
+
+/* ===== Placeholder ===== */
+.collage-placeholder {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: var(--color-background-alt);
+  color: var(--color-accent);
+  width: 100%;
+  height: 100%;
+  min-height: 150px;
+}
+
+.collage-placeholder .icon {
+  width: 3rem;
+  height: 3rem;
+}

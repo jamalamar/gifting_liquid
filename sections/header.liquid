@@ -1,0 +1,188 @@
+<header class="header collage-header" data-section-id="{{ section.id }}">
+  {%- if section.settings.show_announcement -%}
+    <div class="announcement-bar collage-tape">
+      <div class="container">
+        <p class="announcement-bar__message">
+          {% render 'icon-gift' %}
+          <span>{{ section.settings.announcement_text }}</span>
+          {% render 'icon-gift' %}
+        </p>
+      </div>
+    </div>
+  {%- endif -%}
+
+  <div class="header__wrapper">
+    <div class="container">
+      <div class="header__inner">
+        <button class="header__menu-toggle collage-button" aria-label="Menu" data-menu-toggle>
+          <span class="hamburger">
+            <span></span>
+            <span></span>
+            <span></span>
+          </span>
+        </button>
+
+        <div class="header__logo">
+          <a href="{{ routes.root_url }}" class="header__logo-link">
+            {%- if settings.logo != blank -%}
+              <img
+                src="{{ settings.logo | image_url: width: settings.logo_width | times: 2 }}"
+                alt="{{ shop.name }}"
+                width="{{ settings.logo_width }}"
+                height="{{ settings.logo_width | divided_by: settings.logo.aspect_ratio }}"
+                loading="eager"
+                class="header__logo-image"
+              >
+            {%- else -%}
+              <span class="header__logo-text">
+                <span class="logo-gift">gift</span><span class="logo-ing">ing</span>
+                <span class="logo-marketplace">MARKETPLACE</span>
+              </span>
+            {%- endif -%}
+          </a>
+        </div>
+
+        <nav class="header__nav" aria-label="Main navigation">
+          <ul class="header__nav-list">
+            {%- for link in section.settings.menu.links -%}
+              <li class="header__nav-item{% if link.links != blank %} has-dropdown{% endif %}">
+                <a href="{{ link.url }}" class="header__nav-link collage-link">
+                  {{ link.title }}
+                  {%- if link.links != blank -%}
+                    {% render 'icon-chevron-down' %}
+                  {%- endif -%}
+                </a>
+                {%- if link.links != blank -%}
+                  <div class="header__dropdown collage-paper">
+                    <ul class="header__dropdown-list">
+                      {%- for child_link in link.links -%}
+                        <li class="header__dropdown-item">
+                          <a href="{{ child_link.url }}" class="header__dropdown-link">
+                            {{ child_link.title }}
+                          </a>
+                        </li>
+                      {%- endfor -%}
+                    </ul>
+                  </div>
+                {%- endif -%}
+              </li>
+            {%- endfor -%}
+          </ul>
+        </nav>
+
+        <div class="header__actions">
+          <button class="header__action-btn collage-icon-btn" aria-label="Buscar" data-search-toggle>
+            {% render 'icon-search' %}
+          </button>
+          <a href="{{ routes.account_url }}" class="header__action-btn collage-icon-btn" aria-label="Cuenta">
+            {% render 'icon-user' %}
+          </a>
+          <button class="header__action-btn header__cart-btn collage-icon-btn" aria-label="Carrito" data-cart-toggle>
+            {% render 'icon-cart' %}
+            <span class="header__cart-count collage-badge" data-cart-count>{{ cart.item_count }}</span>
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="header__mobile-menu collage-paper" data-mobile-menu>
+    <div class="mobile-menu__inner">
+      <button class="mobile-menu__close" aria-label="Cerrar menu" data-menu-close>
+        {% render 'icon-close' %}
+      </button>
+      <nav class="mobile-menu__nav">
+        <ul class="mobile-menu__list">
+          {%- for link in section.settings.menu.links -%}
+            <li class="mobile-menu__item">
+              <a href="{{ link.url }}" class="mobile-menu__link">{{ link.title }}</a>
+              {%- if link.links != blank -%}
+                <ul class="mobile-menu__sublist">
+                  {%- for child_link in link.links -%}
+                    <li class="mobile-menu__subitem">
+                      <a href="{{ child_link.url }}" class="mobile-menu__sublink">{{ child_link.title }}</a>
+                    </li>
+                  {%- endfor -%}
+                </ul>
+              {%- endif -%}
+            </li>
+          {%- endfor -%}
+        </ul>
+      </nav>
+      <div class="mobile-menu__footer">
+        <div class="mobile-menu__social">
+          {%- if settings.social_instagram != blank -%}
+            <a href="https://instagram.com/{{ settings.social_instagram | remove: '@' }}" target="_blank" rel="noopener" class="mobile-menu__social-link">
+              {% render 'icon-instagram' %}
+            </a>
+          {%- endif -%}
+          {%- if settings.social_facebook != blank -%}
+            <a href="https://facebook.com{{ settings.social_facebook }}" target="_blank" rel="noopener" class="mobile-menu__social-link">
+              {% render 'icon-facebook' %}
+            </a>
+          {%- endif -%}
+          {%- if settings.social_tiktok != blank -%}
+            <a href="https://tiktok.com/{{ settings.social_tiktok | remove: '@' }}" target="_blank" rel="noopener" class="mobile-menu__social-link">
+              {% render 'icon-tiktok' %}
+            </a>
+          {%- endif -%}
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="header__search collage-paper" data-search-panel>
+    <div class="container">
+      <form action="{{ routes.search_url }}" method="get" class="search-form">
+        <input
+          type="search"
+          name="q"
+          placeholder="Buscar productos, categorias..."
+          class="search-form__input collage-input"
+          autocomplete="off"
+        >
+        <button type="submit" class="search-form__submit collage-button">
+          {% render 'icon-search' %}
+        </button>
+        <button type="button" class="search-form__close" data-search-close>
+          {% render 'icon-close' %}
+        </button>
+      </form>
+      <div class="search-results" data-search-results></div>
+    </div>
+  </div>
+</header>
+
+{% schema %}
+{
+  "name": "Header",
+  "tag": "section",
+  "class": "section-header",
+  "settings": [
+    {
+      "type": "checkbox",
+      "id": "show_announcement",
+      "label": "Mostrar barra de anuncios",
+      "default": true
+    },
+    {
+      "type": "text",
+      "id": "announcement_text",
+      "label": "Texto del anuncio",
+      "default": "Envio GRATIS en CDMX en compras mayores a $3,000 MXN"
+    },
+    {
+      "type": "link_list",
+      "id": "menu",
+      "label": "Menu principal",
+      "default": "main-menu"
+    },
+    {
+      "type": "checkbox",
+      "id": "sticky_header",
+      "label": "Header fijo al hacer scroll",
+      "default": true
+    }
+  ]
+}
+{% endschema %}

@@ -1,0 +1,166 @@
+<section class="hero collage-section" data-section-id="{{ section.id }}">
+  <div class="hero__background">
+    <div class="collage-bg-elements">
+      <div class="collage-element collage-element--torn-paper hero-paper-1"></div>
+      <div class="collage-element collage-element--tape hero-tape-1"></div>
+      <div class="collage-element collage-element--sticker hero-sticker-1">{% render 'icon-heart' %}</div>
+      <div class="collage-element collage-element--stamp hero-stamp-1"></div>
+      <div class="collage-element collage-element--polaroid hero-polaroid-1"></div>
+    </div>
+  </div>
+
+  <div class="container">
+    <div class="hero__content">
+      <div class="hero__text collage-paper collage-paper--tilted">
+        <span class="hero__tag collage-sticker">{{ section.settings.tag | default: 'Elige, Personaliza y Consiente' }}</span>
+        <h1 class="hero__headline">
+          {{ section.settings.headline | default: 'El regalo perfecto si existe. Y esta aqui.' }}
+        </h1>
+        <p class="hero__subheadline">
+          {{ section.settings.subheadline | default: 'Arma cajas de regalo unicas con productos de emprendedores locales. Tu eliges, nosotros lo hacemos realidad.' }}
+        </p>
+        <div class="hero__cta">
+          <a href="{{ section.settings.cta_link | default: routes.all_products_collection_url }}" class="btn btn--primary collage-button collage-button--tape">
+            {{ section.settings.cta_text | default: 'Empezar a armar mi regalo' }}
+            {% render 'icon-arrow-right' %}
+          </a>
+        </div>
+      </div>
+
+      <div class="hero__visual">
+        <div class="hero__image-collage">
+          {%- if section.settings.image_1 != blank -%}
+            <div class="hero__image hero__image--1 collage-photo collage-photo--tape">
+              <img
+                src="{{ section.settings.image_1 | image_url: width: 400 }}"
+                alt="{{ section.settings.image_1.alt | default: 'Regalo' }}"
+                width="300"
+                height="400"
+                loading="eager"
+              >
+            </div>
+          {%- else -%}
+            <div class="hero__image hero__image--1 collage-photo collage-photo--tape hero__placeholder">
+              {% render 'icon-gift-box' %}
+            </div>
+          {%- endif -%}
+
+          {%- if section.settings.image_2 != blank -%}
+            <div class="hero__image hero__image--2 collage-polaroid">
+              <img
+                src="{{ section.settings.image_2 | image_url: width: 350 }}"
+                alt="{{ section.settings.image_2.alt | default: 'Regalo' }}"
+                width="250"
+                height="300"
+                loading="eager"
+              >
+              <span class="collage-polaroid__caption">Con amor</span>
+            </div>
+          {%- else -%}
+            <div class="hero__image hero__image--2 collage-polaroid hero__placeholder">
+              {% render 'icon-package' %}
+              <span class="collage-polaroid__caption">Con amor</span>
+            </div>
+          {%- endif -%}
+
+          {%- if section.settings.image_3 != blank -%}
+            <div class="hero__image hero__image--3 collage-photo collage-photo--pin">
+              <img
+                src="{{ section.settings.image_3 | image_url: width: 300 }}"
+                alt="{{ section.settings.image_3.alt | default: 'Regalo' }}"
+                width="200"
+                height="250"
+                loading="lazy"
+              >
+            </div>
+          {%- else -%}
+            <div class="hero__image hero__image--3 collage-photo collage-photo--pin hero__placeholder">
+              {% render 'icon-bow' %}
+            </div>
+          {%- endif -%}
+
+          <div class="hero__doodles">
+            <svg class="doodle doodle--arrow" viewBox="0 0 100 50" fill="none">
+              <path d="M5 25 Q 30 5, 55 25 T 95 25" stroke="currentColor" stroke-width="2" stroke-dasharray="5,5"/>
+              <path d="M85 20 L 95 25 L 85 30" stroke="currentColor" stroke-width="2"/>
+            </svg>
+            <svg class="doodle doodle--stars" viewBox="0 0 50 50">
+              <path d="M25 5 L27 20 L42 22 L30 27 L32 42 L25 32 L18 42 L20 27 L8 22 L23 20 Z" fill="currentColor"/>
+            </svg>
+            <span class="doodle doodle--text">Para ti</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="hero__scroll-indicator">
+    <span>Scroll</span>
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+      <path d="M12 5v14M19 12l-7 7-7-7"/>
+    </svg>
+  </div>
+</section>
+
+{% schema %}
+{
+  "name": "Hero",
+  "tag": "section",
+  "class": "section-hero",
+  "settings": [
+    {
+      "type": "text",
+      "id": "tag",
+      "label": "Etiqueta",
+      "default": "Elige, Personaliza y Consiente"
+    },
+    {
+      "type": "textarea",
+      "id": "headline",
+      "label": "Titulo principal",
+      "default": "El regalo perfecto si existe. Y esta aqui."
+    },
+    {
+      "type": "textarea",
+      "id": "subheadline",
+      "label": "Subtitulo",
+      "default": "Arma cajas de regalo unicas con productos de emprendedores locales. Tu eliges, nosotros lo hacemos realidad."
+    },
+    {
+      "type": "text",
+      "id": "cta_text",
+      "label": "Texto del boton",
+      "default": "Empezar a armar mi regalo"
+    },
+    {
+      "type": "url",
+      "id": "cta_link",
+      "label": "Enlace del boton"
+    },
+    {
+      "type": "header",
+      "content": "Imagenes del collage"
+    },
+    {
+      "type": "image_picker",
+      "id": "image_1",
+      "label": "Imagen 1 (principal)"
+    },
+    {
+      "type": "image_picker",
+      "id": "image_2",
+      "label": "Imagen 2 (polaroid)"
+    },
+    {
+      "type": "image_picker",
+      "id": "image_3",
+      "label": "Imagen 3 (pequena)"
+    }
+  ],
+  "presets": [
+    {
+      "name": "Hero collage"
+    }
+  ]
+}
+{% endschema %}

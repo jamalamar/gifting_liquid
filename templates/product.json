@@ -1,0 +1,20 @@
+{
+  "sections": {
+    "main": {
+      "type": "main-product",
+      "settings": {
+        "show_gift_message": true,
+        "gift_message": "¿Es un regalo? Agrega un mensaje personalizado en el carrito"
+      }
+    },
+    "related-products": {
+      "type": "featured-products",
+      "settings": {
+        "title": "También te puede gustar",
+        "products_limit": 4,
+        "show_view_all": false
+      }
+    }
+  },
+  "order": ["main", "related-products"]
+}

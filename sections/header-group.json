@@ -1,0 +1,15 @@
+{
+  "type": "header",
+  "name": "Header group",
+  "sections": {
+    "header": {
+      "type": "header",
+      "settings": {
+        "show_announcement": true,
+        "announcement_text": "Envío GRATIS en CDMX en compras mayores a $3,000 MXN",
+        "sticky_header": true
+      }
+    }
+  },
+  "order": ["header"]
+}

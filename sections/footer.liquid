@@ -1,0 +1,162 @@
+<footer class="footer collage-section">
+  <div class="footer__decorations">
+    <div class="collage-element collage-element--paper footer-deco-1"></div>
+    <div class="collage-element collage-element--sticker footer-deco-2"></div>
+  </div>
+
+  <div class="container">
+    <div class="footer__grid">
+      <div class="footer__column footer__about">
+        <div class="footer__logo">
+          {%- if settings.logo != blank -%}
+            <img
+              src="{{ settings.logo | image_url: width: 200 }}"
+              alt="{{ shop.name }}"
+              width="150"
+              loading="lazy"
+            >
+          {%- else -%}
+            <span class="footer__logo-text">
+              <span class="logo-gift">gift</span><span class="logo-ing">ing</span>
+              <span class="logo-marketplace">MARKETPLACE</span>
+            </span>
+          {%- endif -%}
+        </div>
+        <p class="footer__about-text">
+          {{ section.settings.about_text | default: 'El punto de encuentro entre quien quiere regalar algo especial y quien lo sabe crear. Regalos unicos de emprendedores mexicanos.' }}
+        </p>
+        <div class="footer__social">
+          {%- if settings.social_instagram != blank -%}
+            <a href="https://instagram.com/{{ settings.social_instagram | remove: '@' }}" target="_blank" rel="noopener" class="footer__social-link collage-icon-btn" aria-label="Instagram">
+              {% render 'icon-instagram' %}
+            </a>
+          {%- endif -%}
+          {%- if settings.social_facebook != blank -%}
+            <a href="https://facebook.com{{ settings.social_facebook }}" target="_blank" rel="noopener" class="footer__social-link collage-icon-btn" aria-label="Facebook">
+              {% render 'icon-facebook' %}
+            </a>
+          {%- endif -%}
+          {%- if settings.social_tiktok != blank -%}
+            <a href="https://tiktok.com/{{ settings.social_tiktok | remove: '@' }}" target="_blank" rel="noopener" class="footer__social-link collage-icon-btn" aria-label="TikTok">
+              {% render 'icon-tiktok' %}
+            </a>
+          {%- endif -%}
+          {%- if settings.social_whatsapp != blank -%}
+            <a href="https://wa.me/52{{ settings.social_whatsapp | remove: ' ' }}" target="_blank" rel="noopener" class="footer__social-link collage-icon-btn" aria-label="WhatsApp">
+              {% render 'icon-whatsapp' %}
+            </a>
+          {%- endif -%}
+        </div>
+      </div>
+
+      <div class="footer__column footer__nav">
+        <h4 class="footer__heading collage-heading">{{ section.settings.menu_title | default: 'Menu' }}</h4>
+        <ul class="footer__nav-list">
+          {%- for link in section.settings.menu.links -%}
+            <li class="footer__nav-item">
+              <a href="{{ link.url }}" class="footer__nav-link collage-link">{{ link.title }}</a>
+            </li>
+          {%- endfor -%}
+        </ul>
+      </div>
+
+      <div class="footer__column footer__help">
+        <h4 class="footer__heading collage-heading">{{ section.settings.help_title | default: 'Ayuda' }}</h4>
+        <ul class="footer__nav-list">
+          {%- for link in section.settings.help_menu.links -%}
+            <li class="footer__nav-item">
+              <a href="{{ link.url }}" class="footer__nav-link collage-link">{{ link.title }}</a>
+            </li>
+          {%- endfor -%}
+        </ul>
+      </div>
+
+      <div class="footer__column footer__contact">
+        <h4 class="footer__heading collage-heading">{{ section.settings.contact_title | default: 'Contacto' }}</h4>
+        <ul class="footer__contact-list">
+          {%- if settings.social_whatsapp != blank -%}
+            <li class="footer__contact-item">
+              <a href="https://wa.me/52{{ settings.social_whatsapp | remove: ' ' }}" class="footer__contact-link collage-link">
+                {% render 'icon-whatsapp' %}
+                <span>{{ settings.social_whatsapp }}</span>
+              </a>
+            </li>
+          {%- endif -%}
+          {%- if settings.contact_email != blank -%}
+            <li class="footer__contact-item">
+              <a href="mailto:{{ settings.contact_email }}" class="footer__contact-link collage-link">
+                {% render 'icon-email' %}
+                <span>{{ settings.contact_email }}</span>
+              </a>
+            </li>
+          {%- endif -%}
+          {%- if settings.contact_location != blank -%}
+            <li class="footer__contact-item">
+              <span class="footer__contact-link">
+                {% render 'icon-location' %}
+                <span>{{ settings.contact_location }}</span>
+              </span>
+            </li>
+          {%- endif -%}
+        </ul>
+      </div>
+    </div>
+
+    <div class="footer__bottom collage-tape">
+      <p class="footer__copyright">
+        &copy; {{ 'now' | date: '%Y' }} {{ shop.name }}. Todos los derechos reservados. Hecho con mucho amor en CDMX.
+      </p>
+      <div class="footer__payment">
+        {% render 'payment-icons' %}
+      </div>
+    </div>
+  </div>
+
+  <div class="footer__paper-airplane collage-decoration">
+    {% render 'icon-paper-airplane' %}
+  </div>
+</footer>
+
+{% schema %}
+{
+  "name": "Footer",
+  "tag": "section",
+  "class": "section-footer",
+  "settings": [
+    {
+      "type": "textarea",
+      "id": "about_text",
+      "label": "Texto sobre nosotros",
+      "default": "El punto de encuentro entre quien quiere regalar algo especial y quien lo sabe crear. Regalos unicos de emprendedores mexicanos."
+    },
+    {
+      "type": "text",
+      "id": "menu_title",
+      "label": "Titulo del menu",
+      "default": "Menu"
+    },
+    {
+      "type": "link_list",
+      "id": "menu",
+      "label": "Menu de navegacion"
+    },
+    {
+      "type": "text",
+      "id": "help_title",
+      "label": "Titulo de ayuda",
+      "default": "Ayuda"
+    },
+    {
+      "type": "link_list",
+      "id": "help_menu",
+      "label": "Menu de ayuda"
+    },
+    {
+      "type": "text",
+      "id": "contact_title",
+      "label": "Titulo de contacto",
+      "default": "Contacto"
+    }
+  ]
+}
+{% endschema %}

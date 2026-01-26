@@ -1,0 +1,16 @@
+{
+  "type": "footer",
+  "name": "Footer group",
+  "sections": {
+    "footer": {
+      "type": "footer",
+      "settings": {
+        "about_text": "El punto de encuentro entre quien quiere regalar algo especial y quien lo sabe crear. Regalos únicos de emprendedores mexicanos.",
+        "menu_title": "Menú",
+        "help_title": "Ayuda",
+        "contact_title": "Contacto"
+      }
+    }
+  },
+  "order": ["footer"]
+}

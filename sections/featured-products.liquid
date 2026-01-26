@@ -1,0 +1,95 @@
+<section class="featured-products collage-section" data-section-id="{{ section.id }}">
+  <div class="container">
+    <div class="section-header">
+      <h2 class="section-title collage-heading">
+        {{ section.settings.title | default: 'Productos destacados' }}
+      </h2>
+      {%- if section.settings.subtitle != blank -%}
+        <p class="section-subtitle">{{ section.settings.subtitle }}</p>
+      {%- endif -%}
+    </div>
+
+    <div class="featured-products__grid">
+      {%- assign collection = collections[section.settings.collection] -%}
+      {%- if collection != blank -%}
+        {%- for product in collection.products limit: section.settings.products_limit -%}
+          <div class="featured-products__item collage-card collage-card--product">
+            {% render 'product-card', product: product, index: forloop.index %}
+          </div>
+        {%- endfor -%}
+      {%- else -%}
+        {%- for i in (1..section.settings.products_limit) -%}
+          <div class="featured-products__item collage-card collage-card--product">
+            {% render 'product-card-placeholder', index: i %}
+          </div>
+        {%- endfor -%}
+      {%- endif -%}
+    </div>
+
+    {%- if section.settings.show_view_all and collection != blank -%}
+      <div class="featured-products__footer">
+        <a href="{{ collection.url }}" class="btn btn--secondary collage-button">
+          {{ section.settings.view_all_text | default: 'Ver todos' }}
+          {% render 'icon-arrow-right' %}
+        </a>
+      </div>
+    {%- endif -%}
+  </div>
+
+  <div class="featured-products__decorations">
+    <div class="collage-element collage-element--star products-star-1"></div>
+    <div class="collage-element collage-element--star products-star-2"></div>
+  </div>
+</section>
+
+{% schema %}
+{
+  "name": "Productos destacados",
+  "tag": "section",
+  "class": "section-featured-products",
+  "settings": [
+    {
+      "type": "text",
+      "id": "title",
+      "label": "Titulo",
+      "default": "Productos destacados"
+    },
+    {
+      "type": "textarea",
+      "id": "subtitle",
+      "label": "Subtitulo"
+    },
+    {
+      "type": "collection",
+      "id": "collection",
+      "label": "Coleccion"
+    },
+    {
+      "type": "range",
+      "id": "products_limit",
+      "label": "Numero de productos",
+      "min": 2,
+      "max": 12,
+      "step": 1,
+      "default": 8
+    },
+    {
+      "type": "checkbox",
+      "id": "show_view_all",
+      "label": "Mostrar boton ver todos",
+      "default": true
+    },
+    {
+      "type": "text",
+      "id": "view_all_text",
+      "label": "Texto del boton",
+      "default": "Ver todos"
+    }
+  ],
+  "presets": [
+    {
+      "name": "Productos destacados"
+    }
+  ]
+}
+{% endschema %}

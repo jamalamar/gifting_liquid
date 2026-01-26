@@ -1,0 +1,303 @@
+<section class="page-contact collage-section" data-section-id="{{ section.id }}">
+  <div class="container">
+    <div class="page-contact__hero">
+      <h1 class="page-contact__headline collage-heading">
+        {{ section.settings.headline | default: '¿Tienes dudas? Aqui andamos' }}
+      </h1>
+      <p class="page-contact__subtitle">
+        {{ section.settings.subtitle | default: 'Ya sea que quieras preguntarnos algo sobre tu pedido, tengas una idea loca o simplemente quieras saludar, escribenos. Prometemos contestar rapido (somos bien platicadores).' }}
+      </p>
+    </div>
+
+    <div class="page-contact__grid">
+      <div class="page-contact__info">
+        <div class="contact-info-card collage-paper collage-paper--note">
+          <div class="contact-info-card__pin collage-pin"></div>
+          <h2 class="contact-info-card__title">Contactanos</h2>
+
+          <ul class="contact-info-card__list">
+            <li class="contact-info-card__item contact-info-card__item--whatsapp">
+              <div class="contact-info-card__icon collage-sticker collage-sticker--small">
+                {% render 'icon-whatsapp' %}
+              </div>
+              <div class="contact-info-card__content">
+                <span class="contact-info-card__label">{{ section.settings.whatsapp_label | default: 'WhatsApp (La via rapida)' }}</span>
+                <a href="https://wa.me/52{{ settings.social_whatsapp | remove: ' ' }}" class="contact-info-card__value collage-link">
+                  {{ settings.social_whatsapp }}
+                </a>
+              </div>
+            </li>
+            <li class="contact-info-card__item contact-info-card__item--email">
+              <div class="contact-info-card__icon collage-sticker collage-sticker--small">
+                {% render 'icon-email' %}
+              </div>
+              <div class="contact-info-card__content">
+                <span class="contact-info-card__label">{{ section.settings.email_label | default: 'Email' }}</span>
+                <a href="mailto:{{ settings.contact_email }}" class="contact-info-card__value collage-link">
+                  {{ settings.contact_email }}
+                </a>
+              </div>
+            </li>
+            <li class="contact-info-card__item contact-info-card__item--hours">
+              <div class="contact-info-card__icon collage-sticker collage-sticker--small">
+                {% render 'icon-clock' %}
+              </div>
+              <div class="contact-info-card__content">
+                <span class="contact-info-card__label">{{ section.settings.hours_label | default: 'Horario de Atencion' }}</span>
+                <span class="contact-info-card__value">{{ settings.contact_hours }}</span>
+              </div>
+            </li>
+            <li class="contact-info-card__item contact-info-card__item--location">
+              <div class="contact-info-card__icon collage-sticker collage-sticker--small">
+                {% render 'icon-location' %}
+              </div>
+              <div class="contact-info-card__content">
+                <span class="contact-info-card__label">{{ section.settings.location_label | default: '¿Donde estamos?' }}</span>
+                <span class="contact-info-card__value">{{ section.settings.location_text | default: 'CDMX, Mexico (por ahora solo hacemos entregas en la ciudad, pero estamos creciendo)' }}</span>
+              </div>
+            </li>
+          </ul>
+        </div>
+
+        <div class="contact-social collage-paper collage-paper--small">
+          <h3 class="contact-social__title">{{ section.settings.social_title | default: 'Siguenos y enterate de todo' }}</h3>
+          <div class="contact-social__links">
+            {%- if settings.social_instagram != blank -%}
+              <a href="https://instagram.com/{{ settings.social_instagram | remove: '@' }}" target="_blank" rel="noopener" class="contact-social__link collage-icon-btn">
+                {% render 'icon-instagram' %}
+                <span>{{ settings.social_instagram }}</span>
+              </a>
+            {%- endif -%}
+            {%- if settings.social_facebook != blank -%}
+              <a href="https://facebook.com{{ settings.social_facebook }}" target="_blank" rel="noopener" class="contact-social__link collage-icon-btn">
+                {% render 'icon-facebook' %}
+                <span>{{ settings.social_facebook }}</span>
+              </a>
+            {%- endif -%}
+            {%- if settings.social_tiktok != blank -%}
+              <a href="https://tiktok.com/{{ settings.social_tiktok | remove: '@' }}" target="_blank" rel="noopener" class="contact-social__link collage-icon-btn">
+                {% render 'icon-tiktok' %}
+                <span>{{ settings.social_tiktok }}</span>
+              </a>
+            {%- endif -%}
+          </div>
+        </div>
+      </div>
+
+      <div class="page-contact__form">
+        <div class="contact-form-wrapper collage-paper collage-paper--large">
+          <div class="contact-form-wrapper__tape collage-element collage-element--tape"></div>
+
+          {% form 'contact', class: 'contact-form' %}
+            {%- if form.posted_successfully? -%}
+              <div class="contact-form__success collage-sticker collage-sticker--large">
+                {% render 'icon-check' %}
+                <p>¡Mensaje enviado! Te contestamos pronto.</p>
+              </div>
+            {%- endif -%}
+
+            {%- if form.errors -%}
+              <div class="contact-form__errors">
+                {{ form.errors | default_errors }}
+              </div>
+            {%- endif -%}
+
+            <div class="contact-form__field">
+              <label for="contact-name" class="contact-form__label">{{ section.settings.name_label | default: 'Nombre' }}</label>
+              <input
+                type="text"
+                id="contact-name"
+                name="contact[{{ 'contact.form.name' | t }}]"
+                placeholder="{{ section.settings.name_placeholder | default: '¿Como te llamas?' }}"
+                required
+                class="contact-form__input collage-input"
+              >
+            </div>
+
+            <div class="contact-form__field">
+              <label for="contact-email" class="contact-form__label">{{ section.settings.email_form_label | default: 'Email' }}</label>
+              <input
+                type="email"
+                id="contact-email"
+                name="contact[email]"
+                placeholder="{{ section.settings.email_placeholder | default: 'Tu correo para contestarte' }}"
+                required
+                class="contact-form__input collage-input"
+              >
+            </div>
+
+            <div class="contact-form__field">
+              <label for="contact-subject" class="contact-form__label">{{ section.settings.subject_label | default: 'Asunto' }}</label>
+              <input
+                type="text"
+                id="contact-subject"
+                name="contact[{{ 'contact.form.subject' | t }}]"
+                placeholder="{{ section.settings.subject_placeholder | default: '¿Sobre que quieres platicar?' }}"
+                class="contact-form__input collage-input"
+              >
+            </div>
+
+            <div class="contact-form__field">
+              <label for="contact-message" class="contact-form__label">{{ section.settings.message_label | default: 'Mensaje' }}</label>
+              <textarea
+                id="contact-message"
+                name="contact[{{ 'contact.form.message' | t }}]"
+                placeholder="{{ section.settings.message_placeholder | default: 'Cuentanos, te leemos' }}"
+                required
+                rows="5"
+                class="contact-form__textarea collage-input"
+              ></textarea>
+            </div>
+
+            <button type="submit" class="contact-form__submit btn btn--primary collage-button">
+              {{ section.settings.submit_text | default: 'Enviar mensaje' }}
+              {% render 'icon-arrow-right' %}
+            </button>
+          {% endform %}
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="page-contact__decorations">
+    <div class="collage-element collage-element--paper-airplane contact-airplane">
+      {% render 'icon-paper-airplane' %}
+    </div>
+    <div class="collage-element collage-element--heart contact-heart">
+      {% render 'icon-heart' %}
+    </div>
+  </div>
+</section>
+
+{% schema %}
+{
+  "name": "Pagina Contacto",
+  "tag": "section",
+  "class": "section-page-contact",
+  "settings": [
+    {
+      "type": "header",
+      "content": "Hero"
+    },
+    {
+      "type": "text",
+      "id": "headline",
+      "label": "Titular",
+      "default": "¿Tienes dudas? Aqui andamos"
+    },
+    {
+      "type": "textarea",
+      "id": "subtitle",
+      "label": "Subtitulo",
+      "default": "Ya sea que quieras preguntarnos algo sobre tu pedido, tengas una idea loca o simplemente quieras saludar, escribenos. Prometemos contestar rapido (somos bien platicadores)."
+    },
+    {
+      "type": "header",
+      "content": "Informacion de contacto"
+    },
+    {
+      "type": "text",
+      "id": "whatsapp_label",
+      "label": "Etiqueta WhatsApp",
+      "default": "WhatsApp (La via rapida)"
+    },
+    {
+      "type": "text",
+      "id": "email_label",
+      "label": "Etiqueta Email",
+      "default": "Email"
+    },
+    {
+      "type": "text",
+      "id": "hours_label",
+      "label": "Etiqueta Horario",
+      "default": "Horario de Atencion"
+    },
+    {
+      "type": "text",
+      "id": "location_label",
+      "label": "Etiqueta Ubicacion",
+      "default": "¿Donde estamos?"
+    },
+    {
+      "type": "textarea",
+      "id": "location_text",
+      "label": "Texto de ubicacion",
+      "default": "CDMX, Mexico (por ahora solo hacemos entregas en la ciudad, pero estamos creciendo)"
+    },
+    {
+      "type": "header",
+      "content": "Redes sociales"
+    },
+    {
+      "type": "text",
+      "id": "social_title",
+      "label": "Titulo redes sociales",
+      "default": "Siguenos y enterate de todo"
+    },
+    {
+      "type": "header",
+      "content": "Formulario"
+    },
+    {
+      "type": "text",
+      "id": "name_label",
+      "label": "Etiqueta nombre",
+      "default": "Nombre"
+    },
+    {
+      "type": "text",
+      "id": "name_placeholder",
+      "label": "Placeholder nombre",
+      "default": "¿Como te llamas?"
+    },
+    {
+      "type": "text",
+      "id": "email_form_label",
+      "label": "Etiqueta email",
+      "default": "Email"
+    },
+    {
+      "type": "text",
+      "id": "email_placeholder",
+      "label": "Placeholder email",
+      "default": "Tu correo para contestarte"
+    },
+    {
+      "type": "text",
+      "id": "subject_label",
+      "label": "Etiqueta asunto",
+      "default": "Asunto"
+    },
+    {
+      "type": "text",
+      "id": "subject_placeholder",
+      "label": "Placeholder asunto",
+      "default": "¿Sobre que quieres platicar?"
+    },
+    {
+      "type": "text",
+      "id": "message_label",
+      "label": "Etiqueta mensaje",
+      "default": "Mensaje"
+    },
+    {
+      "type": "text",
+      "id": "message_placeholder",
+      "label": "Placeholder mensaje",
+      "default": "Cuentanos, te leemos"
+    },
+    {
+      "type": "text",
+      "id": "submit_text",
+      "label": "Texto del boton",
+      "default": "Enviar mensaje"
+    }
+  ],
+  "presets": [
+    {
+      "name": "Pagina Contacto"
+    }
+  ]
+}
+{% endschema %}

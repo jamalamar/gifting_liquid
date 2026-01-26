@@ -1,0 +1,164 @@
+<section class="page-faqs collage-section" data-section-id="{{ section.id }}">
+  <div class="container">
+    <div class="page-faqs__hero">
+      <h1 class="page-faqs__headline collage-heading">
+        {{ section.settings.headline | default: 'Las dudas mas comunes (y sus respuestas)' }}
+      </h1>
+      <p class="page-faqs__subtitle">
+        {{ section.settings.subtitle | default: 'Si tu pregunta no esta aqui, escribenos por WhatsApp y te ayudamos al tiro.' }}
+      </p>
+    </div>
+
+    <div class="page-faqs__content">
+      <div class="faqs-list collage-paper collage-paper--large">
+        <div class="faqs-list__tape collage-element collage-element--tape"></div>
+
+        {%- for block in section.blocks -%}
+          <div class="faq-item collage-card collage-card--faq" data-faq-item {{ block.shopify_attributes }}>
+            <button class="faq-item__question" data-faq-toggle aria-expanded="false">
+              <span class="faq-item__question-text">{{ block.settings.question }}</span>
+              <span class="faq-item__icon collage-sticker collage-sticker--small">
+                {% render 'icon-plus' %}
+              </span>
+            </button>
+            <div class="faq-item__answer" data-faq-answer>
+              <div class="faq-item__answer-inner">
+                {{ block.settings.answer }}
+              </div>
+            </div>
+          </div>
+        {%- endfor -%}
+      </div>
+
+      <div class="page-faqs__cta collage-paper collage-paper--note collage-paper--accent">
+        <div class="page-faqs__cta-pin collage-pin"></div>
+        <h2 class="page-faqs__cta-title">{{ section.settings.cta_title | default: '¿Tienes otra duda?' }}</h2>
+        <p class="page-faqs__cta-text">{{ section.settings.cta_text | default: 'Escribenos por WhatsApp y te ayudamos' }}</p>
+        <a href="https://wa.me/52{{ settings.social_whatsapp | remove: ' ' }}?text={{ section.settings.whatsapp_message | default: '¡Hola! Tengo una duda...' | url_encode }}" target="_blank" rel="noopener" class="btn btn--primary collage-button">
+          {% render 'icon-whatsapp' %}
+          <span>Escribir por WhatsApp</span>
+        </a>
+      </div>
+    </div>
+  </div>
+
+  <div class="page-faqs__decorations">
+    <div class="collage-element collage-element--question-mark faqs-question-1">?</div>
+    <div class="collage-element collage-element--question-mark faqs-question-2">?</div>
+    <div class="collage-element collage-element--doodle faqs-doodle">
+      <svg viewBox="0 0 60 60">
+        <circle cx="30" cy="30" r="25" fill="none" stroke="currentColor" stroke-width="2" stroke-dasharray="8,4"/>
+      </svg>
+    </div>
+  </div>
+</section>
+
+<script>
+  document.addEventListener('DOMContentLoaded', function() {
+    const faqItems = document.querySelectorAll('[data-faq-item]');
+
+    faqItems.forEach(item => {
+      const toggle = item.querySelector('[data-faq-toggle]');
+      const answer = item.querySelector('[data-faq-answer]');
+
+      toggle.addEventListener('click', function() {
+        const isExpanded = toggle.getAttribute('aria-expanded') === 'true';
+
+        faqItems.forEach(otherItem => {
+          const otherToggle = otherItem.querySelector('[data-faq-toggle]');
+          const otherAnswer = otherItem.querySelector('[data-faq-answer]');
+          otherToggle.setAttribute('aria-expanded', 'false');
+          otherAnswer.style.maxHeight = null;
+          otherItem.classList.remove('is-open');
+        });
+
+        if (!isExpanded) {
+          toggle.setAttribute('aria-expanded', 'true');
+          answer.style.maxHeight = answer.scrollHeight + 'px';
+          item.classList.add('is-open');
+        }
+      });
+    });
+  });
+</script>
+
+{% schema %}
+{
+  "name": "Pagina FAQs",
+  "tag": "section",
+  "class": "section-page-faqs",
+  "settings": [
+    {
+      "type": "text",
+      "id": "headline",
+      "label": "Titular",
+      "default": "Las dudas mas comunes (y sus respuestas)"
+    },
+    {
+      "type": "textarea",
+      "id": "subtitle",
+      "label": "Subtitulo",
+      "default": "Si tu pregunta no esta aqui, escribenos por WhatsApp y te ayudamos al tiro."
+    },
+    {
+      "type": "header",
+      "content": "CTA"
+    },
+    {
+      "type": "text",
+      "id": "cta_title",
+      "label": "Titulo CTA",
+      "default": "¿Tienes otra duda?"
+    },
+    {
+      "type": "text",
+      "id": "cta_text",
+      "label": "Texto CTA",
+      "default": "Escribenos por WhatsApp y te ayudamos"
+    },
+    {
+      "type": "text",
+      "id": "whatsapp_message",
+      "label": "Mensaje predeterminado WhatsApp",
+      "default": "¡Hola! Tengo una duda..."
+    }
+  ],
+  "blocks": [
+    {
+      "type": "faq",
+      "name": "Pregunta",
+      "settings": [
+        {
+          "type": "text",
+          "id": "question",
+          "label": "Pregunta",
+          "default": "¿Cuanto tarda en llegar mi pedido?"
+        },
+        {
+          "type": "richtext",
+          "id": "answer",
+          "label": "Respuesta",
+          "default": "<p>En CDMX, entre 24 y 48 horas. Si necesitas que llegue el mismo dia, tenemos envio express por $250 MXN extra (sujeto a disponibilidad del producto). Solo avisanos con tiempo para que no andemos corriendo.</p>"
+        }
+      ]
+    }
+  ],
+  "presets": [
+    {
+      "name": "Pagina FAQs",
+      "blocks": [
+        { "type": "faq", "settings": { "question": "¿Cuanto tarda en llegar mi pedido?", "answer": "<p>En CDMX, entre 24 y 48 horas. Si necesitas que llegue el mismo dia, tenemos envio express por $250 MXN extra (sujeto a disponibilidad del producto). Solo avisanos con tiempo para que no andemos corriendo.</p>" } },
+        { "type": "faq", "settings": { "question": "¿Puedo agregar una tarjeta con mensaje?", "answer": "<p>¡Obvio! Todas las cajas incluyen una tarjeta personalizada sin costo extra. Escribe tu mensaje durante la compra y nosotros nos encargamos de que se vea bonito.</p>" } },
+        { "type": "faq", "settings": { "question": "¿Que pasa si no hay nadie en casa cuando llegue el regalo?", "answer": "<p>Intentamos contactar al destinatario antes de llegar. Si no hay nadie, podemos dejarlo con el portero (si nos autorizas) o reprogramamos la entrega. Eso si, reprogramar tiene un costo adicional.</p>" } },
+        { "type": "faq", "settings": { "question": "¿Los precios ya incluyen IVA?", "answer": "<p>Sip, todos los precios que ves ya tienen el 16% de IVA incluido. Lo que ves es lo que pagas, sin sorpresas al final.</p>" } },
+        { "type": "faq", "settings": { "question": "¿Como se en que va mi pedido?", "answer": "<p>Escribenos por WhatsApp y te damos el status al momento. Estamos al pendiente de cada pedido como si fuera nuestro propio regalo.</p>" } },
+        { "type": "faq", "settings": { "question": "¿Puedo hacer un pedido sorpresa?", "answer": "<p>¡Claro que si! Somos expertos en entregas sorpresa. Solo dinos en las notas del pedido y el equipo se encarga de que sea un momento epico.</p>" } },
+        { "type": "faq", "settings": { "question": "¿Cuantos productos puedo meter en una caja?", "answer": "<p>Los que quieras. Si agregas mas de 7 productos, te regalamos la caja extra. El equipo de armado se encarga de acomodar todo para que llegue perfecto.</p>" } },
+        { "type": "faq", "settings": { "question": "¿Puedo devolver algo si no me gusto?", "answer": "<p>Aceptamos devoluciones dentro de los primeros 7 dias despues de la entrega, siempre que el producto este en su empaque original y sin usar. Ojo: flores, chocolates y cosas perecederas no aplican para devolucion porque... bueno, ya sabes.</p>" } },
+        { "type": "faq", "settings": { "question": "¿Hacen envios fuera de CDMX?", "answer": "<p>Por ahora solo estamos en CDMX, pero andamos creciendo. Siguenos en redes para enterarte cuando lleguemos a tu ciudad.</p>" } },
+        { "type": "faq", "settings": { "question": "¿Como puedo vender mis productos en Gifting?", "answer": "<p>¡Nos encanta sumar creadores! Llena el formulario en nuestra pagina 'Vende con Nosotros' y nos ponemos en contacto contigo.</p>" } }
+      ]
+    }
+  ]
+}
+{% endschema %}

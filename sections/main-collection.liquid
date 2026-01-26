@@ -1,0 +1,102 @@
+<section class="collection collage-section" data-section-id="{{ section.id }}">
+  <div class="container">
+    <div class="collection__header collage-paper collage-paper--large">
+      <div class="collection__header-tape collage-element collage-element--tape"></div>
+
+      <h1 class="collection__title collage-heading">{{ collection.title }}</h1>
+
+      {%- if collection.description != blank -%}
+        <div class="collection__description">
+          {{ collection.description }}
+        </div>
+      {%- endif -%}
+
+      <div class="collection__meta">
+        <span class="collection__count">{{ collection.products_count }} productos</span>
+      </div>
+    </div>
+
+    <div class="collection__toolbar">
+      <div class="collection__filters">
+        <button class="collection__filter-toggle collage-button collage-button--small" data-filter-toggle>
+          {% render 'icon-filter' %}
+          <span>Filtrar</span>
+        </button>
+      </div>
+
+      <div class="collection__sort">
+        <label for="sort-by" class="visually-hidden">Ordenar por</label>
+        <select id="sort-by" class="collection__sort-select collage-select" data-sort-select>
+          {%- for option in collection.sort_options -%}
+            <option value="{{ option.value }}"{% if option.value == collection.sort_by %} selected{% endif %}>
+              {{ option.name }}
+            </option>
+          {%- endfor -%}
+        </select>
+      </div>
+    </div>
+
+    <div class="collection__content">
+      <aside class="collection__sidebar collage-paper collage-paper--note" data-filter-sidebar>
+        <div class="collection__sidebar-header">
+          <h2 class="collection__sidebar-title">Filtros</h2>
+          <button class="collection__sidebar-close" data-filter-close>
+            {% render 'icon-close' %}
+          </button>
+        </div>
+
+        {% render 'collection-filters', collection: collection %}
+      </aside>
+
+      <div class="collection__grid">
+        {%- paginate collection.products by section.settings.products_per_page -%}
+          {%- if collection.products.size > 0 -%}
+            <div class="collection__products">
+              {%- for product in collection.products -%}
+                <div class="collection__product collage-card collage-card--product">
+                  {% render 'product-card', product: product, index: forloop.index %}
+                </div>
+              {%- endfor -%}
+            </div>
+
+            {%- if paginate.pages > 1 -%}
+              <div class="collection__pagination">
+                {% render 'pagination', paginate: paginate %}
+              </div>
+            {%- endif -%}
+          {%- else -%}
+            <div class="collection__empty collage-paper collage-paper--note">
+              <div class="collection__empty-icon collage-sticker">
+                {% render 'icon-search' %}
+              </div>
+              <h2 class="collection__empty-title">No encontramos lo que buscas</h2>
+              <p class="collection__empty-text">Intenta con otras palabras o échale un ojo a nuestras categorías. Seguro hay algo que te late.</p>
+              <a href="{{ routes.all_products_collection_url }}" class="btn btn--primary collage-button">
+                Ver todos los productos
+              </a>
+            </div>
+          {%- endif -%}
+        {%- endpaginate -%}
+      </div>
+    </div>
+  </div>
+</section>
+
+{% schema %}
+{
+  "name": "Coleccion principal",
+  "tag": "section",
+  "class": "section-main-collection",
+  "settings": [
+    {
+      "type": "range",
+      "id": "products_per_page",
+      "label": "Productos por pagina",
+      "min": 8,
+      "max": 24,
+      "step": 4,
+      "default": 12
+    }
+  ]
+}
+{% endschema %}

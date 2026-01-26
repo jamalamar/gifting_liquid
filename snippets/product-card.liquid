@@ -1,0 +1,79 @@
+{%- comment -%}
+  Product card snippet for digital collage style
+  Usage: {% render 'product-card', product: product, index: forloop.index %}
+{%- endcomment -%}
+
+{%- liquid
+  assign index = index | default: 1
+  assign style_variant = index | modulo: 4 | plus: 1
+-%}
+
+<article class="product-card collage-photo collage-photo--style-{{ style_variant }}">
+  <a href="{{ product.url }}" class="product-card__link">
+    <div class="product-card__image-wrapper">
+      {%- if product.featured_media -%}
+        <img
+          src="{{ product.featured_media | image_url: width: 400 }}"
+          alt="{{ product.featured_media.alt | default: product.title }}"
+          width="300"
+          height="300"
+          loading="lazy"
+          class="product-card__image"
+        >
+        {%- if product.media[1] != nil and product.media[1].media_type == 'image' -%}
+          <img
+            src="{{ product.media[1] | image_url: width: 400 }}"
+            alt="{{ product.media[1].alt | default: product.title }}"
+            width="300"
+            height="300"
+            loading="lazy"
+            class="product-card__image product-card__image--hover"
+          >
+        {%- endif -%}
+      {%- else -%}
+        <div class="product-card__placeholder">
+          {% render 'icon-gift' %}
+        </div>
+      {%- endif -%}
+
+      <div class="product-card__badges">
+        {%- if product.available == false -%}
+          <span class="product-card__badge product-card__badge--soldout collage-sticker">Agotado</span>
+        {%- elsif product.compare_at_price > product.price -%}
+          {%- assign savings = product.compare_at_price | minus: product.price | times: 100.0 | divided_by: product.compare_at_price | round -%}
+          <span class="product-card__badge product-card__badge--sale collage-sticker">-{{ savings }}%</span>
+        {%- endif -%}
+      </div>
+
+      <button
+        type="button"
+        class="product-card__quick-add collage-button collage-button--small"
+        data-quick-add
+        data-product-id="{{ product.selected_or_first_available_variant.id }}"
+        {% unless product.available %}disabled{% endunless %}
+        aria-label="Agregar a la caja"
+      >
+        {% render 'icon-plus' %}
+      </button>
+    </div>
+
+    <div class="product-card__content">
+      {%- if product.vendor -%}
+        <p class="product-card__vendor collage-handwritten">{{ product.vendor }}</p>
+      {%- endif -%}
+
+      <h3 class="product-card__title">{{ product.title }}</h3>
+
+      <div class="product-card__price">
+        {%- if product.compare_at_price > product.price -%}
+          <span class="product-card__price-compare">{{ product.compare_at_price | money }}</span>
+        {%- endif -%}
+        <span class="product-card__price-current{% if product.compare_at_price > product.price %} product-card__price-current--sale{% endif %}">
+          {{ product.price | money }}
+        </span>
+      </div>
+    </div>
+  </a>
+
+  <div class="product-card__tape collage-element collage-element--tape collage-element--tape-{{ style_variant }}"></div>
+</article>

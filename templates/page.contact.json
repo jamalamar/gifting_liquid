@@ -1,0 +1,27 @@
+{
+  "sections": {
+    "main": {
+      "type": "page-contact",
+      "settings": {
+        "headline": "¿Tienes dudas? Aquí andamos",
+        "subtitle": "Ya sea que quieras preguntarnos algo sobre tu pedido, tengas una idea loca o simplemente quieras saludar, escríbenos. Prometemos contestar rápido (somos bien platicadores).",
+        "whatsapp_label": "WhatsApp (La vía rápida)",
+        "email_label": "Email",
+        "hours_label": "Horario de Atención",
+        "location_label": "¿Dónde estamos?",
+        "location_text": "CDMX, México (por ahora solo hacemos entregas en la ciudad, pero estamos creciendo)",
+        "social_title": "Síguenos y entérate de todo",
+        "name_label": "Nombre",
+        "name_placeholder": "¿Cómo te llamas?",
+        "email_form_label": "Email",
+        "email_placeholder": "Tu correo para contestarte",
+        "subject_label": "Asunto",
+        "subject_placeholder": "¿Sobre qué quieres platicar?",
+        "message_label": "Mensaje",
+        "message_placeholder": "Cuéntanos, te leemos",
+        "submit_text": "Enviar mensaje"
+      }
+    }
+  },
+  "order": ["main"]
+}

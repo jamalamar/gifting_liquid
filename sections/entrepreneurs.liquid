@@ -1,0 +1,117 @@
+<section class="entrepreneurs collage-section" data-section-id="{{ section.id }}">
+  <div class="container">
+    <div class="entrepreneurs__wrapper collage-paper collage-paper--large">
+      <div class="entrepreneurs__content">
+        <div class="entrepreneurs__badge collage-sticker collage-sticker--handwritten">
+          {% render 'icon-heart' %}
+          <span>Hecho en Mexico</span>
+        </div>
+        <h2 class="entrepreneurs__title">
+          {{ section.settings.title | default: 'Detras de cada producto, hay una historia' }}
+        </h2>
+        <p class="entrepreneurs__subtitle">
+          {{ section.settings.subtitle | default: 'Todos los productos que encuentras aqui son de emprendedores mexicanos que le ponen el corazon a lo que crean. Al elegirlos, apoyas suenos locales.' }}
+        </p>
+        <a href="{{ section.settings.cta_link | default: '/pages/emprendedores' }}" class="btn btn--secondary collage-button">
+          {{ section.settings.cta_text | default: 'Conocer a los creadores' }}
+          {% render 'icon-arrow-right' %}
+        </a>
+      </div>
+
+      <div class="entrepreneurs__gallery">
+        {%- for block in section.blocks -%}
+          <div class="entrepreneur-card collage-polaroid collage-polaroid--{{ forloop.index | modulo: 3 | plus: 1 }}" {{ block.shopify_attributes }}>
+            {%- if block.settings.image != blank -%}
+              <img
+                src="{{ block.settings.image | image_url: width: 300 }}"
+                alt="{{ block.settings.name | default: 'Emprendedor' }}"
+                width="150"
+                height="180"
+                loading="lazy"
+              >
+            {%- else -%}
+              <div class="entrepreneur-card__placeholder">
+                {% render 'icon-user' %}
+              </div>
+            {%- endif -%}
+            {%- if block.settings.name != blank -%}
+              <span class="collage-polaroid__caption">{{ block.settings.name }}</span>
+            {%- endif -%}
+          </div>
+        {%- endfor -%}
+      </div>
+
+      <div class="entrepreneurs__decorations">
+        <div class="collage-element collage-element--tape entrepreneurs-tape-1"></div>
+        <div class="collage-element collage-element--tape entrepreneurs-tape-2"></div>
+        <div class="collage-element collage-element--doodle entrepreneurs-doodle">
+          <svg viewBox="0 0 50 50">
+            <path d="M25 5 L30 20 L45 25 L30 30 L25 45 L20 30 L5 25 L20 20 Z" fill="none" stroke="currentColor" stroke-width="2"/>
+          </svg>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+{% schema %}
+{
+  "name": "Emprendedores",
+  "tag": "section",
+  "class": "section-entrepreneurs",
+  "settings": [
+    {
+      "type": "text",
+      "id": "title",
+      "label": "Titulo",
+      "default": "Detras de cada producto, hay una historia"
+    },
+    {
+      "type": "textarea",
+      "id": "subtitle",
+      "label": "Subtitulo",
+      "default": "Todos los productos que encuentras aqui son de emprendedores mexicanos que le ponen el corazon a lo que crean. Al elegirlos, apoyas suenos locales."
+    },
+    {
+      "type": "text",
+      "id": "cta_text",
+      "label": "Texto del boton",
+      "default": "Conocer a los creadores"
+    },
+    {
+      "type": "url",
+      "id": "cta_link",
+      "label": "Enlace del boton"
+    }
+  ],
+  "blocks": [
+    {
+      "type": "entrepreneur",
+      "name": "Emprendedor",
+      "settings": [
+        {
+          "type": "image_picker",
+          "id": "image",
+          "label": "Foto"
+        },
+        {
+          "type": "text",
+          "id": "name",
+          "label": "Nombre",
+          "default": "Maria"
+        }
+      ]
+    }
+  ],
+  "presets": [
+    {
+      "name": "Emprendedores",
+      "blocks": [
+        { "type": "entrepreneur", "settings": { "name": "Maria" } },
+        { "type": "entrepreneur", "settings": { "name": "Carlos" } },
+        { "type": "entrepreneur", "settings": { "name": "Ana" } }
+      ]
+    }
+  ]
+}
+{% endschema %}

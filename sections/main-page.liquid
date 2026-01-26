@@ -1,0 +1,22 @@
+<section class="page collage-section" data-section-id="{{ section.id }}">
+  <div class="container">
+    <div class="page__content collage-paper collage-paper--large">
+      <div class="page__tape collage-element collage-element--tape"></div>
+
+      <h1 class="page__title collage-heading">{{ page.title }}</h1>
+
+      <div class="page__body rte">
+        {{ page.content }}
+      </div>
+    </div>
+  </div>
+</section>
+
+{% schema %}
+{
+  "name": "Pagina generica",
+  "tag": "section",
+  "class": "section-main-page",
+  "settings": []
+}
+{% endschema %}

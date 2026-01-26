@@ -1,0 +1,55 @@
+{
+  "current": {
+    "color_primary": "#ac5134",
+    "color_secondary": "#ac5b3c",
+    "color_accent": "#dcae9c",
+    "color_navy": "#3c4c6c",
+    "color_navy_light": "#5c6484",
+    "color_brown": "#713c27",
+    "color_background": "#faf8f5",
+    "color_background_alt": "#f5f0eb",
+    "color_text": "#2d2d2d",
+    "color_text_light": "#666666",
+    "font_heading": "playfair_display_n4",
+    "font_body": "work_sans_n4",
+    "font_accent": "pacifico_n4",
+    "logo_width": 150,
+    "social_instagram": "@gifting.mexico",
+    "social_facebook": "/giftingMX",
+    "social_tiktok": "@gifting.mx",
+    "social_whatsapp": "477 176 7465",
+    "contact_email": "gifting.mex@gmail.com",
+    "contact_phone": "477 176 7465",
+    "contact_location": "CDMX, Mexico",
+    "contact_hours": "Lunes a Viernes de 9:00 AM a 6:00 PM",
+    "free_shipping_threshold": "3000",
+    "shipping_cost": "150",
+    "express_shipping_cost": "250",
+    "show_collage_elements": true,
+    "show_paper_textures": true,
+    "show_tape_elements": true,
+    "show_sticker_effects": true,
+    "collage_rotation_max": 5,
+    "sections": {
+      "header": {
+        "type": "header",
+        "settings": {}
+      },
+      "footer": {
+        "type": "footer",
+        "settings": {}
+      }
+    },
+    "content_for_index": [
+      "hero",
+      "announcement-bar",
+      "categories",
+      "how-it-works",
+      "featured-products",
+      "entrepreneurs",
+      "occasions",
+      "why-gifting",
+      "newsletter"
+    ]
+  }
+}

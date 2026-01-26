@@ -1,0 +1,189 @@
+<section class="product collage-section" data-section-id="{{ section.id }}">
+  <div class="container">
+    <div class="product__wrapper">
+      <div class="product__media">
+        <div class="product__gallery collage-paper collage-paper--large">
+          {%- if product.featured_media -%}
+            <div class="product__main-image collage-photo collage-photo--tape">
+              <img
+                src="{{ product.featured_media | image_url: width: 800 }}"
+                alt="{{ product.featured_media.alt | default: product.title }}"
+                width="600"
+                height="600"
+                loading="eager"
+                class="product__image"
+                data-main-image
+              >
+            </div>
+          {%- endif -%}
+
+          {%- if product.media.size > 1 -%}
+            <div class="product__thumbnails">
+              {%- for media in product.media -%}
+                <button
+                  class="product__thumbnail collage-polaroid collage-polaroid--small{% if forloop.first %} is-active{% endif %}"
+                  data-thumbnail
+                  data-media-id="{{ media.id }}"
+                  data-src="{{ media | image_url: width: 800 }}"
+                >
+                  <img
+                    src="{{ media | image_url: width: 150 }}"
+                    alt="{{ media.alt | default: product.title }}"
+                    width="80"
+                    height="80"
+                    loading="lazy"
+                  >
+                </button>
+              {%- endfor -%}
+            </div>
+          {%- endif -%}
+
+          <div class="product__badges">
+            {%- if product.available == false -%}
+              <span class="product__badge product__badge--soldout collage-sticker">Agotado</span>
+            {%- elsif product.compare_at_price > product.price -%}
+              <span class="product__badge product__badge--sale collage-sticker">Oferta</span>
+            {%- endif -%}
+          </div>
+        </div>
+      </div>
+
+      <div class="product__info">
+        <div class="product__info-inner collage-paper collage-paper--note">
+          <div class="product__info-tape collage-element collage-element--tape"></div>
+
+          {%- if product.vendor -%}
+            <p class="product__vendor collage-handwritten">{{ product.vendor }}</p>
+          {%- endif -%}
+
+          <h1 class="product__title">{{ product.title }}</h1>
+
+          <div class="product__price">
+            {%- if product.compare_at_price > product.price -%}
+              <span class="product__price-compare">{{ product.compare_at_price | money }}</span>
+            {%- endif -%}
+            <span class="product__price-current">{{ product.price | money }}</span>
+          </div>
+
+          {%- if product.metafields.custom.short_description != blank -%}
+            <p class="product__short-description">{{ product.metafields.custom.short_description }}</p>
+          {%- endif -%}
+
+          {% form 'product', product, class: 'product__form', data-product-form: '' %}
+            <input type="hidden" name="id" value="{{ product.selected_or_first_available_variant.id }}" data-variant-id>
+
+            {%- unless product.has_only_default_variant -%}
+              <div class="product__variants">
+                {%- for option in product.options_with_values -%}
+                  <div class="product__option">
+                    <label class="product__option-label">{{ option.name }}</label>
+                    <div class="product__option-values">
+                      {%- for value in option.values -%}
+                        <label class="product__option-value collage-radio{% if option.selected_value == value %} is-selected{% endif %}">
+                          <input
+                            type="radio"
+                            name="{{ option.name }}"
+                            value="{{ value }}"
+                            {% if option.selected_value == value %}checked{% endif %}
+                            data-option-selector
+                          >
+                          <span>{{ value }}</span>
+                        </label>
+                      {%- endfor -%}
+                    </div>
+                  </div>
+                {%- endfor -%}
+              </div>
+            {%- endunless -%}
+
+            <div class="product__quantity">
+              <label class="product__quantity-label">Cantidad</label>
+              <div class="product__quantity-selector collage-input-group">
+                <button type="button" class="product__quantity-btn" data-quantity-minus>-</button>
+                <input
+                  type="number"
+                  name="quantity"
+                  value="1"
+                  min="1"
+                  class="product__quantity-input collage-input"
+                  data-quantity-input
+                >
+                <button type="button" class="product__quantity-btn" data-quantity-plus>+</button>
+              </div>
+            </div>
+
+            <button
+              type="submit"
+              class="product__add-to-cart btn btn--primary btn--large collage-button"
+              {% unless product.available %}disabled{% endunless %}
+              data-add-to-cart
+            >
+              {%- if product.available -%}
+                {% render 'icon-cart' %}
+                <span>Agregar a mi caja</span>
+              {%- else -%}
+                <span>Agotado</span>
+              {%- endif -%}
+            </button>
+
+            <div class="product__add-message" data-add-message></div>
+          {% endform %}
+
+          {%- if section.settings.show_gift_message -%}
+            <div class="product__gift-note collage-paper collage-paper--small collage-paper--accent">
+              <div class="product__gift-note-icon">{% render 'icon-gift' %}</div>
+              <p>{{ section.settings.gift_message | default: '¿Es un regalo? Agrega un mensaje personalizado en el carrito' }}</p>
+            </div>
+          {%- endif -%}
+
+          <div class="product__meta">
+            {%- if product.tags.size > 0 -%}
+              <div class="product__tags">
+                {%- for tag in product.tags -%}
+                  <a href="{{ routes.collections_url }}/all/{{ tag | handle }}" class="product__tag collage-sticker collage-sticker--small">
+                    {{ tag }}
+                  </a>
+                {%- endfor -%}
+              </div>
+            {%- endif -%}
+          </div>
+        </div>
+      </div>
+    </div>
+
+    {%- if product.description != blank -%}
+      <div class="product__description collage-paper collage-paper--large">
+        <h2 class="product__description-title collage-heading">Descripcion</h2>
+        <div class="product__description-content rte">
+          {{ product.description }}
+        </div>
+      </div>
+    {%- endif -%}
+  </div>
+</section>
+
+<script type="application/json" data-product-json>
+  {{ product | json }}
+</script>
+
+{% schema %}
+{
+  "name": "Producto principal",
+  "tag": "section",
+  "class": "section-main-product",
+  "settings": [
+    {
+      "type": "checkbox",
+      "id": "show_gift_message",
+      "label": "Mostrar nota de regalo",
+      "default": true
+    },
+    {
+      "type": "text",
+      "id": "gift_message",
+      "label": "Mensaje de regalo",
+      "default": "¿Es un regalo? Agrega un mensaje personalizado en el carrito"
+    }
+  ]
+}
+{% endschema %}

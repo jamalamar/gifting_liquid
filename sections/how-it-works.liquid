@@ -1,0 +1,135 @@
+<section class="how-it-works collage-section collage-section--alt" data-section-id="{{ section.id }}">
+  <div class="container">
+    <div class="section-header">
+      <h2 class="section-title collage-heading collage-heading--underline">
+        {{ section.settings.title | default: 'Regalar nunca fue tan facil (en serio)' }}
+      </h2>
+    </div>
+
+    <div class="how-it-works__steps">
+      {%- for block in section.blocks -%}
+        <div class="step collage-card collage-card--step" {{ block.shopify_attributes }}>
+          <div class="step__number collage-sticker collage-sticker--circle">
+            <span>{{ block.settings.number | default: forloop.index }}</span>
+          </div>
+          <div class="step__content collage-paper collage-paper--note">
+            <div class="step__icon">
+              {%- case block.settings.icon -%}
+                {%- when 'person' -%}
+                  {% render 'icon-user' %}
+                {%- when 'box' -%}
+                  {% render 'icon-gift-box' %}
+                {%- when 'heart' -%}
+                  {% render 'icon-heart' %}
+                {%- when 'truck' -%}
+                  {% render 'icon-truck' %}
+                {%- else -%}
+                  {% render 'icon-star' %}
+              {%- endcase -%}
+            </div>
+            <h3 class="step__title">{{ block.settings.title }}</h3>
+            <p class="step__description">{{ block.settings.description }}</p>
+          </div>
+          {%- unless forloop.last -%}
+            <div class="step__connector">
+              <svg class="connector-line" viewBox="0 0 100 20" preserveAspectRatio="none">
+                <path d="M0 10 Q 25 0, 50 10 T 100 10" stroke="currentColor" stroke-width="2" fill="none" stroke-dasharray="5,5"/>
+              </svg>
+            </div>
+          {%- endunless -%}
+        </div>
+      {%- endfor -%}
+    </div>
+
+    <div class="how-it-works__cta">
+      <a href="{{ section.settings.cta_link | default: routes.all_products_collection_url }}" class="btn btn--primary collage-button collage-button--large">
+        {{ section.settings.cta_text | default: 'Empezar ahora' }}
+        {% render 'icon-arrow-right' %}
+      </a>
+    </div>
+  </div>
+
+  <div class="how-it-works__decorations">
+    <div class="collage-element collage-element--paper-airplane">
+      {% render 'icon-paper-airplane' %}
+    </div>
+    <div class="collage-element collage-element--confetti"></div>
+  </div>
+</section>
+
+{% schema %}
+{
+  "name": "Como funciona",
+  "tag": "section",
+  "class": "section-how-it-works",
+  "settings": [
+    {
+      "type": "text",
+      "id": "title",
+      "label": "Titulo",
+      "default": "Regalar nunca fue tan facil (en serio)"
+    },
+    {
+      "type": "text",
+      "id": "cta_text",
+      "label": "Texto del boton",
+      "default": "Empezar ahora"
+    },
+    {
+      "type": "url",
+      "id": "cta_link",
+      "label": "Enlace del boton"
+    }
+  ],
+  "blocks": [
+    {
+      "type": "step",
+      "name": "Paso",
+      "settings": [
+        {
+          "type": "number",
+          "id": "number",
+          "label": "Numero del paso",
+          "default": 1
+        },
+        {
+          "type": "text",
+          "id": "title",
+          "label": "Titulo",
+          "default": "Elige a quien va el regalo"
+        },
+        {
+          "type": "textarea",
+          "id": "description",
+          "label": "Descripcion",
+          "default": "¿Es para tu novia, tu mama, tu compa? Empezamos por ahi."
+        },
+        {
+          "type": "select",
+          "id": "icon",
+          "label": "Icono",
+          "options": [
+            { "value": "person", "label": "Persona" },
+            { "value": "box", "label": "Caja de regalo" },
+            { "value": "heart", "label": "Corazon" },
+            { "value": "truck", "label": "Entrega" },
+            { "value": "star", "label": "Estrella" }
+          ],
+          "default": "person"
+        }
+      ]
+    }
+  ],
+  "presets": [
+    {
+      "name": "Como funciona",
+      "blocks": [
+        { "type": "step", "settings": { "number": 1, "title": "Elige a quien va el regalo", "description": "¿Es para tu novia, tu mama, tu compa? Empezamos por ahi.", "icon": "person" } },
+        { "type": "step", "settings": { "number": 2, "title": "Arma tu caja perfecta", "description": "Explora productos de emprendedores mexicanos y selecciona los que mas le van a gustar.", "icon": "box" } },
+        { "type": "step", "settings": { "number": 3, "title": "Personalizalo con amor", "description": "Agrega una tarjeta con tu mensaje. Nosotros lo armamos bonito.", "icon": "heart" } },
+        { "type": "step", "settings": { "number": 4, "title": "Lo entregamos por ti", "description": "Tu solo dinos cuando y donde. Nosotros hacemos la magia.", "icon": "truck" } }
+      ]
+    }
+  ]
+}
+{% endschema %}

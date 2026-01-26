@@ -1,0 +1,104 @@
+<section class="why-gifting collage-section" data-section-id="{{ section.id }}">
+  <div class="container">
+    <div class="section-header">
+      <h2 class="section-title collage-heading collage-heading--handwritten">
+        {{ section.settings.title | default: '¿Por que con nosotros?' }}
+      </h2>
+    </div>
+
+    <div class="why-gifting__grid">
+      {%- for block in section.blocks -%}
+        <div class="benefit-card collage-card collage-card--benefit" {{ block.shopify_attributes }}>
+          <div class="benefit-card__inner collage-paper collage-paper--note collage-paper--{{ forloop.index | modulo: 4 | plus: 1 }}">
+            <div class="benefit-card__pin collage-pin"></div>
+            <div class="benefit-card__icon">
+              {%- case block.settings.icon -%}
+                {%- when 'unique' -%}
+                  {% render 'icon-sparkle' %}
+                {%- when 'custom' -%}
+                  {% render 'icon-palette' %}
+                {%- when 'delivery' -%}
+                  {% render 'icon-truck' %}
+                {%- when 'support' -%}
+                  {% render 'icon-heart' %}
+                {%- else -%}
+                  {% render 'icon-star' %}
+              {%- endcase -%}
+            </div>
+            <h3 class="benefit-card__title">{{ block.settings.title }}</h3>
+            <p class="benefit-card__description">{{ block.settings.description }}</p>
+          </div>
+        </div>
+      {%- endfor -%}
+    </div>
+  </div>
+
+  <div class="why-gifting__decorations">
+    <div class="collage-element collage-element--string why-gifting-string"></div>
+    <div class="collage-element collage-element--doodle why-gifting-doodle-1">
+      <svg viewBox="0 0 60 60">
+        <path d="M30 5 C 45 20, 45 40, 30 55 C 15 40, 15 20, 30 5" fill="none" stroke="currentColor" stroke-width="2"/>
+      </svg>
+    </div>
+  </div>
+</section>
+
+{% schema %}
+{
+  "name": "Por que elegirnos",
+  "tag": "section",
+  "class": "section-why-gifting",
+  "settings": [
+    {
+      "type": "text",
+      "id": "title",
+      "label": "Titulo",
+      "default": "¿Por que con nosotros?"
+    }
+  ],
+  "blocks": [
+    {
+      "type": "benefit",
+      "name": "Beneficio",
+      "settings": [
+        {
+          "type": "text",
+          "id": "title",
+          "label": "Titulo",
+          "default": "Productos unicos"
+        },
+        {
+          "type": "textarea",
+          "id": "description",
+          "label": "Descripcion",
+          "default": "Nada de lo tipico. Aqui encuentras cosas que no estan en cualquier tienda."
+        },
+        {
+          "type": "select",
+          "id": "icon",
+          "label": "Icono",
+          "options": [
+            { "value": "unique", "label": "Unico (destello)" },
+            { "value": "custom", "label": "Personalizacion (paleta)" },
+            { "value": "delivery", "label": "Entrega (camion)" },
+            { "value": "support", "label": "Apoyo (corazon)" },
+            { "value": "star", "label": "Estrella" }
+          ],
+          "default": "unique"
+        }
+      ]
+    }
+  ],
+  "presets": [
+    {
+      "name": "Por que elegirnos",
+      "blocks": [
+        { "type": "benefit", "settings": { "title": "Productos unicos de emprendedores locales", "description": "Nada de lo tipico. Aqui encuentras cosas que no estan en cualquier tienda.", "icon": "unique" } },
+        { "type": "benefit", "settings": { "title": "Personalizacion real", "description": "Arma tu caja exactamente como quieres. Sin paquetes armados que nadie pidio.", "icon": "custom" } },
+        { "type": "benefit", "settings": { "title": "Entregas que no fallan", "description": "24-48 hrs en CDMX. Y si, tambien hacemos entregas sorpresa.", "icon": "delivery" } },
+        { "type": "benefit", "settings": { "title": "Apoyas al talento mexicano", "description": "Cada compra impulsa el sueno de alguien que crea con pasion.", "icon": "support" } }
+      ]
+    }
+  ]
+}
+{% endschema %}

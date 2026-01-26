@@ -1,0 +1,153 @@
+<section class="categories collage-section" data-section-id="{{ section.id }}">
+  <div class="container">
+    <div class="section-header collage-paper collage-paper--note">
+      <h2 class="section-title">{{ section.settings.title | default: '¿A quien quieres consentir hoy?' }}</h2>
+      <p class="section-subtitle">{{ section.settings.subtitle | default: 'Dinos quien se merece ese detalle y te ayudamos a encontrar el regalo ideal.' }}</p>
+    </div>
+
+    <div class="categories__grid">
+      {%- for block in section.blocks -%}
+        <a href="{{ block.settings.link | default: '#' }}" class="category-card collage-card collage-card--{{ forloop.index | modulo: 4 | plus: 1 }}" {{ block.shopify_attributes }}>
+          <div class="category-card__inner">
+            <div class="category-card__image-wrapper collage-photo collage-photo--{{ block.settings.style | default: 'tape' }}">
+              {%- if block.settings.image != blank -%}
+                <img
+                  src="{{ block.settings.image | image_url: width: 400 }}"
+                  alt="{{ block.settings.name }}"
+                  width="200"
+                  height="250"
+                  loading="lazy"
+                  class="category-card__image"
+                >
+              {%- else -%}
+                <div class="category-card__placeholder">
+                  {% render 'icon-gift' %}
+                </div>
+              {%- endif -%}
+            </div>
+            <div class="category-card__content">
+              <h3 class="category-card__name">{{ block.settings.name }}</h3>
+              <p class="category-card__tagline">{{ block.settings.tagline }}</p>
+            </div>
+            <div class="category-card__sticker collage-sticker collage-sticker--small">
+              {% render 'icon-arrow-right' %}
+            </div>
+          </div>
+        </a>
+      {%- endfor -%}
+    </div>
+
+    {%- if section.settings.show_view_all -%}
+      <div class="categories__footer">
+        <a href="{{ section.settings.view_all_link | default: routes.all_products_collection_url }}" class="btn btn--secondary collage-button">
+          {{ section.settings.view_all_text | default: 'Ver todas las categorias' }}
+        </a>
+      </div>
+    {%- endif -%}
+  </div>
+
+  <div class="categories__decorations">
+    <div class="collage-element collage-element--washi-tape categories-tape-1"></div>
+    <div class="collage-element collage-element--doodle categories-doodle-1">
+      <svg viewBox="0 0 100 100">
+        <circle cx="50" cy="50" r="45" fill="none" stroke="currentColor" stroke-width="2" stroke-dasharray="10,5"/>
+      </svg>
+    </div>
+  </div>
+</section>
+
+{% schema %}
+{
+  "name": "Categorias por persona",
+  "tag": "section",
+  "class": "section-categories",
+  "settings": [
+    {
+      "type": "text",
+      "id": "title",
+      "label": "Titulo",
+      "default": "¿A quien quieres consentir hoy?"
+    },
+    {
+      "type": "textarea",
+      "id": "subtitle",
+      "label": "Subtitulo",
+      "default": "Dinos quien se merece ese detalle y te ayudamos a encontrar el regalo ideal."
+    },
+    {
+      "type": "checkbox",
+      "id": "show_view_all",
+      "label": "Mostrar boton ver todo",
+      "default": true
+    },
+    {
+      "type": "text",
+      "id": "view_all_text",
+      "label": "Texto del boton",
+      "default": "Ver todas las categorias"
+    },
+    {
+      "type": "url",
+      "id": "view_all_link",
+      "label": "Enlace del boton"
+    }
+  ],
+  "blocks": [
+    {
+      "type": "category",
+      "name": "Categoria",
+      "settings": [
+        {
+          "type": "text",
+          "id": "name",
+          "label": "Nombre",
+          "default": "Para mi novia"
+        },
+        {
+          "type": "text",
+          "id": "tagline",
+          "label": "Tagline",
+          "default": "Porque ella merece mas que flores"
+        },
+        {
+          "type": "image_picker",
+          "id": "image",
+          "label": "Imagen"
+        },
+        {
+          "type": "url",
+          "id": "link",
+          "label": "Enlace"
+        },
+        {
+          "type": "select",
+          "id": "style",
+          "label": "Estilo de foto",
+          "options": [
+            { "value": "tape", "label": "Con cinta" },
+            { "value": "pin", "label": "Con pin" },
+            { "value": "polaroid", "label": "Polaroid" },
+            { "value": "torn", "label": "Rasgado" }
+          ],
+          "default": "tape"
+        }
+      ]
+    }
+  ],
+  "presets": [
+    {
+      "name": "Categorias por persona",
+      "blocks": [
+        { "type": "category", "settings": { "name": "Para mi novia", "tagline": "Porque ella merece mas que flores" } },
+        { "type": "category", "settings": { "name": "Para mi novio", "tagline": "El detalle que no esperaba" } },
+        { "type": "category", "settings": { "name": "Para mi mama", "tagline": "Todo lo que hace por ti, en una caja" } },
+        { "type": "category", "settings": { "name": "Para mi papa", "tagline": "Para el que 'no necesita nada'" } },
+        { "type": "category", "settings": { "name": "Para mi esposa", "tagline": "Porque el amor se celebra todos los dias" } },
+        { "type": "category", "settings": { "name": "Para mi esposo", "tagline": "El detalle que no vio venir" } },
+        { "type": "category", "settings": { "name": "Para mi mejor amiga", "tagline": "Porque nadie te conoce como ella" } },
+        { "type": "category", "settings": { "name": "Para mi mejor amigo", "tagline": "El bro que siempre esta" } }
+      ]
+    }
+  ]
+}
+{% endschema %}

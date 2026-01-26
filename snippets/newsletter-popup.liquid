@@ -1,0 +1,52 @@
+{%- comment -%}
+  Newsletter popup / modal
+{%- endcomment -%}
+
+<div class="newsletter-popup collage-paper collage-paper--large" data-newsletter-popup aria-hidden="true">
+  <div class="newsletter-popup__overlay" data-newsletter-popup-close></div>
+
+  <div class="newsletter-popup__content">
+    <button class="newsletter-popup__close collage-icon-btn" data-newsletter-popup-close aria-label="Cerrar">
+      {% render 'icon-close' %}
+    </button>
+
+    <div class="newsletter-popup__icon collage-sticker collage-sticker--large">
+      {% render 'icon-gift' %}
+    </div>
+
+    <h2 class="newsletter-popup__title">¿Quieres un 10% en tu primera compra?</h2>
+
+    <p class="newsletter-popup__text">Suscribete y ademas te avisamos de promos exclusivas y nuevos productos de nuestros creadores.</p>
+
+    <form class="newsletter-popup__form" action="{{ routes.root_url }}" method="post" data-popup-newsletter-form>
+      <input type="hidden" name="form_type" value="customer">
+      <input type="hidden" name="utf8" value="✓">
+      <input type="hidden" name="contact[tags]" value="newsletter,popup">
+
+      <div class="newsletter-popup__input-group">
+        <input
+          type="email"
+          name="contact[email]"
+          placeholder="Tu email aqui"
+          required
+          class="newsletter-popup__input collage-input"
+          aria-label="Email"
+        >
+        <button type="submit" class="newsletter-popup__submit btn btn--primary collage-button">
+          Si, quiero mi descuento
+        </button>
+      </div>
+
+      <div class="newsletter-popup__message" data-popup-newsletter-message></div>
+    </form>
+
+    <button class="newsletter-popup__skip collage-link" data-newsletter-popup-close>
+      No, gracias. Prefiero pagar precio completo.
+    </button>
+
+    <div class="newsletter-popup__decorations">
+      <div class="collage-element collage-element--tape newsletter-popup-tape-1"></div>
+      <div class="collage-element collage-element--tape newsletter-popup-tape-2"></div>
+    </div>
+  </div>
+</div>

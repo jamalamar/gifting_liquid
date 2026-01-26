@@ -1,0 +1,70 @@
+<section class="page-404 collage-section" data-section-id="{{ section.id }}">
+  <div class="container">
+    <div class="page-404__content collage-paper collage-paper--large">
+      <div class="page-404__tape collage-element collage-element--tape"></div>
+
+      <div class="page-404__icon collage-sticker collage-sticker--large">
+        {% render 'icon-confused' %}
+      </div>
+
+      <h1 class="page-404__title">{{ section.settings.title | default: '¡Ups! Esta pagina se nos perdio' }}</h1>
+
+      <p class="page-404__text">{{ section.settings.text | default: 'Parece que llegaste a un lugar que no existe. ¿Te llevamos de regreso al inicio?' }}</p>
+
+      <div class="page-404__actions">
+        <a href="{{ routes.root_url }}" class="btn btn--primary collage-button">
+          {% render 'icon-home' %}
+          <span>Ir al inicio</span>
+        </a>
+        <a href="{{ routes.all_products_collection_url }}" class="btn btn--secondary collage-button">
+          {% render 'icon-gift' %}
+          <span>Ver productos</span>
+        </a>
+      </div>
+
+      <div class="page-404__search collage-paper collage-paper--note">
+        <p>O busca lo que necesitas:</p>
+        <form action="{{ routes.search_url }}" method="get" class="page-404__search-form">
+          <input
+            type="search"
+            name="q"
+            placeholder="Buscar..."
+            class="page-404__search-input collage-input"
+          >
+          <button type="submit" class="page-404__search-submit btn btn--primary collage-button">
+            {% render 'icon-search' %}
+          </button>
+        </form>
+      </div>
+
+      <div class="page-404__decorations">
+        <div class="collage-element collage-element--paper-airplane page-404-airplane">
+          {% render 'icon-paper-airplane' %}
+        </div>
+        <div class="collage-element collage-element--question-mark page-404-question">?</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+{% schema %}
+{
+  "name": "Pagina 404",
+  "tag": "section",
+  "class": "section-page-404",
+  "settings": [
+    {
+      "type": "text",
+      "id": "title",
+      "label": "Titulo",
+      "default": "¡Ups! Esta pagina se nos perdio"
+    },
+    {
+      "type": "textarea",
+      "id": "text",
+      "label": "Texto",
+      "default": "Parece que llegaste a un lugar que no existe. ¿Te llevamos de regreso al inicio?"
+    }
+  ]
+}
+{% endschema %}

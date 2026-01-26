@@ -1,0 +1,101 @@
+<section class="newsletter collage-section collage-section--accent" data-section-id="{{ section.id }}">
+  <div class="container">
+    <div class="newsletter__wrapper collage-paper collage-paper--envelope">
+      <div class="newsletter__content">
+        <div class="newsletter__icon collage-sticker collage-sticker--large">
+          {% render 'icon-email' %}
+        </div>
+        <h2 class="newsletter__title">
+          {{ section.settings.title | default: 'No te pierdas el chisme bueno' }}
+        </h2>
+        <p class="newsletter__subtitle">
+          {{ section.settings.subtitle | default: 'Suscribete y te avisamos de nuevos productos, promos exclusivas y las fechas que no puedes olvidar (como el cumple de tu suegra).' }}
+        </p>
+
+        <form class="newsletter__form" action="{{ routes.root_url }}" method="post" data-newsletter-form>
+          <input type="hidden" name="form_type" value="customer">
+          <input type="hidden" name="utf8" value="✓">
+          <input type="hidden" name="contact[tags]" value="newsletter">
+
+          <div class="newsletter__input-group">
+            <input
+              type="email"
+              name="contact[email]"
+              placeholder="{{ section.settings.placeholder | default: 'Tu email aqui' }}"
+              required
+              class="newsletter__input collage-input"
+              aria-label="Email"
+            >
+            <button type="submit" class="newsletter__submit btn btn--primary collage-button">
+              {{ section.settings.cta_text | default: 'Quiero enterarme' }}
+              {% render 'icon-arrow-right' %}
+            </button>
+          </div>
+
+          <div class="newsletter__message" data-newsletter-message></div>
+        </form>
+
+        <p class="newsletter__disclaimer">
+          {{ section.settings.disclaimer | default: 'Prometemos no llenarte de spam. Solo cosas buenas.' }}
+        </p>
+      </div>
+
+      <div class="newsletter__decorations">
+        <div class="collage-element collage-element--stamp newsletter-stamp"></div>
+        <div class="collage-element collage-element--doodle newsletter-doodle">
+          <svg viewBox="0 0 100 50">
+            <path d="M10 40 Q 30 10, 50 25 T 90 15" fill="none" stroke="currentColor" stroke-width="2" stroke-dasharray="5,3"/>
+          </svg>
+        </div>
+        <div class="collage-element collage-element--heart newsletter-heart">
+          {% render 'icon-heart' %}
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+{% schema %}
+{
+  "name": "Newsletter",
+  "tag": "section",
+  "class": "section-newsletter",
+  "settings": [
+    {
+      "type": "text",
+      "id": "title",
+      "label": "Titulo",
+      "default": "No te pierdas el chisme bueno"
+    },
+    {
+      "type": "textarea",
+      "id": "subtitle",
+      "label": "Subtitulo",
+      "default": "Suscribete y te avisamos de nuevos productos, promos exclusivas y las fechas que no puedes olvidar (como el cumple de tu suegra)."
+    },
+    {
+      "type": "text",
+      "id": "placeholder",
+      "label": "Placeholder del input",
+      "default": "Tu email aqui"
+    },
+    {
+      "type": "text",
+      "id": "cta_text",
+      "label": "Texto del boton",
+      "default": "Quiero enterarme"
+    },
+    {
+      "type": "text",
+      "id": "disclaimer",
+      "label": "Texto de disclaimer",
+      "default": "Prometemos no llenarte de spam. Solo cosas buenas."
+    }
+  ],
+  "presets": [
+    {
+      "name": "Newsletter"
+    }
+  ]
+}
+{% endschema %}

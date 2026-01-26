@@ -1,0 +1,29 @@
+{%- comment -%}
+  Product card placeholder for when no products exist
+  Usage: {% render 'product-card-placeholder', index: forloop.index %}
+{%- endcomment -%}
+
+{%- liquid
+  assign index = index | default: 1
+  assign style_variant = index | modulo: 4 | plus: 1
+-%}
+
+<article class="product-card product-card--placeholder collage-photo collage-photo--style-{{ style_variant }}">
+  <div class="product-card__link">
+    <div class="product-card__image-wrapper">
+      <div class="product-card__placeholder">
+        {% render 'icon-gift' %}
+      </div>
+    </div>
+
+    <div class="product-card__content">
+      <p class="product-card__vendor collage-handwritten">Marca</p>
+      <h3 class="product-card__title">Nombre del producto</h3>
+      <div class="product-card__price">
+        <span class="product-card__price-current">$000.00 MXN</span>
+      </div>
+    </div>
+  </div>
+
+  <div class="product-card__tape collage-element collage-element--tape collage-element--tape-{{ style_variant }}"></div>
+</article>
