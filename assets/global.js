@@ -451,23 +451,30 @@ class CollectionFilters {
   constructor() {
     this.filterToggle = document.querySelector('[data-filter-toggle]');
     this.filterSidebar = document.querySelector('[data-filter-sidebar]');
-    this.filterClose = document.querySelector('[data-filter-close]');
+    this.filterCloseButtons = document.querySelectorAll('[data-filter-close]');
     this.sortSelect = document.querySelector('[data-sort-select]');
 
     this.init();
   }
 
   init() {
+    // Filter drawer toggle
     if (this.filterToggle && this.filterSidebar) {
-      this.filterToggle.addEventListener('click', () => {
-        this.filterSidebar.classList.toggle('is-open');
+      this.filterToggle.addEventListener('click', () => this.openFilters());
+
+      this.filterCloseButtons.forEach(btn => {
+        btn.addEventListener('click', () => this.closeFilters());
       });
 
-      this.filterClose?.addEventListener('click', () => {
-        this.filterSidebar.classList.remove('is-open');
+      // Close on escape
+      document.addEventListener('keydown', (e) => {
+        if (e.key === 'Escape') {
+          this.closeFilters();
+        }
       });
     }
 
+    // Sort select
     if (this.sortSelect) {
       this.sortSelect.addEventListener('change', () => {
         const url = new URL(window.location.href);
@@ -476,12 +483,45 @@ class CollectionFilters {
       });
     }
 
+    // Filter group toggles
+    document.querySelectorAll('[data-filter-toggle-group]').forEach(toggle => {
+      toggle.addEventListener('click', () => {
+        const group = toggle.closest('[data-filter-group]');
+        if (group) {
+          group.classList.toggle('is-open');
+          const isOpen = group.classList.contains('is-open');
+          toggle.setAttribute('aria-expanded', isOpen);
+        }
+      });
+    });
+
     // Filter checkboxes
     document.querySelectorAll('[data-filter-checkbox]').forEach(checkbox => {
       checkbox.addEventListener('change', () => {
         this.applyFilters();
       });
     });
+
+    // Price range inputs
+    const priceInputs = document.querySelectorAll('[data-filter-price-min], [data-filter-price-max]');
+    priceInputs.forEach(input => {
+      input.addEventListener('change', debounce(() => {
+        this.applyFilters();
+      }, 500));
+    });
+  }
+
+  openFilters() {
+    this.filterSidebar.setAttribute('aria-hidden', 'false');
+    this.filterToggle.setAttribute('aria-expanded', 'true');
+    document.body.style.overflow = 'hidden';
+    trapFocus(this.filterSidebar);
+  }
+
+  closeFilters() {
+    this.filterSidebar?.setAttribute('aria-hidden', 'true');
+    this.filterToggle?.setAttribute('aria-expanded', 'false');
+    document.body.style.overflow = '';
   }
 
   applyFilters() {
@@ -497,6 +537,16 @@ class CollectionFilters {
     document.querySelectorAll('[data-filter-checkbox]:checked').forEach(checkbox => {
       url.searchParams.append(checkbox.name, checkbox.value);
     });
+
+    // Add price range
+    const minPrice = document.querySelector('[data-filter-price-min]');
+    const maxPrice = document.querySelector('[data-filter-price-max]');
+    if (minPrice?.value) {
+      url.searchParams.set(minPrice.name, minPrice.value * 100);
+    }
+    if (maxPrice?.value) {
+      url.searchParams.set(maxPrice.name, maxPrice.value * 100);
+    }
 
     window.location.href = url.toString();
   }

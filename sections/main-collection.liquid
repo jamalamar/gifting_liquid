@@ -1,85 +1,151 @@
-<section class="collection collage-section" data-section-id="{{ section.id }}">
-  <div class="container">
-    <div class="collection__header collage-paper collage-paper--large">
-      <div class="collection__header-tape collage-element collage-element--tape"></div>
+<section class="collection-page" data-section-id="{{ section.id }}">
 
-      <h1 class="collection__title collage-heading">{{ collection.title }}</h1>
-
-      {%- if collection.description != blank -%}
-        <div class="collection__description">
-          {{ collection.description }}
+  <!-- Collection Hero -->
+  <div class="collection-hero">
+    <div class="container">
+      <div class="collection-hero__content">
+        <div class="collection-hero__tag collage-sticker collage-sticker--handwritten">
+          {% render 'icon-sparkle' %}
+          <span>Catálogo</span>
+        </div>
+        <h1 class="collection-hero__title">{{ collection.title }}</h1>
+        {%- if collection.description != blank -%}
+          <p class="collection-hero__description">{{ collection.description | strip_html | truncate: 200 }}</p>
+        {%- endif -%}
+        <div class="collection-hero__count collage-sticker collage-sticker--small">
+          {{ collection.products_count }} productos
+        </div>
+      </div>
+      {%- if collection.image -%}
+        <div class="collection-hero__image collage-photo collage-photo--tape">
+          <img
+            src="{{ collection.image | image_url: width: 600 }}"
+            alt="{{ collection.title }}"
+            loading="eager"
+          >
         </div>
       {%- endif -%}
-
-      <div class="collection__meta">
-        <span class="collection__count">{{ collection.products_count }} productos</span>
-      </div>
     </div>
+    <div class="collection-hero__tape collage-element collage-element--tape"></div>
+  </div>
 
-    <div class="collection__toolbar">
-      <div class="collection__filters">
-        <button class="collection__filter-toggle collage-button collage-button--small" data-filter-toggle>
+  <!-- Toolbar -->
+  <div class="collection-toolbar">
+    <div class="container">
+      <div class="collection-toolbar__inner">
+        <button class="collection-toolbar__filter-btn" data-filter-toggle aria-expanded="false" aria-controls="collection-filters">
           {% render 'icon-filter' %}
-          <span>Filtrar</span>
+          <span>Filtros</span>
         </button>
-      </div>
 
-      <div class="collection__sort">
-        <label for="sort-by" class="visually-hidden">Ordenar por</label>
-        <select id="sort-by" class="collection__sort-select collage-select" data-sort-select>
-          {%- for option in collection.sort_options -%}
-            <option value="{{ option.value }}"{% if option.value == collection.sort_by %} selected{% endif %}>
-              {{ option.name }}
-            </option>
-          {%- endfor -%}
-        </select>
-      </div>
-    </div>
-
-    <div class="collection__content">
-      <aside class="collection__sidebar collage-paper collage-paper--note" data-filter-sidebar>
-        <div class="collection__sidebar-header">
-          <h2 class="collection__sidebar-title">Filtros</h2>
-          <button class="collection__sidebar-close" data-filter-close>
-            {% render 'icon-close' %}
-          </button>
+        <div class="collection-toolbar__sort">
+          <label for="sort-by" class="visually-hidden">Ordenar por</label>
+          <select id="sort-by" class="collection-toolbar__select" data-sort-select>
+            {%- for option in collection.sort_options -%}
+              <option value="{{ option.value }}"{% if option.value == collection.sort_by %} selected{% endif %}>
+                {{ option.name }}
+              </option>
+            {%- endfor -%}
+          </select>
+          {% render 'icon-chevron-down' %}
         </div>
-
-        {% render 'collection-filters', collection: collection %}
-      </aside>
-
-      <div class="collection__grid">
-        {%- paginate collection.products by section.settings.products_per_page -%}
-          {%- if collection.products.size > 0 -%}
-            <div class="collection__products">
-              {%- for product in collection.products -%}
-                <div class="collection__product collage-card collage-card--product">
-                  {% render 'product-card', product: product, index: forloop.index %}
-                </div>
-              {%- endfor -%}
-            </div>
-
-            {%- if paginate.pages > 1 -%}
-              <div class="collection__pagination">
-                {% render 'pagination', paginate: paginate %}
-              </div>
-            {%- endif -%}
-          {%- else -%}
-            <div class="collection__empty collage-paper collage-paper--note">
-              <div class="collection__empty-icon collage-sticker">
-                {% render 'icon-search' %}
-              </div>
-              <h2 class="collection__empty-title">No encontramos lo que buscas</h2>
-              <p class="collection__empty-text">Intenta con otras palabras o échale un ojo a nuestras categorías. Seguro hay algo que te late.</p>
-              <a href="{{ routes.all_products_collection_url }}" class="btn btn--primary collage-button">
-                Ver todos los productos
-              </a>
-            </div>
-          {%- endif -%}
-        {%- endpaginate -%}
       </div>
     </div>
   </div>
+
+  <!-- Main Content -->
+  <div class="collection-main">
+    <div class="container">
+      <div class="collection-layout">
+
+        <!-- Filter Sidebar / Drawer -->
+        <aside class="collection-filters" id="collection-filters" data-filter-sidebar aria-hidden="true">
+          <div class="collection-filters__overlay" data-filter-close></div>
+          <div class="collection-filters__panel">
+            <div class="collection-filters__header">
+              <h2 class="collection-filters__title">Filtros</h2>
+              <button class="collection-filters__close" data-filter-close aria-label="Cerrar filtros">
+                {% render 'icon-close' %}
+              </button>
+            </div>
+            <div class="collection-filters__body">
+              {% render 'collection-filters', collection: collection %}
+            </div>
+          </div>
+        </aside>
+
+        <!-- Product Grid -->
+        <div class="collection-products-wrapper">
+          {%- paginate collection.products by section.settings.products_per_page -%}
+            {%- if collection.products.size > 0 -%}
+              <div class="collection-products">
+                {%- for product in collection.products -%}
+                  {% render 'product-card', product: product, index: forloop.index %}
+                {%- endfor -%}
+              </div>
+
+              {%- if paginate.pages > 1 -%}
+                <nav class="collection-pagination" aria-label="Paginacion">
+                  <div class="collection-pagination__inner">
+                    {%- if paginate.previous -%}
+                      <a href="{{ paginate.previous.url }}" class="collection-pagination__btn collection-pagination__btn--prev">
+                        {% render 'icon-chevron-left' %}
+                        <span>Anterior</span>
+                      </a>
+                    {%- else -%}
+                      <span class="collection-pagination__btn collection-pagination__btn--prev collection-pagination__btn--disabled">
+                        {% render 'icon-chevron-left' %}
+                        <span>Anterior</span>
+                      </span>
+                    {%- endif -%}
+
+                    <div class="collection-pagination__pages">
+                      {%- for part in paginate.parts -%}
+                        {%- if part.is_link -%}
+                          <a href="{{ part.url }}" class="collection-pagination__page">{{ part.title }}</a>
+                        {%- else -%}
+                          {%- if part.title == paginate.current_page -%}
+                            <span class="collection-pagination__page collection-pagination__page--current collage-sticker collage-sticker--small">{{ part.title }}</span>
+                          {%- else -%}
+                            <span class="collection-pagination__page collection-pagination__page--ellipsis">{{ part.title }}</span>
+                          {%- endif -%}
+                        {%- endif -%}
+                      {%- endfor -%}
+                    </div>
+
+                    {%- if paginate.next -%}
+                      <a href="{{ paginate.next.url }}" class="collection-pagination__btn collection-pagination__btn--next">
+                        <span>Siguiente</span>
+                        {% render 'icon-chevron-right' %}
+                      </a>
+                    {%- else -%}
+                      <span class="collection-pagination__btn collection-pagination__btn--next collection-pagination__btn--disabled">
+                        <span>Siguiente</span>
+                        {% render 'icon-chevron-right' %}
+                      </span>
+                    {%- endif -%}
+                  </div>
+                </nav>
+              {%- endif -%}
+            {%- else -%}
+              <div class="collection-empty">
+                <div class="collection-empty__icon collage-sticker collage-sticker--large">
+                  {% render 'icon-confused' %}
+                </div>
+                <h2 class="collection-empty__title">No encontramos lo que buscas</h2>
+                <p class="collection-empty__text">Intenta con otras palabras o échale un ojo a nuestras categorías. Seguro hay algo que te late.</p>
+                <a href="{{ routes.all_products_collection_url }}" class="btn btn--primary">
+                  Ver todos los productos
+                </a>
+              </div>
+            {%- endif -%}
+          {%- endpaginate -%}
+        </div>
+
+      </div>
+    </div>
+  </div>
+
 </section>
 
 {% schema %}

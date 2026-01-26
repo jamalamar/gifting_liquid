@@ -3,21 +3,21 @@
   Usage: {% render 'collection-filters', collection: collection %}
 {%- endcomment -%}
 
-<div class="collection-filters">
+<div class="filters-list">
   {%- for filter in collection.filters -%}
-    <div class="collection-filter" data-filter-group>
-      <button class="collection-filter__toggle collage-button collage-button--text" data-filter-toggle-group aria-expanded="true">
+    <div class="filter-group is-open" data-filter-group>
+      <button class="filter-group__toggle" data-filter-toggle-group aria-expanded="true">
         <span>{{ filter.label }}</span>
         {% render 'icon-chevron-down' %}
       </button>
 
-      <div class="collection-filter__content" data-filter-content>
+      <div class="filter-group__content" data-filter-content>
         {%- case filter.type -%}
           {%- when 'list' -%}
-            <ul class="collection-filter__list">
+            <ul class="filter-group__list">
               {%- for value in filter.values -%}
-                <li class="collection-filter__item">
-                  <label class="collection-filter__checkbox collage-checkbox">
+                <li class="filter-option">
+                  <label>
                     <input
                       type="checkbox"
                       name="{{ value.param_name }}"
@@ -26,43 +26,38 @@
                       {% if value.count == 0 and value.active == false %}disabled{% endif %}
                       data-filter-checkbox
                     >
-                    <span class="collection-filter__checkmark"></span>
-                    <span class="collection-filter__label">
-                      {{ value.label }}
-                      <span class="collection-filter__count">({{ value.count }})</span>
-                    </span>
+                    <span class="filter-option__label">{{ value.label }}</span>
+                    <span class="filter-option__count">({{ value.count }})</span>
                   </label>
                 </li>
               {%- endfor -%}
             </ul>
 
           {%- when 'price_range' -%}
-            <div class="collection-filter__price-range">
-              <div class="collection-filter__price-inputs">
-                <div class="collection-filter__price-input">
-                  <span class="collection-filter__price-currency">{{ cart.currency.symbol }}</span>
+            <div class="filter-price">
+              <div class="filter-price__inputs">
+                <div class="filter-price__field">
+                  <span class="filter-price__currency">{{ cart.currency.symbol }}</span>
                   <input
                     type="number"
                     name="{{ filter.min_value.param_name }}"
                     value="{{ filter.min_value.value | money_without_currency | replace: ',', '' }}"
                     min="0"
                     max="{{ filter.range_max | money_without_currency | replace: ',', '' }}"
-                    placeholder="{{ filter.min_value.value | money_without_currency }}"
-                    class="collage-input"
+                    placeholder="Min"
                     data-filter-price-min
                   >
                 </div>
-                <span class="collection-filter__price-separator">-</span>
-                <div class="collection-filter__price-input">
-                  <span class="collection-filter__price-currency">{{ cart.currency.symbol }}</span>
+                <span class="filter-price__separator">-</span>
+                <div class="filter-price__field">
+                  <span class="filter-price__currency">{{ cart.currency.symbol }}</span>
                   <input
                     type="number"
                     name="{{ filter.max_value.param_name }}"
                     value="{{ filter.max_value.value | money_without_currency | replace: ',', '' }}"
                     min="0"
                     max="{{ filter.range_max | money_without_currency | replace: ',', '' }}"
-                    placeholder="{{ filter.range_max | money_without_currency }}"
-                    class="collage-input"
+                    placeholder="Max"
                     data-filter-price-max
                   >
                 </div>
@@ -74,8 +69,8 @@
   {%- endfor -%}
 
   {%- if collection.filters.size > 0 -%}
-    <div class="collection-filters__actions">
-      <a href="{{ collection.url }}" class="collection-filters__clear collage-link">
+    <div class="filters-actions">
+      <a href="{{ collection.url }}" class="filters-clear">
         Limpiar filtros
       </a>
     </div>
