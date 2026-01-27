@@ -1,7 +1,7 @@
-<section class="entrepreneurs collage-section" data-section-id="{{ section.id }}">
+<section class="entrepreneurs collage-section" data-section-id="{{ section.id }}" data-animate="entrepreneurs">
   <div class="container">
     <div class="entrepreneurs__wrapper collage-paper collage-paper--large">
-      <div class="entrepreneurs__content">
+      <div class="entrepreneurs__content animate-item animate-item--left" style="--i:0">
         <div class="entrepreneurs__badge collage-sticker collage-sticker--handwritten">
           {% render 'icon-heart' %}
           <span>Hecho en Mexico</span>
@@ -20,7 +20,7 @@
 
       <div class="entrepreneurs__gallery">
         {%- for block in section.blocks -%}
-          <div class="entrepreneur-card collage-polaroid collage-polaroid--{{ forloop.index | modulo: 3 | plus: 1 }}" {{ block.shopify_attributes }}>
+          <div class="entrepreneur-card collage-polaroid collage-polaroid--{{ forloop.index | modulo: 3 | plus: 1 }} animate-item animate-item--drop" style="--i:{{ forloop.index | plus: 1 }}" {{ block.shopify_attributes }}>
             {%- if block.settings.image != blank -%}
               <img
                 src="{{ block.settings.image | image_url: width: 300 }}"

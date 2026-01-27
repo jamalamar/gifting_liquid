@@ -1,13 +1,13 @@
-<section class="categories collage-section" data-section-id="{{ section.id }}">
+<section class="categories collage-section" data-section-id="{{ section.id }}" data-animate="stagger">
   <div class="container">
-    <div class="section-header collage-paper collage-paper--note">
+    <div class="section-header collage-paper collage-paper--note animate-item" style="--i:0">
       <h2 class="section-title">{{ section.settings.title | default: '¿A quien quieres consentir hoy?' }}</h2>
       <p class="section-subtitle">{{ section.settings.subtitle | default: 'Dinos quien se merece ese detalle y te ayudamos a encontrar el regalo ideal.' }}</p>
     </div>
 
     <div class="categories__grid">
       {%- for block in section.blocks -%}
-        <a href="{{ block.settings.link | default: '#' }}" class="category-card collage-card collage-card--{{ forloop.index | modulo: 4 | plus: 1 }}" {{ block.shopify_attributes }}>
+        <a href="{{ block.settings.link | default: '#' }}" class="category-card collage-card collage-card--{{ forloop.index | modulo: 4 | plus: 1 }} animate-item" style="--i:{{ forloop.index }}" {{ block.shopify_attributes }}>
           <div class="category-card__inner">
             <div class="category-card__image-wrapper collage-photo collage-photo--{{ block.settings.style | default: 'tape' }}">
               {%- if block.settings.image != blank -%}
@@ -38,7 +38,7 @@
     </div>
 
     {%- if section.settings.show_view_all -%}
-      <div class="categories__footer">
+      <div class="categories__footer animate-item" style="--i:{{ section.blocks.size | plus: 1 }}">
         <a href="{{ section.settings.view_all_link | default: routes.all_products_collection_url }}" class="btn btn--secondary collage-button">
           {{ section.settings.view_all_text | default: 'Ver todas las categorias' }}
         </a>

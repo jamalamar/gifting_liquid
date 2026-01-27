@@ -1,6 +1,6 @@
-<section class="how-it-works collage-section collage-section--alt" data-section-id="{{ section.id }}">
+<section class="how-it-works collage-section collage-section--alt" data-section-id="{{ section.id }}" data-animate="steps">
   <div class="container">
-    <div class="section-header">
+    <div class="section-header animate-item" style="--i:0">
       <h2 class="section-title collage-heading collage-heading--underline">
         {{ section.settings.title | default: 'Regalar nunca fue tan facil (en serio)' }}
       </h2>
@@ -8,7 +8,7 @@
 
     <div class="how-it-works__steps">
       {%- for block in section.blocks -%}
-        <div class="step collage-card collage-card--step" {{ block.shopify_attributes }}>
+        <div class="step collage-card collage-card--step animate-item" style="--i:{{ forloop.index }}" {{ block.shopify_attributes }}>
           <div class="step__number collage-sticker collage-sticker--circle">
             <span>{{ block.settings.number | default: forloop.index }}</span>
           </div>
@@ -41,7 +41,7 @@
       {%- endfor -%}
     </div>
 
-    <div class="how-it-works__cta">
+    <div class="how-it-works__cta animate-item" style="--i:{{ section.blocks.size | plus: 1 }}">
       <a href="{{ section.settings.cta_link | default: routes.all_products_collection_url }}" class="btn btn--primary collage-button collage-button--large">
         {{ section.settings.cta_text | default: 'Empezar ahora' }}
         {% render 'icon-arrow-right' %}

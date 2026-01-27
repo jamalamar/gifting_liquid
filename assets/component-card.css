@@ -3764,3 +3764,290 @@ a.contact-info__item:hover .contact-info__value {
   color: #dc2626;
   font-size: 0.9rem;
 }
+
+/* ============================================
+   HOME PAGE - Editorial Animations & Enhancements
+   ============================================ */
+
+/* === Core Animation System === */
+[data-animate] .animate-item {
+  opacity: 0;
+  transform: translateY(40px);
+  transition: opacity 0.7s ease, transform 0.7s cubic-bezier(0.16, 1, 0.3, 1);
+  transition-delay: calc(var(--i, 0) * 80ms);
+}
+
+[data-animate].is-visible .animate-item {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+/* Slide from left variant */
+[data-animate].is-visible .animate-item--left {
+  opacity: 1;
+  transform: translateX(0);
+}
+
+.animate-item--left {
+  opacity: 0;
+  transform: translateX(-60px);
+  transition: opacity 0.7s ease, transform 0.7s cubic-bezier(0.16, 1, 0.3, 1);
+  transition-delay: calc(var(--i, 0) * 80ms);
+}
+
+/* Drop-in variant (for polaroids) */
+.animate-item--drop {
+  opacity: 0;
+  transform: translateY(-40px) rotate(-8deg);
+  transition: opacity 0.6s ease, transform 0.6s cubic-bezier(0.34, 1.56, 0.64, 1);
+  transition-delay: calc(var(--i, 0) * 120ms);
+}
+
+[data-animate].is-visible .animate-item--drop {
+  opacity: 1;
+  transform: translateY(0) rotate(0deg);
+}
+
+/* Icon spring animation */
+.animate-icon {
+  transform: scale(0);
+  transition: transform 0.5s cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+
+[data-animate].is-visible .animate-icon {
+  transform: scale(1);
+  transition-delay: 0.3s;
+}
+
+/* === Hero Editorial Enhancements === */
+.hero__headline {
+  font-size: clamp(2.5rem, 6vw, 4.5rem);
+  line-height: 1.05;
+  letter-spacing: -0.02em;
+  font-weight: 800;
+}
+
+.hero__text {
+  position: relative;
+}
+
+/* Hero word reveal */
+.hero__word {
+  display: inline-block;
+  opacity: 0;
+  transform: translateY(100%);
+  transition: opacity 0.6s ease, transform 0.6s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+[data-animate="hero"].is-visible .hero__word {
+  opacity: 1;
+  transform: translateY(0);
+  transition-delay: calc(var(--i, 0) * 0.08s + 0.2s);
+}
+
+/* Hero floating elements */
+.hero__float {
+  animation: floatY 4s ease-in-out infinite;
+  animation-delay: var(--float-delay, 0s);
+}
+
+/* Hero scroll indicator bounce */
+.hero__scroll-indicator {
+  animation: scrollBounce 2s ease-in-out infinite;
+}
+
+[data-animate="hero"].is-visible .hero__scroll-indicator {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+/* === How It Works - Step Animations === */
+[data-animate="steps"] .step__number {
+  transform: scale(0);
+  transition: transform 0.5s cubic-bezier(0.34, 1.56, 0.64, 1);
+  transition-delay: calc(var(--i, 0) * 150ms + 0.2s);
+}
+
+[data-animate="steps"].is-visible .step__number {
+  transform: scale(1);
+}
+
+/* Connector line draw-in */
+.step__connector svg path {
+  stroke-dasharray: 200;
+  stroke-dashoffset: 200;
+  transition: stroke-dashoffset 1s ease;
+  transition-delay: calc(var(--i, 0) * 150ms + 0.4s);
+}
+
+[data-animate="steps"].is-visible .step__connector svg path {
+  stroke-dashoffset: 0;
+}
+
+/* === Category Cards - Enhanced Hover === */
+.category-card {
+  transition: transform 0.4s cubic-bezier(0.16, 1, 0.3, 1), box-shadow 0.4s ease;
+}
+
+.category-card:hover {
+  transform: translateY(-8px) rotate(-1deg);
+  box-shadow: 0 20px 40px rgba(0, 0, 0, 0.12);
+}
+
+.category-card:hover .category-card__sticker {
+  transform: scale(1.15) rotate(5deg);
+}
+
+.category-card__sticker {
+  transition: transform 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+
+/* === Featured Products - Hover Enhancement === */
+.featured-products__item {
+  transition: transform 0.4s cubic-bezier(0.16, 1, 0.3, 1), box-shadow 0.4s ease;
+}
+
+.featured-products__item:hover {
+  transform: scale(1.02);
+  box-shadow: 0 12px 32px rgba(0, 0, 0, 0.1);
+}
+
+/* === Entrepreneurs - Badge bounce === */
+[data-animate="entrepreneurs"].is-visible .entrepreneurs__badge {
+  animation: badgeBounce 0.6s cubic-bezier(0.34, 1.56, 0.64, 1) 0.5s both;
+}
+
+/* === Occasions - Scroll snap enhancement === */
+.occasions__track {
+  scroll-snap-type: x mandatory;
+  -webkit-overflow-scrolling: touch;
+}
+
+.occasion-card {
+  scroll-snap-align: start;
+  transition: transform 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.occasion-card:hover {
+  transform: translateY(-6px);
+}
+
+/* Carousel nav pulse on idle */
+.carousel-btn {
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.carousel-btn:hover {
+  transform: scale(1.1);
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.15);
+}
+
+/* === Why Gifting - Benefit card icon spring === */
+[data-animate="stagger"].is-visible .benefit-card .animate-icon {
+  transform: scale(1);
+  transition-delay: calc(var(--i, 0) * 80ms + 0.3s);
+}
+
+.benefit-card {
+  transition: transform 0.4s cubic-bezier(0.16, 1, 0.3, 1), box-shadow 0.4s ease;
+}
+
+.benefit-card:hover {
+  transform: translateY(-6px);
+  box-shadow: 0 16px 32px rgba(0, 0, 0, 0.08);
+}
+
+/* === Newsletter - Envelope & Pulse === */
+.newsletter__submit--pulse {
+  position: relative;
+}
+
+.newsletter__submit--pulse::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  box-shadow: 0 0 0 0 rgba(var(--color-accent-rgb, 231, 111, 81), 0.4);
+  animation: btnPulse 2.5s ease-in-out infinite 3s;
+}
+
+/* === Keyframe Animations === */
+@keyframes floatY {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(-15px); }
+}
+
+@keyframes scrollBounce {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(8px); }
+}
+
+@keyframes badgeBounce {
+  0% { transform: scale(0) rotate(-12deg); }
+  60% { transform: scale(1.15) rotate(3deg); }
+  100% { transform: scale(1) rotate(-2deg); }
+}
+
+@keyframes btnPulse {
+  0%, 100% { box-shadow: 0 0 0 0 rgba(var(--color-accent-rgb, 231, 111, 81), 0.4); }
+  50% { box-shadow: 0 0 0 12px rgba(var(--color-accent-rgb, 231, 111, 81), 0); }
+}
+
+@keyframes wordReveal {
+  from {
+    opacity: 0;
+    transform: translateY(100%);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes popIn {
+  from { transform: scale(0); }
+  to { transform: scale(1); }
+}
+
+/* === Reduced Motion === */
+@media (prefers-reduced-motion: reduce) {
+  [data-animate] .animate-item,
+  .animate-item--left,
+  .animate-item--drop,
+  .animate-icon,
+  .hero__word {
+    opacity: 1;
+    transform: none;
+    transition: none;
+    animation: none;
+  }
+
+  .hero__float,
+  .hero__scroll-indicator,
+  .newsletter__submit--pulse::after {
+    animation: none;
+  }
+
+  [data-animate] .step__number {
+    transform: scale(1);
+    transition: none;
+  }
+
+  .step__connector svg path {
+    stroke-dashoffset: 0;
+    transition: none;
+  }
+}
+
+/* === Editorial Typography - Section titles === */
+.section-title {
+  font-size: clamp(1.8rem, 4vw, 3rem);
+  line-height: 1.1;
+  letter-spacing: -0.01em;
+}
+
+.section-subtitle {
+  font-size: clamp(1rem, 1.5vw, 1.15rem);
+  max-width: 600px;
+  margin-inline: auto;
+}

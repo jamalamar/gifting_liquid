@@ -3,26 +3,24 @@
    Animations and visual effects for collage style
    ============================================ */
 
-// Parallax effect on scroll
+// Parallax effect on scroll (enhanced with depth layers)
 class ParallaxEffect {
   constructor() {
-    this.elements = document.querySelectorAll('.collage-deco, .collage-element--paper-airplane');
+    this.elements = document.querySelectorAll('[data-parallax-speed], .collage-deco, .collage-element--paper-airplane');
     this.init();
   }
 
   init() {
     if (this.elements.length === 0) return;
-
     window.addEventListener('scroll', () => {
       requestAnimationFrame(() => this.onScroll());
-    });
+    }, { passive: true });
   }
 
   onScroll() {
     const scrollY = window.scrollY;
-
     this.elements.forEach((el, index) => {
-      const speed = 0.05 + (index * 0.02);
+      const speed = parseFloat(el.dataset.parallaxSpeed) || (0.05 + (index * 0.02));
       const yPos = scrollY * speed;
       el.style.transform = `translateY(${yPos}px)`;
     });
@@ -38,11 +36,10 @@ class CollageCardEffects {
 
   init() {
     this.cards.forEach(card => {
-      // Store original transform
       const originalTransform = window.getComputedStyle(card).transform;
 
       card.addEventListener('mouseenter', () => {
-        const randomRotation = (Math.random() - 0.5) * 4; // -2 to 2 degrees
+        const randomRotation = (Math.random() - 0.5) * 4;
         card.style.transition = 'transform 0.3s ease';
         card.style.transform = `${originalTransform === 'none' ? '' : originalTransform} rotate(${randomRotation}deg) translateY(-5px)`;
       });
@@ -74,39 +71,68 @@ class StickerEffects {
   }
 }
 
-// Intersection Observer for fade-in animations
+// Enhanced Scroll Animations with stagger support and text splitting
 class ScrollAnimations {
   constructor() {
-    this.elements = document.querySelectorAll(
-      '.collage-paper, .collage-card, .step, .category-card, .benefit-card, .occasion-card'
+    this.sections = document.querySelectorAll('[data-animate]');
+    this.legacyElements = document.querySelectorAll(
+      '.collage-paper:not([data-animate] .collage-paper), .collage-card:not([data-animate] .collage-card), .step:not([data-animate] .step), .category-card:not([data-animate] .category-card), .benefit-card:not([data-animate] .benefit-card), .occasion-card:not([data-animate] .occasion-card)'
     );
     this.init();
   }
 
   init() {
     if (!('IntersectionObserver' in window)) {
-      this.elements.forEach(el => el.classList.add('is-visible'));
+      this.sections.forEach(el => el.classList.add('is-visible'));
+      this.legacyElements.forEach(el => el.classList.add('is-visible'));
       return;
     }
 
-    const observer = new IntersectionObserver(
+    // Split hero headline text into words
+    this.splitHeroText();
+
+    // Observe animated sections
+    const sectionObserver = new IntersectionObserver(
       (entries) => {
         entries.forEach(entry => {
           if (entry.isIntersecting) {
             entry.target.classList.add('is-visible');
-            observer.unobserve(entry.target);
+            sectionObserver.unobserve(entry.target);
           }
         });
       },
-      {
-        threshold: 0.1,
-        rootMargin: '0px 0px -50px 0px'
-      }
+      { threshold: 0.1, rootMargin: '0px 0px -50px 0px' }
     );
 
-    this.elements.forEach(el => {
+    this.sections.forEach(el => sectionObserver.observe(el));
+
+    // Legacy elements (non data-animate)
+    const legacyObserver = new IntersectionObserver(
+      (entries) => {
+        entries.forEach(entry => {
+          if (entry.isIntersecting) {
+            entry.target.classList.add('is-visible');
+            legacyObserver.unobserve(entry.target);
+          }
+        });
+      },
+      { threshold: 0.1, rootMargin: '0px 0px -50px 0px' }
+    );
+
+    this.legacyElements.forEach(el => {
       el.classList.add('animate-on-scroll');
-      observer.observe(el);
+      legacyObserver.observe(el);
+    });
+  }
+
+  splitHeroText() {
+    const headlines = document.querySelectorAll('[data-split-text]');
+    headlines.forEach(headline => {
+      const text = headline.textContent.trim();
+      const words = text.split(/\s+/);
+      headline.innerHTML = words.map((word, i) =>
+        `<span class="hero__word" style="--i:${i + 1}">${word}</span>`
+      ).join(' ');
     });
   }
 }
@@ -122,28 +148,21 @@ class CursorFollower {
   init() {
     if (!this.enabled) return;
 
-    // Create cursor element
     this.cursor = document.createElement('div');
     this.cursor.className = 'cursor-follower';
     this.cursor.innerHTML = '<span class="cursor-dot"></span>';
     document.body.appendChild(this.cursor);
 
-    // Track mouse
     document.addEventListener('mousemove', (e) => {
       requestAnimationFrame(() => {
         this.cursor.style.transform = `translate(${e.clientX}px, ${e.clientY}px)`;
       });
     });
 
-    // Hover effects
     const interactiveElements = document.querySelectorAll('a, button, .collage-card, .product-card');
     interactiveElements.forEach(el => {
-      el.addEventListener('mouseenter', () => {
-        this.cursor.classList.add('is-hovering');
-      });
-      el.addEventListener('mouseleave', () => {
-        this.cursor.classList.remove('is-hovering');
-      });
+      el.addEventListener('mouseenter', () => this.cursor.classList.add('is-hovering'));
+      el.addEventListener('mouseleave', () => this.cursor.classList.remove('is-hovering'));
     });
   }
 }
@@ -156,25 +175,23 @@ class Carousel {
     this.prevBtn = container.querySelector('[data-carousel-prev]');
     this.nextBtn = container.querySelector('[data-carousel-next]');
     this.items = container.querySelectorAll('.occasion-card');
-
     this.init();
   }
 
   init() {
     if (!this.track || this.items.length === 0) return;
-
     this.prevBtn?.addEventListener('click', () => this.scroll('prev'));
     this.nextBtn?.addEventListener('click', () => this.scroll('next'));
   }
 
   scroll(direction) {
-    const itemWidth = this.items[0].offsetWidth + 24; // Include gap
+    const itemWidth = this.items[0].offsetWidth + 24;
     const scrollAmount = direction === 'next' ? itemWidth : -itemWidth;
     this.track.scrollBy({ left: scrollAmount, behavior: 'smooth' });
   }
 }
 
-// Add CSS for animations
+// Add CSS for legacy animations
 const style = document.createElement('style');
 style.textContent = `
   .animate-on-scroll {

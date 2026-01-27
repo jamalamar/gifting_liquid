@@ -1,18 +1,18 @@
-<section class="newsletter collage-section collage-section--accent" data-section-id="{{ section.id }}">
+<section class="newsletter collage-section collage-section--accent" data-section-id="{{ section.id }}" data-animate="newsletter">
   <div class="container">
-    <div class="newsletter__wrapper collage-paper collage-paper--envelope">
+    <div class="newsletter__wrapper collage-paper collage-paper--envelope animate-item" style="--i:0">
       <div class="newsletter__content">
-        <div class="newsletter__icon collage-sticker collage-sticker--large">
+        <div class="newsletter__icon collage-sticker collage-sticker--large animate-icon">
           {% render 'icon-email' %}
         </div>
-        <h2 class="newsletter__title">
+        <h2 class="newsletter__title animate-item" style="--i:1">
           {{ section.settings.title | default: 'No te pierdas el chisme bueno' }}
         </h2>
-        <p class="newsletter__subtitle">
+        <p class="newsletter__subtitle animate-item" style="--i:2">
           {{ section.settings.subtitle | default: 'Suscribete y te avisamos de nuevos productos, promos exclusivas y las fechas que no puedes olvidar (como el cumple de tu suegra).' }}
         </p>
 
-        <form class="newsletter__form" action="{{ routes.root_url }}" method="post" data-newsletter-form>
+        <form class="newsletter__form animate-item" style="--i:3" action="{{ routes.root_url }}" method="post" data-newsletter-form>
           <input type="hidden" name="form_type" value="customer">
           <input type="hidden" name="utf8" value="✓">
           <input type="hidden" name="contact[tags]" value="newsletter">
@@ -26,7 +26,7 @@
               class="newsletter__input collage-input"
               aria-label="Email"
             >
-            <button type="submit" class="newsletter__submit btn btn--primary collage-button">
+            <button type="submit" class="newsletter__submit btn btn--primary collage-button newsletter__submit--pulse">
               {{ section.settings.cta_text | default: 'Quiero enterarme' }}
               {% render 'icon-arrow-right' %}
             </button>
@@ -35,7 +35,7 @@
           <div class="newsletter__message" data-newsletter-message></div>
         </form>
 
-        <p class="newsletter__disclaimer">
+        <p class="newsletter__disclaimer animate-item" style="--i:4">
           {{ section.settings.disclaimer | default: 'Prometemos no llenarte de spam. Solo cosas buenas.' }}
         </p>
       </div>

@@ -1,18 +1,18 @@
-<section class="occasions collage-section collage-section--alt" data-section-id="{{ section.id }}">
+<section class="occasions collage-section collage-section--alt" data-section-id="{{ section.id }}" data-animate="stagger">
   <div class="container">
-    <div class="section-header">
+    <div class="section-header animate-item" style="--i:0">
       <h2 class="section-title collage-heading">
         {{ section.settings.title | default: 'Siempre hay un buen pretexto para regalar' }}
       </h2>
       <p class="section-subtitle">
-        {{ section.settings.subtitle | default: 'Ya sea San Valentin, cumpleanos, Dia de las Madres o un "porque si", aqui encuentras algo especial para cada momento.' }}
+        {{ section.settings.subtitle | default: 'Ya sea San Valentin, cumpleanos, Dia de las Madres o un \"porque si\", aqui encuentras algo especial para cada momento.' }}
       </p>
     </div>
 
     <div class="occasions__carousel" data-carousel>
       <div class="occasions__track">
         {%- for block in section.blocks -%}
-          <a href="{{ block.settings.link | default: '#' }}" class="occasion-card collage-card collage-card--occasion" {{ block.shopify_attributes }}>
+          <a href="{{ block.settings.link | default: '#' }}" class="occasion-card collage-card collage-card--occasion animate-item" style="--i:{{ forloop.index }}" {{ block.shopify_attributes }}>
             <div class="occasion-card__inner collage-paper collage-paper--torn">
               <div class="occasion-card__image-wrapper">
                 {%- if block.settings.image != blank -%}

@@ -1,6 +1,6 @@
-<section class="why-gifting collage-section" data-section-id="{{ section.id }}">
+<section class="why-gifting collage-section" data-section-id="{{ section.id }}" data-animate="stagger">
   <div class="container">
-    <div class="section-header">
+    <div class="section-header animate-item" style="--i:0">
       <h2 class="section-title collage-heading collage-heading--handwritten">
         {{ section.settings.title | default: '¿Por que con nosotros?' }}
       </h2>
@@ -8,10 +8,10 @@
 
     <div class="why-gifting__grid">
       {%- for block in section.blocks -%}
-        <div class="benefit-card collage-card collage-card--benefit" {{ block.shopify_attributes }}>
+        <div class="benefit-card collage-card collage-card--benefit animate-item" style="--i:{{ forloop.index }}" {{ block.shopify_attributes }}>
           <div class="benefit-card__inner collage-paper collage-paper--note collage-paper--{{ forloop.index | modulo: 4 | plus: 1 }}">
             <div class="benefit-card__pin collage-pin"></div>
-            <div class="benefit-card__icon">
+            <div class="benefit-card__icon animate-icon">
               {%- case block.settings.icon -%}
                 {%- when 'unique' -%}
                   {% render 'icon-sparkle' %}

@@ -1,6 +1,6 @@
-<section class="featured-products collage-section" data-section-id="{{ section.id }}">
+<section class="featured-products collage-section" data-section-id="{{ section.id }}" data-animate="stagger">
   <div class="container">
-    <div class="section-header">
+    <div class="section-header animate-item" style="--i:0">
       <h2 class="section-title collage-heading">
         {{ section.settings.title | default: 'Productos destacados' }}
       </h2>
@@ -13,13 +13,13 @@
       {%- assign collection = collections[section.settings.collection] -%}
       {%- if collection != blank -%}
         {%- for product in collection.products limit: section.settings.products_limit -%}
-          <div class="featured-products__item collage-card collage-card--product">
+          <div class="featured-products__item collage-card collage-card--product animate-item" style="--i:{{ forloop.index }}">
             {% render 'product-card', product: product, index: forloop.index %}
           </div>
         {%- endfor -%}
       {%- else -%}
         {%- for i in (1..section.settings.products_limit) -%}
-          <div class="featured-products__item collage-card collage-card--product">
+          <div class="featured-products__item collage-card collage-card--product animate-item" style="--i:{{ i }}">
             {% render 'product-card-placeholder', index: i %}
           </div>
         {%- endfor -%}
@@ -27,7 +27,7 @@
     </div>
 
     {%- if section.settings.show_view_all and collection != blank -%}
-      <div class="featured-products__footer">
+      <div class="featured-products__footer animate-item" style="--i:{{ section.settings.products_limit | plus: 1 }}">
         <a href="{{ collection.url }}" class="btn btn--secondary collage-button">
           {{ section.settings.view_all_text | default: 'Ver todos' }}
           {% render 'icon-arrow-right' %}
