@@ -29,53 +29,73 @@
 
       <div class="hero__visual">
         <div class="hero__image-collage">
+          {%- comment -%} Image 1 - Large main photo with tape {%- endcomment -%}
           {%- if section.settings.image_1 != blank -%}
-            <div class="hero__image hero__image--1 collage-photo collage-photo--tape animate-item" style="--i:3" data-parallax-speed="0.02">
-              <img
-                src="{{ section.settings.image_1 | image_url: width: 400 }}"
-                alt="{{ section.settings.image_1.alt | default: 'Regalo' }}"
-                width="300"
-                height="400"
-                loading="eager"
-              >
+            <div class="hero__image hero__image--1 collage-photo collage-photo--tape animate-item" style="--i:2" data-parallax-speed="0.02">
+              <img src="{{ section.settings.image_1 | image_url: width: 480 }}" alt="{{ section.settings.image_1.alt | default: 'Regalo' }}" width="320" height="420" loading="eager">
             </div>
           {%- else -%}
-            <div class="hero__image hero__image--1 collage-photo collage-photo--tape hero__placeholder animate-item" style="--i:3" data-parallax-speed="0.02">
+            <div class="hero__image hero__image--1 collage-photo collage-photo--tape hero__placeholder hero__placeholder--lg animate-item" style="--i:2" data-parallax-speed="0.02">
               {% render 'icon-gift-box' %}
             </div>
           {%- endif -%}
 
+          {%- comment -%} Image 2 - Medium polaroid {%- endcomment -%}
           {%- if section.settings.image_2 != blank -%}
-            <div class="hero__image hero__image--2 collage-polaroid animate-item" style="--i:5" data-parallax-speed="0.04">
-              <img
-                src="{{ section.settings.image_2 | image_url: width: 350 }}"
-                alt="{{ section.settings.image_2.alt | default: 'Regalo' }}"
-                width="250"
-                height="300"
-                loading="eager"
-              >
+            <div class="hero__image hero__image--2 collage-polaroid animate-item" style="--i:4" data-parallax-speed="0.04">
+              <img src="{{ section.settings.image_2 | image_url: width: 350 }}" alt="{{ section.settings.image_2.alt | default: 'Regalo' }}" width="230" height="280" loading="eager">
               <span class="collage-polaroid__caption">Con amor</span>
             </div>
           {%- else -%}
-            <div class="hero__image hero__image--2 collage-polaroid hero__placeholder animate-item" style="--i:5" data-parallax-speed="0.04">
+            <div class="hero__image hero__image--2 collage-polaroid hero__placeholder hero__placeholder--md animate-item" style="--i:4" data-parallax-speed="0.04">
               {% render 'icon-package' %}
               <span class="collage-polaroid__caption">Con amor</span>
             </div>
           {%- endif -%}
 
+          {%- comment -%} Image 3 - Small pinned photo {%- endcomment -%}
           {%- if section.settings.image_3 != blank -%}
-            <div class="hero__image hero__image--3 collage-photo collage-photo--pin animate-item" style="--i:7" data-parallax-speed="0.06">
-              <img
-                src="{{ section.settings.image_3 | image_url: width: 300 }}"
-                alt="{{ section.settings.image_3.alt | default: 'Regalo' }}"
-                width="200"
-                height="250"
-                loading="lazy"
-              >
+            <div class="hero__image hero__image--3 collage-photo collage-photo--pin animate-item" style="--i:6" data-parallax-speed="0.06">
+              <img src="{{ section.settings.image_3 | image_url: width: 250 }}" alt="{{ section.settings.image_3.alt | default: 'Regalo' }}" width="160" height="200" loading="lazy">
             </div>
           {%- else -%}
-            <div class="hero__image hero__image--3 collage-photo collage-photo--pin hero__placeholder animate-item" style="--i:7" data-parallax-speed="0.06">
+            <div class="hero__image hero__image--3 collage-photo collage-photo--pin hero__placeholder hero__placeholder--sm animate-item" style="--i:6" data-parallax-speed="0.06">
               {% render 'icon-bow' %}
+            </div>
+          {%- endif -%}
+
+          {%- comment -%} Image 4 - Tiny torn photo (top-right accent) {%- endcomment -%}
+          {%- if section.settings.image_4 != blank -%}
+            <div class="hero__image hero__image--4 collage-photo collage-photo--torn animate-item animate-item--drop" style="--i:3" data-parallax-speed="0.07">
+              <img src="{{ section.settings.image_4 | image_url: width: 200 }}" alt="{{ section.settings.image_4.alt | default: 'Regalo' }}" width="120" height="140" loading="lazy">
+            </div>
+          {%- else -%}
+            <div class="hero__image hero__image--4 collage-photo collage-photo--torn hero__placeholder hero__placeholder--xs animate-item animate-item--drop" style="--i:3" data-parallax-speed="0.07">
+              {% render 'icon-heart' %}
+            </div>
+          {%- endif -%}
+
+          {%- comment -%} Image 5 - Medium-small polaroid (bottom-right) {%- endcomment -%}
+          {%- if section.settings.image_5 != blank -%}
+            <div class="hero__image hero__image--5 collage-polaroid collage-polaroid--2 animate-item" style="--i:8" data-parallax-speed="0.03">
+              <img src="{{ section.settings.image_5 | image_url: width: 280 }}" alt="{{ section.settings.image_5.alt | default: 'Regalo' }}" width="180" height="220" loading="lazy">
+              <span class="collage-polaroid__caption">Hecho a mano</span>
+            </div>
+          {%- else -%}
+            <div class="hero__image hero__image--5 collage-polaroid collage-polaroid--2 hero__placeholder hero__placeholder--md-sm animate-item" style="--i:8" data-parallax-speed="0.03">
+              {% render 'icon-sparkle' %}
+              <span class="collage-polaroid__caption">Hecho a mano</span>
+            </div>
+          {%- endif -%}
+
+          {%- comment -%} Image 6 - Tiny sticker-like photo (floating accent) {%- endcomment -%}
+          {%- if section.settings.image_6 != blank -%}
+            <div class="hero__image hero__image--6 collage-photo collage-photo--tape animate-item animate-item--drop" style="--i:5" data-parallax-speed="0.08">
+              <img src="{{ section.settings.image_6 | image_url: width: 160 }}" alt="{{ section.settings.image_6.alt | default: 'Regalo' }}" width="100" height="100" loading="lazy">
+            </div>
+          {%- else -%}
+            <div class="hero__image hero__image--6 collage-photo collage-photo--tape hero__placeholder hero__placeholder--tiny animate-item animate-item--drop" style="--i:5" data-parallax-speed="0.08">
+              {% render 'icon-star' %}
             </div>
           {%- endif -%}
 
@@ -88,6 +108,9 @@
               <path d="M25 5 L27 20 L42 22 L30 27 L32 42 L25 32 L18 42 L20 27 L8 22 L23 20 Z" fill="currentColor"/>
             </svg>
             <span class="doodle doodle--text hero__float" style="--float-delay: 0.8s">Para ti</span>
+            <svg class="doodle doodle--spiral hero__float" style="--float-delay: 2s" viewBox="0 0 40 40" fill="none">
+              <path d="M20 5 C 30 5, 35 15, 35 20 C 35 28, 28 35, 20 35 C 12 35, 5 28, 5 20 C 5 14, 10 9, 16 9" stroke="currentColor" stroke-width="1.5" stroke-dasharray="4,3"/>
+            </svg>
           </div>
         </div>
       </div>
@@ -144,17 +167,32 @@
     {
       "type": "image_picker",
       "id": "image_1",
-      "label": "Imagen 1 (principal)"
+      "label": "Imagen 1 - Grande (principal)"
     },
     {
       "type": "image_picker",
       "id": "image_2",
-      "label": "Imagen 2 (polaroid)"
+      "label": "Imagen 2 - Mediana (polaroid)"
     },
     {
       "type": "image_picker",
       "id": "image_3",
-      "label": "Imagen 3 (pequena)"
+      "label": "Imagen 3 - Pequena (pin)"
+    },
+    {
+      "type": "image_picker",
+      "id": "image_4",
+      "label": "Imagen 4 - Mini (rasgada)"
+    },
+    {
+      "type": "image_picker",
+      "id": "image_5",
+      "label": "Imagen 5 - Mediana-chica (polaroid)"
+    },
+    {
+      "type": "image_picker",
+      "id": "image_6",
+      "label": "Imagen 6 - Tiny (acento)"
     }
   ],
   "presets": [

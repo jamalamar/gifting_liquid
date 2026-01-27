@@ -660,46 +660,136 @@
 
 .hero__image-collage {
   position: relative;
-  min-height: 400px;
+  min-height: 480px;
 }
 
 .hero__image {
   position: absolute;
+  transition: transform 0.5s cubic-bezier(0.16, 1, 0.3, 1), box-shadow 0.4s ease;
 }
 
+.hero__image:hover {
+  z-index: 10;
+  box-shadow: 0 20px 50px rgba(0, 0, 0, 0.18);
+}
+
+/* Image 1 - Large main (320x420) */
 .hero__image--1 {
   top: 0;
-  left: 10%;
-  z-index: 3;
+  left: 8%;
+  z-index: 5;
 }
 
+.hero__image--1 img { width: 320px; height: auto; }
+
+/* Image 2 - Medium polaroid (230x280) */
 .hero__image--2 {
-  top: 20%;
-  right: 5%;
-  z-index: 2;
+  top: 5%;
+  right: 2%;
+  z-index: 4;
   transform: rotate(5deg);
 }
 
+.hero__image--2:hover { transform: rotate(2deg) scale(1.04); }
+.hero__image--2 img { width: 230px; height: auto; }
+
+/* Image 3 - Small pinned (160x200) */
 .hero__image--3 {
-  bottom: 10%;
-  left: 5%;
-  z-index: 1;
+  bottom: 5%;
+  left: 0;
+  z-index: 3;
   transform: rotate(-8deg);
 }
 
+.hero__image--3:hover { transform: rotate(-4deg) scale(1.05); }
+.hero__image--3 img { width: 160px; height: auto; }
+
+/* Image 4 - Mini torn (120x140) */
+.hero__image--4 {
+  top: -5%;
+  right: 25%;
+  z-index: 6;
+  transform: rotate(12deg);
+}
+
+.hero__image--4:hover { transform: rotate(8deg) scale(1.08); }
+.hero__image--4 img { width: 120px; height: auto; }
+
+/* Image 5 - Med-small polaroid (180x220) */
+.hero__image--5 {
+  bottom: 0;
+  right: 8%;
+  z-index: 2;
+  transform: rotate(-4deg);
+}
+
+.hero__image--5:hover { transform: rotate(-1deg) scale(1.04); }
+.hero__image--5 img { width: 180px; height: auto; }
+
+/* Image 6 - Tiny accent (100x100) */
+.hero__image--6 {
+  top: 40%;
+  left: -3%;
+  z-index: 7;
+  transform: rotate(-15deg);
+}
+
+.hero__image--6:hover { transform: rotate(-10deg) scale(1.1); }
+.hero__image--6 img { width: 100px; height: auto; }
+
+/* Placeholder sizes */
 .hero__placeholder {
   display: flex;
   align-items: center;
   justify-content: center;
-  width: 200px;
-  height: 250px;
   background: var(--color-background-alt);
   color: var(--color-accent);
 }
 
 .hero__placeholder .icon {
-  width: 4rem;
-  height: 4rem;
+  width: 3rem;
+  height: 3rem;
+}
+
+.hero__placeholder--lg { width: 320px; height: 420px; }
+.hero__placeholder--lg .icon { width: 5rem; height: 5rem; }
+.hero__placeholder--md { width: 230px; height: 280px; }
+.hero__placeholder--md .icon { width: 4rem; height: 4rem; }
+.hero__placeholder--sm { width: 160px; height: 200px; }
+.hero__placeholder--md-sm { width: 180px; height: 220px; }
+.hero__placeholder--xs { width: 120px; height: 140px; }
+.hero__placeholder--xs .icon { width: 2.5rem; height: 2.5rem; }
+.hero__placeholder--tiny { width: 100px; height: 100px; border-radius: var(--radius-md); }
+.hero__placeholder--tiny .icon { width: 2rem; height: 2rem; }
+
+/* Spiral doodle */
+.doodle--spiral {
+  position: absolute;
+  bottom: 15%;
+  right: 30%;
+  width: 50px;
+  color: var(--color-primary);
+  opacity: 0.6;
+}
+
+/* Hide extra images on small screens, keep main 3 */
+@media screen and (max-width: 749px) {
+  .hero__image--4,
+  .hero__image--5,
+  .hero__image--6 {
+    display: none;
+  }
+
+  .hero__image-collage {
+    min-height: 350px;
+  }
+
+  .hero__image--1 img { width: 220px; }
+  .hero__image--2 img { width: 160px; }
+  .hero__image--3 img { width: 120px; }
+  .hero__placeholder--lg { width: 220px; height: 290px; }
+  .hero__placeholder--md { width: 160px; height: 200px; }
+  .hero__placeholder--sm { width: 120px; height: 150px; }
 }
 
 .hero__doodles {
