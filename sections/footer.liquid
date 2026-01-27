@@ -1,12 +1,43 @@
-<footer class="footer collage-section">
+<footer class="footer collage-section" data-animate="stagger">
+  {%- comment -%} CTA Band {%- endcomment -%}
+  <div class="footer__cta-band animate-item" style="--i:0">
+    <div class="container">
+      <div class="footer__cta-inner">
+        <h3 class="footer__cta-title">¿Listo para regalar algo increible?</h3>
+        <a href="{{ routes.all_products_collection_url }}" class="btn btn--primary collage-button footer__cta-btn">
+          Explorar regalos
+          {% render 'icon-arrow-right' %}
+        </a>
+        <div class="footer__cta-doodle">
+          <svg viewBox="0 0 60 30" fill="none">
+            <path d="M5 15 Q 20 2, 35 15 T 55 12" stroke="currentColor" stroke-width="1.5" stroke-dasharray="4,3"/>
+          </svg>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  {%- comment -%} Decorations {%- endcomment -%}
   <div class="footer__decorations">
     <div class="collage-element collage-element--paper footer-deco-1"></div>
     <div class="collage-element collage-element--sticker footer-deco-2"></div>
+    <div class="collage-element collage-element--tape footer-tape-1"></div>
+    <div class="collage-element collage-element--doodle footer-doodle-1">
+      <svg viewBox="0 0 80 80" fill="none">
+        <circle cx="40" cy="40" r="35" stroke="currentColor" stroke-width="1.5" stroke-dasharray="8,4" opacity="0.15"/>
+      </svg>
+    </div>
+    <div class="collage-element collage-element--doodle footer-doodle-2">
+      <svg viewBox="0 0 50 50" fill="none">
+        <path d="M25 5 L30 20 L45 25 L30 30 L25 45 L20 30 L5 25 L20 20 Z" stroke="currentColor" stroke-width="1.5" opacity="0.1"/>
+      </svg>
+    </div>
   </div>
 
   <div class="container">
     <div class="footer__grid">
-      <div class="footer__column footer__about">
+      {%- comment -%} About column {%- endcomment -%}
+      <div class="footer__column footer__about animate-item" style="--i:1">
         <div class="footer__logo">
           {%- if settings.logo != blank -%}
             <img
@@ -25,6 +56,12 @@
         <p class="footer__about-text">
           {{ section.settings.about_text | default: 'El punto de encuentro entre quien quiere regalar algo especial y quien lo sabe crear. Regalos unicos de emprendedores mexicanos.' }}
         </p>
+
+        <div class="footer__badge collage-sticker collage-sticker--handwritten">
+          {% render 'icon-heart' %}
+          <span>Hecho con amor en Mexico</span>
+        </div>
+
         <div class="footer__social">
           {%- if settings.social_instagram != blank -%}
             <a href="https://instagram.com/{{ settings.social_instagram | remove: '@' }}" target="_blank" rel="noopener" class="footer__social-link collage-icon-btn" aria-label="Instagram">
@@ -47,9 +84,31 @@
             </a>
           {%- endif -%}
         </div>
+
+        {%- comment -%} Newsletter mini-form {%- endcomment -%}
+        <form class="footer__newsletter" action="{{ routes.root_url }}" method="post">
+          <input type="hidden" name="form_type" value="customer">
+          <input type="hidden" name="utf8" value="✓">
+          <input type="hidden" name="contact[tags]" value="newsletter">
+          <label class="footer__newsletter-label">Recibe las novedades</label>
+          <div class="footer__newsletter-row">
+            <input
+              type="email"
+              name="contact[email]"
+              placeholder="Tu email"
+              required
+              class="footer__newsletter-input"
+              aria-label="Email"
+            >
+            <button type="submit" class="footer__newsletter-btn btn btn--primary">
+              {% render 'icon-arrow-right' %}
+            </button>
+          </div>
+        </form>
       </div>
 
-      <div class="footer__column footer__nav">
+      {%- comment -%} Nav columns {%- endcomment -%}
+      <div class="footer__column footer__nav animate-item" style="--i:2">
         <h4 class="footer__heading collage-heading">{{ section.settings.menu_title | default: 'Menu' }}</h4>
         <ul class="footer__nav-list">
           {%- for link in section.settings.menu.links -%}
@@ -60,7 +119,7 @@
         </ul>
       </div>
 
-      <div class="footer__column footer__help">
+      <div class="footer__column footer__help animate-item" style="--i:3">
         <h4 class="footer__heading collage-heading">{{ section.settings.help_title | default: 'Ayuda' }}</h4>
         <ul class="footer__nav-list">
           {%- for link in section.settings.help_menu.links -%}
@@ -71,7 +130,7 @@
         </ul>
       </div>
 
-      <div class="footer__column footer__contact">
+      <div class="footer__column footer__contact animate-item" style="--i:4">
         <h4 class="footer__heading collage-heading">{{ section.settings.contact_title | default: 'Contacto' }}</h4>
         <ul class="footer__contact-list">
           {%- if settings.social_whatsapp != blank -%}
@@ -102,10 +161,16 @@
       </div>
     </div>
 
-    <div class="footer__bottom collage-tape">
+    <div class="footer__bottom animate-item" style="--i:5">
       <p class="footer__copyright">
-        &copy; {{ 'now' | date: '%Y' }} {{ shop.name }}. Todos los derechos reservados. Hecho con mucho amor en CDMX.
+        &copy; {{ 'now' | date: '%Y' }} {{ shop.name }}. Todos los derechos reservados.
       </p>
+      <div class="footer__bottom-tagline">
+        <svg class="footer__bottom-doodle" viewBox="0 0 30 30" fill="none">
+          <path d="M15 3 L17 12 L26 14 L18 17 L16 26 L14 17 L5 14 L13 12 Z" fill="currentColor" opacity="0.4"/>
+        </svg>
+        <span>Hecho con mucho amor en CDMX</span>
+      </div>
       <div class="footer__payment">
         {% render 'payment-icons' %}
       </div>
