@@ -3859,53 +3859,56 @@ a.contact-info__item:hover .contact-info__value {
    HOME PAGE - Editorial Animations & Enhancements
    ============================================ */
 
-/* === Core Animation System === */
+/* === Core Animation System ===
+   Uses `translate` and `opacity` independently so base `transform`
+   (rotate, scale, etc.) on each element is never overridden.        */
+
 [data-animate] .animate-item {
   opacity: 0;
-  transform: translateY(40px);
-  transition: opacity 0.7s ease, transform 0.7s cubic-bezier(0.16, 1, 0.3, 1);
+  translate: 0 40px;
+  transition: opacity 0.7s ease, translate 0.7s cubic-bezier(0.16, 1, 0.3, 1);
   transition-delay: calc(var(--i, 0) * 80ms);
 }
 
 [data-animate].is-visible .animate-item {
   opacity: 1;
-  transform: translateY(0);
+  translate: 0 0;
 }
 
 /* Slide from left variant */
-[data-animate].is-visible .animate-item--left {
-  opacity: 1;
-  transform: translateX(0);
-}
-
 .animate-item--left {
   opacity: 0;
-  transform: translateX(-60px);
-  transition: opacity 0.7s ease, transform 0.7s cubic-bezier(0.16, 1, 0.3, 1);
+  translate: -60px 0;
+  transition: opacity 0.7s ease, translate 0.7s cubic-bezier(0.16, 1, 0.3, 1);
   transition-delay: calc(var(--i, 0) * 80ms);
 }
 
-/* Drop-in variant (for polaroids) */
+[data-animate].is-visible .animate-item--left {
+  opacity: 1;
+  translate: 0 0;
+}
+
+/* Drop-in variant (for polaroids / small images) */
 .animate-item--drop {
   opacity: 0;
-  transform: translateY(-40px) rotate(-8deg);
-  transition: opacity 0.6s ease, transform 0.6s cubic-bezier(0.34, 1.56, 0.64, 1);
+  translate: 0 -40px;
+  transition: opacity 0.6s ease, translate 0.6s cubic-bezier(0.34, 1.56, 0.64, 1);
   transition-delay: calc(var(--i, 0) * 120ms);
 }
 
 [data-animate].is-visible .animate-item--drop {
   opacity: 1;
-  transform: translateY(0) rotate(0deg);
+  translate: 0 0;
 }
 
-/* Icon spring animation */
+/* Icon spring animation — uses scale independently */
 .animate-icon {
-  transform: scale(0);
-  transition: transform 0.5s cubic-bezier(0.34, 1.56, 0.64, 1);
+  scale: 0;
+  transition: scale 0.5s cubic-bezier(0.34, 1.56, 0.64, 1);
 }
 
 [data-animate].is-visible .animate-icon {
-  transform: scale(1);
+  scale: 1;
   transition-delay: 0.3s;
 }
 
@@ -3925,13 +3928,13 @@ a.contact-info__item:hover .contact-info__value {
 .hero__word {
   display: inline-block;
   opacity: 0;
-  transform: translateY(100%);
-  transition: opacity 0.6s ease, transform 0.6s cubic-bezier(0.16, 1, 0.3, 1);
+  translate: 0 100%;
+  transition: opacity 0.6s ease, translate 0.6s cubic-bezier(0.16, 1, 0.3, 1);
 }
 
 [data-animate="hero"].is-visible .hero__word {
   opacity: 1;
-  transform: translateY(0);
+  translate: 0 0;
   transition-delay: calc(var(--i, 0) * 0.08s + 0.2s);
 }
 
@@ -3953,13 +3956,13 @@ a.contact-info__item:hover .contact-info__value {
 
 /* === How It Works - Step Animations === */
 [data-animate="steps"] .step__number {
-  transform: scale(0);
-  transition: transform 0.5s cubic-bezier(0.34, 1.56, 0.64, 1);
+  scale: 0;
+  transition: scale 0.5s cubic-bezier(0.34, 1.56, 0.64, 1);
   transition-delay: calc(var(--i, 0) * 150ms + 0.2s);
 }
 
 [data-animate="steps"].is-visible .step__number {
-  transform: scale(1);
+  scale: 1;
 }
 
 /* Connector line draw-in */
@@ -4034,7 +4037,7 @@ a.contact-info__item:hover .contact-info__value {
 
 /* === Why Gifting - Benefit card icon spring === */
 [data-animate="stagger"].is-visible .benefit-card .animate-icon {
-  transform: scale(1);
+  scale: 1;
   transition-delay: calc(var(--i, 0) * 80ms + 0.3s);
 }
 
@@ -4103,24 +4106,29 @@ a.contact-info__item:hover .contact-info__value {
 @media (prefers-reduced-motion: reduce) {
   [data-animate] .animate-item,
   .animate-item--left,
-  .animate-item--drop,
-  .animate-icon,
-  .hero__word {
+  .animate-item--drop {
     opacity: 1;
-    transform: none;
+    translate: none;
     transition: none;
     animation: none;
+  }
+
+  .animate-icon,
+  [data-animate] .step__number {
+    scale: 1;
+    transition: none;
+  }
+
+  .hero__word {
+    opacity: 1;
+    translate: none;
+    transition: none;
   }
 
   .hero__float,
   .hero__scroll-indicator,
   .newsletter__submit--pulse::after {
     animation: none;
-  }
-
-  [data-animate] .step__number {
-    transform: scale(1);
-    transition: none;
   }
 
   .step__connector svg path {
