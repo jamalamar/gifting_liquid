@@ -1,20 +1,34 @@
 <section class="faqs-page" data-section-id="{{ section.id }}">
 
-  <!-- FAQs Hero -->
-  <div class="faqs-hero">
-    <div class="container">
-      <div class="faqs-hero__tag collage-sticker collage-sticker--handwritten">
-        {% render 'icon-confused' %}
-        <span>Preguntas</span>
+  <!-- FAQs Hero with Background -->
+  {%- assign hero_image = section.settings.background_image -%}
+  <div class="faqs-hero{% if hero_image %} faqs-hero--has-bg{% endif %}">
+    {%- if hero_image -%}
+      <div class="faqs-hero__bg">
+        <img
+          src="{{ hero_image | image_url: width: 1920 }}"
+          alt="{{ section.settings.headline | default: 'Preguntas frecuentes' }}"
+          loading="eager"
+          class="faqs-hero__bg-image"
+        >
+        <div class="faqs-hero__overlay"></div>
       </div>
-      <h1 class="faqs-hero__title">
-        {{ section.settings.headline | default: 'Las dudas más comunes (y sus respuestas)' }}
-      </h1>
-      <p class="faqs-hero__subtitle">
-        {{ section.settings.subtitle | default: 'Si tu pregunta no está aquí, escríbenos por WhatsApp y te ayudamos al tiro.' }}
-      </p>
-      <div class="faqs-hero__count collage-sticker collage-sticker--small">
-        {{ section.blocks.size }} preguntas
+    {%- endif -%}
+    <div class="container">
+      <div class="faqs-hero__content">
+        <div class="faqs-hero__tag collage-sticker collage-sticker--handwritten">
+          {% render 'icon-confused' %}
+          <span>Preguntas</span>
+        </div>
+        <h1 class="faqs-hero__title">
+          {{ section.settings.headline | default: 'Las dudas más comunes (y sus respuestas)' }}
+        </h1>
+        <p class="faqs-hero__subtitle">
+          {{ section.settings.subtitle | default: 'Si tu pregunta no está aquí, escríbenos por WhatsApp y te ayudamos al tiro.' }}
+        </p>
+        <div class="faqs-hero__count collage-sticker collage-sticker--small">
+          {{ section.blocks.size }} preguntas
+        </div>
       </div>
     </div>
   </div>
@@ -100,6 +114,12 @@
   "tag": "section",
   "class": "section-page-faqs",
   "settings": [
+    {
+      "type": "image_picker",
+      "id": "background_image",
+      "label": "Imagen de fondo",
+      "info": "Imagen de fondo para el hero. Recomendado: 1920x600px"
+    },
     {
       "type": "text",
       "id": "headline",
