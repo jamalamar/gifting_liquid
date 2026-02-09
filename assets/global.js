@@ -408,16 +408,166 @@ class Cart {
       });
 
       // Refresh cart drawer content
-      const drawerBody = document.querySelector('[data-cart-drawer-body]');
-      if (drawerBody) {
-        const cartResponse = await fetch('/?section_id=cart-drawer-items');
-        // You would need to create this section or refresh the drawer content
-      }
+      this.renderCartDrawerItems(cart);
 
     } catch (error) {
       console.error('Update cart UI error:', error);
     }
   }
+
+  renderCartDrawerItems(cart) {
+    const drawerPanel = document.querySelector('.cart-drawer__panel');
+    const drawerBody = document.querySelector('[data-cart-drawer-body]');
+    if (!drawerBody || !drawerPanel) return;
+
+    // Remove existing footer if any
+    const existingFooter = drawerPanel.querySelector('.cart-drawer__footer');
+    if (existingFooter) existingFooter.remove();
+
+    if (cart.item_count === 0) {
+      // Show empty state
+      drawerBody.innerHTML = `
+        <div class="cart-drawer__empty">
+          <div class="cart-drawer__empty-icon">
+            <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+              <path d="M3 3h2l.4 2M7 13h10l4-8H5.4M7 13L5.4 5M7 13l-2.293 2.293c-.63.63-.184 1.707.707 1.707H17m0 0a2 2 0 100 4 2 2 0 000-4zm-8 2a2 2 0 11-4 0 2 2 0 014 0z"/>
+            </svg>
+          </div>
+          <p class="cart-drawer__empty-title">Tu carrito esta vacio</p>
+          <p class="cart-drawer__empty-text">Explora nuestros productos y encuentra el regalo perfecto.</p>
+          <a href="/collections/all" class="btn btn--secondary cart-drawer__empty-btn" data-cart-drawer-close>
+            Ver productos
+          </a>
+        </div>
+      `;
+      return;
+    }
+
+    // Build items HTML
+    const itemsHtml = cart.items.map(item => {
+      const hasVariant = item.variant_title && item.variant_title !== 'Default Title';
+      const imageUrl = item.image ? this.getSizedImageUrl(item.image, '150x') : null;
+
+      return `
+        <div class="cart-drawer__item" data-cart-drawer-item data-key="${item.key}">
+          <div class="cart-drawer__item-image">
+            ${imageUrl ? `
+              <a href="${item.url}">
+                <img src="${imageUrl}" alt="${item.title}" width="70" height="70" loading="lazy">
+              </a>
+            ` : `
+              <div class="cart-drawer__item-placeholder">
+                <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+                  <path d="M12 8v13m0-13V6a4 4 0 00-4-4H6a4 4 0 00-4 4v2h10zm0 0V6a4 4 0 014-4h2a4 4 0 014 4v2H12z"/>
+                </svg>
+              </div>
+            `}
+          </div>
+          <div class="cart-drawer__item-info">
+            <h3 class="cart-drawer__item-title">
+              <a href="${item.url}">${item.product_title}</a>
+            </h3>
+            ${hasVariant ? `<p class="cart-drawer__item-variant">${item.variant_title}</p>` : ''}
+            <div class="cart-drawer__qty-group">
+              <button type="button" class="cart-drawer__qty-btn" data-drawer-qty-minus data-key="${item.key}" aria-label="Disminuir cantidad">
+                <span>−</span>
+              </button>
+              <span class="cart-drawer__qty-value" data-drawer-qty-value>${item.quantity}</span>
+              <button type="button" class="cart-drawer__qty-btn" data-drawer-qty-plus data-key="${item.key}" aria-label="Aumentar cantidad">
+                <span>+</span>
+              </button>
+            </div>
+          </div>
+          <div class="cart-drawer__item-price">
+            ${item.original_line_price !== item.final_line_price ? `
+              <span class="cart-drawer__item-price-compare">${this.formatMoney(item.original_line_price)}</span>
+            ` : ''}
+            <span class="cart-drawer__item-price-current">${this.formatMoney(item.final_line_price)}</span>
+          </div>
+          <button type="button" class="cart-drawer__item-remove" data-drawer-remove-item data-key="${item.key}" aria-label="Eliminar ${item.product_title}">
+            <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <path d="M6 18L18 6M6 6l12 12"/>
+            </svg>
+          </button>
+        </div>
+      `;
+    }).join('');
+
+    drawerBody.innerHTML = `<div class="cart-drawer__items">${itemsHtml}</div>`;
+
+    // Build and append footer
+    const footerHtml = this.buildCartDrawerFooter(cart);
+    drawerPanel.insertAdjacentHTML('beforeend', footerHtml);
+  }
+
+  buildCartDrawerFooter(cart) {
+    const cartDrawer = document.querySelector('[data-cart-drawer]');
+    const threshold = parseInt(cartDrawer?.dataset.freeShippingThreshold || '0') * 100;
+    const remaining = threshold - cart.total_price;
+    const progress = threshold > 0 ? Math.min(100, (cart.total_price / threshold) * 100) : 0;
+
+    let shippingHtml = '';
+    if (threshold > 0) {
+      if (remaining > 0) {
+        shippingHtml = `
+          <div class="cart-drawer__shipping">
+            <p class="cart-drawer__shipping-text">
+              <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" width="16" height="16">
+                <path d="M13 16V6a1 1 0 00-1-1H4a1 1 0 00-1 1v10a1 1 0 001 1h1m8-1a1 1 0 01-1 1H9m4-1V8a1 1 0 011-1h2.586a1 1 0 01.707.293l3.414 3.414a1 1 0 01.293.707V16a1 1 0 01-1 1h-1m-6-1a1 1 0 001 1h1M5 17a2 2 0 104 0m-4 0a2 2 0 114 0m6 0a2 2 0 104 0m-4 0a2 2 0 114 0"/>
+              </svg>
+              <span>Te faltan <strong>${this.formatMoney(remaining)}</strong> para envio gratis</span>
+            </p>
+            <div class="cart-drawer__shipping-bar">
+              <div class="cart-drawer__shipping-progress" style="width: ${progress}%"></div>
+            </div>
+          </div>
+        `;
+      } else {
+        shippingHtml = `
+          <div class="cart-drawer__shipping">
+            <p class="cart-drawer__shipping-text cart-drawer__shipping-text--free">
+              <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="16" height="16">
+                <path d="M5 13l4 4L19 7"/>
+              </svg>
+              <span>Tienes envio gratis</span>
+            </p>
+            <div class="cart-drawer__shipping-bar">
+              <div class="cart-drawer__shipping-progress" style="width: 100%"></div>
+            </div>
+          </div>
+        `;
+      }
+    }
+
+    return `
+      <div class="cart-drawer__footer">
+        ${shippingHtml}
+        <div class="cart-drawer__subtotal">
+          <span>Subtotal</span>
+          <span data-drawer-subtotal>${this.formatMoney(cart.total_price)}</span>
+        </div>
+        <a href="/checkout" class="btn btn--primary cart-drawer__checkout">
+          Continuar al checkout
+          <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="16" height="16">
+            <path d="M14 5l7 7m0 0l-7 7m7-7H3"/>
+          </svg>
+        </a>
+        <a href="/cart" class="cart-drawer__view-cart">
+          Ver carrito completo
+        </a>
+      </div>
+    `;
+  }
+
+  getSizedImageUrl(url, size) {
+    if (!url) return null;
+    // Handle Shopify CDN URLs
+    if (url.includes('cdn.shopify.com')) {
+      return url.replace(/(_\d+x\d+)?(\.[^.]+)$/, `_${size}$2`);
+    }
+    return url;
+  }
+
 
   formatMoney(cents) {
     return '$' + (cents / 100).toFixed(2).replace(/\B(?=(\d{3})+(?!\d))/g, ',') + ' MXN';

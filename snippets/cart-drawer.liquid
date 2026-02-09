@@ -2,7 +2,7 @@
   Cart drawer / mini cart - Clean style
 {%- endcomment -%}
 
-<div class="cart-drawer" data-cart-drawer aria-hidden="true">
+<div class="cart-drawer" data-cart-drawer data-free-shipping-threshold="{{ settings.free_shipping_threshold | default: 0 }}" aria-hidden="true">
   <div class="cart-drawer__overlay" data-cart-drawer-close></div>
 
   <div class="cart-drawer__panel">
