@@ -199,12 +199,19 @@ class Cart {
       form.addEventListener('submit', (e) => {
         e.preventDefault();
         const formData = new FormData(form);
-        this.addToCart(formData.get('id'), formData.get('quantity') || 1);
+        const submitBtn = form.querySelector('[data-add-to-cart]');
+        this.addToCart(formData.get('id'), formData.get('quantity') || 1, submitBtn, form);
       });
     });
   }
 
-  async addToCart(id, quantity = 1) {
+  async addToCart(id, quantity = 1, submitBtn = null, form = null) {
+    // Add loading state
+    if (submitBtn) {
+      submitBtn.classList.add('is-loading');
+      submitBtn.disabled = true;
+    }
+
     try {
       const response = await fetch(window.routes.cart_add_url, {
         method: 'POST',
@@ -218,11 +225,14 @@ class Cart {
         })
       });
 
-      if (!response.ok) throw new Error('Error adding to cart');
+      if (!response.ok) {
+        const errorData = await response.json().catch(() => ({}));
+        throw new Error(errorData.description || 'Error adding to cart');
+      }
 
       const data = await response.json();
       this.updateCartUI();
-      this.showAddedMessage();
+      this.showAddedMessage(form);
 
       // Open cart drawer
       const cartDrawer = document.querySelector('[data-cart-drawer]');
@@ -233,6 +243,13 @@ class Cart {
 
     } catch (error) {
       console.error('Add to cart error:', error);
+      this.showErrorMessage(form, error.message);
+    } finally {
+      // Remove loading state
+      if (submitBtn) {
+        submitBtn.classList.remove('is-loading');
+        submitBtn.disabled = false;
+      }
     }
   }
 
@@ -320,14 +337,26 @@ class Cart {
     return '$' + (cents / 100).toFixed(2).replace(/\B(?=(\d{3})+(?!\d))/g, ',') + ' MXN';
   }
 
-  showAddedMessage() {
-    const message = document.querySelector('[data-add-message]');
+  showAddedMessage(form = null) {
+    const message = form ? form.querySelector('[data-add-message]') : document.querySelector('[data-add-message]');
     if (message) {
       message.textContent = '¡Listo! Ya esta en tu caja de regalo';
+      message.classList.remove('is-error');
       message.classList.add('is-visible');
       setTimeout(() => {
         message.classList.remove('is-visible');
       }, 3000);
+    }
+  }
+
+  showErrorMessage(form = null, errorText = 'Error al agregar al carrito') {
+    const message = form ? form.querySelector('[data-add-message]') : document.querySelector('[data-add-message]');
+    if (message) {
+      message.textContent = errorText;
+      message.classList.add('is-visible', 'is-error');
+      setTimeout(() => {
+        message.classList.remove('is-visible', 'is-error');
+      }, 5000);
     }
   }
 }
@@ -341,6 +370,7 @@ class ProductForm {
     this.optionSelectors = container.querySelectorAll('[data-option-selector]');
     this.mainImage = container.querySelector('[data-main-image]');
     this.thumbnails = container.querySelectorAll('[data-thumbnail]');
+    this.selectedOptions = {};
 
     this.init();
   }
@@ -348,9 +378,23 @@ class ProductForm {
   init() {
     if (!this.productJson.variants) return;
 
-    // Option changes
+    // Initialize selected options from current state
     this.optionSelectors.forEach(selector => {
-      selector.addEventListener('change', () => this.onVariantChange());
+      if (selector.classList.contains('is-selected')) {
+        const optionName = selector.dataset.optionName;
+        const optionValue = selector.dataset.optionValue;
+        if (optionName && optionValue) {
+          this.selectedOptions[optionName] = optionValue;
+        }
+      }
+    });
+
+    // Option button clicks
+    this.optionSelectors.forEach(selector => {
+      selector.addEventListener('click', (e) => {
+        e.preventDefault();
+        this.onOptionClick(selector);
+      });
     });
 
     // Thumbnails
@@ -366,28 +410,46 @@ class ProductForm {
     });
   }
 
-  onVariantChange() {
-    const selectedOptions = [];
-    this.optionSelectors.forEach(selector => {
-      if (selector.checked) {
-        selectedOptions.push(selector.value);
-      }
-    });
+  onOptionClick(selector) {
+    const optionName = selector.dataset.optionName;
+    const optionValue = selector.dataset.optionValue;
 
+    if (!optionName || !optionValue) return;
+
+    // Update selected options
+    this.selectedOptions[optionName] = optionValue;
+
+    // Update button states for this option group
+    const optionGroup = selector.closest('.product-page__option-values');
+    if (optionGroup) {
+      optionGroup.querySelectorAll('[data-option-selector]').forEach(btn => {
+        const isSelected = btn.dataset.optionValue === optionValue;
+        btn.classList.toggle('is-selected', isSelected);
+        btn.setAttribute('aria-pressed', isSelected ? 'true' : 'false');
+      });
+    }
+
+    // Find matching variant
+    this.updateVariant();
+  }
+
+  updateVariant() {
+    // Build options array in order
+    const optionNames = this.productJson.options || [];
+    const selectedOptionsArray = optionNames.map(name => this.selectedOptions[name]);
+
+    // Find variant that matches all selected options
     const variant = this.productJson.variants.find(v => {
-      return JSON.stringify(v.options) === JSON.stringify(selectedOptions);
+      return JSON.stringify(v.options) === JSON.stringify(selectedOptionsArray);
     });
 
     if (variant && this.variantInput) {
       this.variantInput.value = variant.id;
 
-      // Update radio styles
-      this.optionSelectors.forEach(selector => {
-        const label = selector.closest('.collage-radio');
-        if (label) {
-          label.classList.toggle('is-selected', selector.checked);
-        }
-      });
+      // Update variant image if available
+      if (variant.featured_image && this.mainImage) {
+        this.mainImage.src = variant.featured_image.src;
+      }
     }
   }
 }
@@ -821,8 +883,8 @@ document.addEventListener('DOMContentLoaded', () => {
   new NewsletterPopup();
   new CollectionFilters();
 
-  // Product forms
-  document.querySelectorAll('.product').forEach(container => {
+  // Product forms (support both old .product and new .product-page classes)
+  document.querySelectorAll('.product, .product-page').forEach(container => {
     new ProductForm(container);
   });
 });

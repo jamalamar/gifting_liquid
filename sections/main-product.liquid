@@ -1,164 +1,181 @@
-<section class="product collage-section" data-section-id="{{ section.id }}">
+<section class="product-page" data-section-id="{{ section.id }}">
   <div class="container">
-    <div class="product__wrapper">
-      <div class="product__media">
-        <div class="product__gallery collage-paper collage-paper--large">
+    <div class="product-page__wrapper">
+
+      <!-- Product Media -->
+      <div class="product-page__media">
+        <div class="product-page__image-wrapper">
           {%- if product.featured_media -%}
-            <div class="product__main-image collage-photo collage-photo--tape">
+            <div class="product-page__image">
               <img
                 src="{{ product.featured_media | image_url: width: 800 }}"
                 alt="{{ product.featured_media.alt | default: product.title }}"
-                width="600"
-                height="600"
+                width="800"
+                height="800"
                 loading="eager"
-                class="product__image"
                 data-main-image
               >
             </div>
           {%- endif -%}
 
-          {%- if product.media.size > 1 -%}
-            <div class="product__thumbnails">
-              {%- for media in product.media -%}
-                <button
-                  class="product__thumbnail collage-polaroid collage-polaroid--small{% if forloop.first %} is-active{% endif %}"
-                  data-thumbnail
-                  data-media-id="{{ media.id }}"
-                  data-src="{{ media | image_url: width: 800 }}"
-                >
-                  <img
-                    src="{{ media | image_url: width: 150 }}"
-                    alt="{{ media.alt | default: product.title }}"
-                    width="80"
-                    height="80"
-                    loading="lazy"
-                  >
-                </button>
-              {%- endfor -%}
-            </div>
+          {%- if product.available == false -%}
+            <span class="product-page__badge product-page__badge--soldout collage-sticker">Agotado</span>
+          {%- elsif product.compare_at_price > product.price -%}
+            {%- assign discount = product.compare_at_price | minus: product.price | times: 100.0 | divided_by: product.compare_at_price | round -%}
+            <span class="product-page__badge product-page__badge--sale collage-sticker">-{{ discount }}%</span>
           {%- endif -%}
-
-          <div class="product__badges">
-            {%- if product.available == false -%}
-              <span class="product__badge product__badge--soldout collage-sticker">Agotado</span>
-            {%- elsif product.compare_at_price > product.price -%}
-              <span class="product__badge product__badge--sale collage-sticker">Oferta</span>
-            {%- endif -%}
-          </div>
         </div>
+
+        {%- if product.media.size > 1 -%}
+          <div class="product-page__thumbnails">
+            {%- for media in product.media -%}
+              <button
+                type="button"
+                class="product-page__thumb{% if forloop.first %} is-active{% endif %}"
+                data-thumbnail
+                data-media-id="{{ media.id }}"
+                data-src="{{ media | image_url: width: 800 }}"
+                aria-label="Ver imagen {{ forloop.index }}"
+              >
+                <img
+                  src="{{ media | image_url: width: 150 }}"
+                  alt="{{ media.alt | default: product.title }}"
+                  width="70"
+                  height="70"
+                  loading="lazy"
+                >
+              </button>
+            {%- endfor -%}
+          </div>
+        {%- endif -%}
       </div>
 
-      <div class="product__info">
-        <div class="product__info-inner collage-paper collage-paper--note">
-          <div class="product__info-tape collage-element collage-element--tape"></div>
+      <!-- Product Details -->
+      <div class="product-page__details">
+        {%- if product.vendor -%}
+          <p class="product-page__vendor">{{ product.vendor }}</p>
+        {%- endif -%}
 
-          {%- if product.vendor -%}
-            <p class="product__vendor collage-handwritten">{{ product.vendor }}</p>
+        <h1 class="product-page__title">{{ product.title }}</h1>
+
+        <div class="product-page__price">
+          {%- if product.compare_at_price > product.price -%}
+            <span class="product-page__price-compare">{{ product.compare_at_price | money }}</span>
           {%- endif -%}
+          <span class="product-page__price-current">{{ product.price | money }}</span>
+        </div>
 
-          <h1 class="product__title">{{ product.title }}</h1>
+        {%- if product.metafields.custom.short_description != blank -%}
+          <p class="product-page__description-short">{{ product.metafields.custom.short_description }}</p>
+        {%- endif -%}
 
-          <div class="product__price">
-            {%- if product.compare_at_price > product.price -%}
-              <span class="product__price-compare">{{ product.compare_at_price | money }}</span>
-            {%- endif -%}
-            <span class="product__price-current">{{ product.price | money }}</span>
+        <!-- Product Form -->
+        <form
+          action="{{ routes.cart_add_url }}"
+          method="post"
+          class="product-page__form"
+          id="product-form-{{ section.id }}"
+          data-product-form
+        >
+          <input type="hidden" name="id" value="{{ product.selected_or_first_available_variant.id }}" data-variant-id>
+
+          {%- unless product.has_only_default_variant -%}
+            <div class="product-page__variants">
+              {%- for option in product.options_with_values -%}
+                <div class="product-page__option">
+                  <label class="product-page__option-label">{{ option.name }}</label>
+                  <div class="product-page__option-values">
+                    {%- for value in option.values -%}
+                      <button
+                        type="button"
+                        class="product-page__option-btn{% if option.selected_value == value %} is-selected{% endif %}"
+                        data-option-selector
+                        data-option-name="{{ option.name }}"
+                        data-option-value="{{ value }}"
+                        aria-pressed="{% if option.selected_value == value %}true{% else %}false{% endif %}"
+                      >
+                        {{ value }}
+                      </button>
+                    {%- endfor -%}
+                  </div>
+                </div>
+              {%- endfor -%}
+            </div>
+          {%- endunless -%}
+
+          <div class="product-page__quantity">
+            <label class="product-page__option-label">Cantidad</label>
+            <div class="product-page__qty-group">
+              <button type="button" class="product-page__qty-btn" data-quantity-minus aria-label="Disminuir cantidad">
+                <span>−</span>
+              </button>
+              <input
+                type="number"
+                name="quantity"
+                value="1"
+                min="1"
+                class="product-page__qty-input"
+                data-quantity-input
+                aria-label="Cantidad"
+              >
+              <button type="button" class="product-page__qty-btn" data-quantity-plus aria-label="Aumentar cantidad">
+                <span>+</span>
+              </button>
+            </div>
           </div>
 
-          {%- if product.metafields.custom.short_description != blank -%}
-            <p class="product__short-description">{{ product.metafields.custom.short_description }}</p>
-          {%- endif -%}
-
-          {% form 'product', product, class: 'product__form', data-product-form: '' %}
-            <input type="hidden" name="id" value="{{ product.selected_or_first_available_variant.id }}" data-variant-id>
-
-            {%- unless product.has_only_default_variant -%}
-              <div class="product__variants">
-                {%- for option in product.options_with_values -%}
-                  <div class="product__option">
-                    <label class="product__option-label">{{ option.name }}</label>
-                    <div class="product__option-values">
-                      {%- for value in option.values -%}
-                        <label class="product__option-value collage-radio{% if option.selected_value == value %} is-selected{% endif %}">
-                          <input
-                            type="radio"
-                            name="{{ option.name }}"
-                            value="{{ value }}"
-                            {% if option.selected_value == value %}checked{% endif %}
-                            data-option-selector
-                          >
-                          <span>{{ value }}</span>
-                        </label>
-                      {%- endfor -%}
-                    </div>
-                  </div>
-                {%- endfor -%}
-              </div>
-            {%- endunless -%}
-
-            <div class="product__quantity">
-              <label class="product__quantity-label">Cantidad</label>
-              <div class="product__quantity-selector collage-input-group">
-                <button type="button" class="product__quantity-btn" data-quantity-minus>-</button>
-                <input
-                  type="number"
-                  name="quantity"
-                  value="1"
-                  min="1"
-                  class="product__quantity-input collage-input"
-                  data-quantity-input
-                >
-                <button type="button" class="product__quantity-btn" data-quantity-plus>+</button>
-              </div>
-            </div>
-
-            <button
-              type="submit"
-              class="product__add-to-cart btn btn--primary btn--large collage-button"
-              {% unless product.available %}disabled{% endunless %}
-              data-add-to-cart
-            >
+          <button
+            type="submit"
+            class="product-page__add-btn btn btn--primary"
+            {% unless product.available %}disabled{% endunless %}
+            data-add-to-cart
+          >
+            <span class="product-page__add-btn-text">
               {%- if product.available -%}
                 {% render 'icon-cart' %}
                 <span>Agregar a mi caja</span>
               {%- else -%}
                 <span>Agotado</span>
               {%- endif -%}
-            </button>
+            </span>
+            <span class="product-page__add-btn-spinner" aria-hidden="true">
+              <svg class="spinner" viewBox="0 0 24 24" width="20" height="20">
+                <circle cx="12" cy="12" r="10" stroke="currentColor" stroke-width="3" fill="none" stroke-linecap="round" stroke-dasharray="60" stroke-dashoffset="20"/>
+              </svg>
+            </span>
+          </button>
 
-            <div class="product__add-message" data-add-message></div>
-          {% endform %}
+          <div class="product-page__message" data-add-message></div>
+        </form>
 
-          {%- if section.settings.show_gift_message -%}
-            <div class="product__gift-note collage-paper collage-paper--small collage-paper--accent">
-              <div class="product__gift-note-icon">{% render 'icon-gift' %}</div>
-              <p>{{ section.settings.gift_message | default: '¿Es un regalo? Agrega un mensaje personalizado en el carrito' }}</p>
-            </div>
-          {%- endif -%}
-
-          <div class="product__meta">
-            {%- if product.tags.size > 0 -%}
-              <div class="product__tags">
-                {%- for tag in product.tags -%}
-                  <a href="{{ routes.collections_url }}/all/{{ tag | handle }}" class="product__tag collage-sticker collage-sticker--small">
-                    {{ tag }}
-                  </a>
-                {%- endfor -%}
-              </div>
-            {%- endif -%}
+        {%- if section.settings.show_gift_message -%}
+          <div class="product-page__gift-note">
+            <span class="product-page__gift-note-icon">{% render 'icon-gift' %}</span>
+            <p>{{ section.settings.gift_message | default: '¿Es un regalo? Agrega un mensaje personalizado en el carrito' }}</p>
           </div>
-        </div>
-      </div>
-    </div>
+        {%- endif -%}
 
-    {%- if product.description != blank -%}
-      <div class="product__description collage-paper collage-paper--large">
-        <h2 class="product__description-title collage-heading">Descripcion</h2>
-        <div class="product__description-content rte">
-          {{ product.description }}
-        </div>
+        {%- if product.description != blank -%}
+          <div class="product-page__description">
+            <h2 class="product-page__description-title">Descripcion</h2>
+            <div class="product-page__description-content rte">
+              {{ product.description }}
+            </div>
+          </div>
+        {%- endif -%}
+
+        {%- if product.tags.size > 0 -%}
+          <div class="product-page__tags">
+            {%- for tag in product.tags -%}
+              <a href="{{ routes.collections_url }}/all/{{ tag | handle }}" class="product-page__tag collage-sticker collage-sticker--small">
+                {{ tag }}
+              </a>
+            {%- endfor -%}
+          </div>
+        {%- endif -%}
       </div>
-    {%- endif -%}
+
+    </div>
   </div>
 </section>
 
