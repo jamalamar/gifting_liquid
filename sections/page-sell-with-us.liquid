@@ -1,26 +1,35 @@
 <section class="sell-page" data-section-id="{{ section.id }}">
 
-  <!-- Sell Hero -->
-  <div class="sell-hero">
-    <div class="container">
-      <div class="sell-hero__tag collage-sticker collage-sticker--handwritten">
-        {% render 'icon-sparkle' %}
-        <span>Únete</span>
+  <!-- Sell Hero with Background -->
+  {%- assign hero_image = section.settings.background_image -%}
+  <div class="sell-hero{% if hero_image %} sell-hero--has-bg{% endif %}">
+    {%- if hero_image -%}
+      <div class="sell-hero__bg">
+        <img
+          src="{{ hero_image | image_url: width: 1920 }}"
+          alt="{{ section.settings.headline | default: 'Vende con nosotros' }}"
+          loading="eager"
+          class="sell-hero__bg-image"
+        >
+        <div class="sell-hero__overlay"></div>
       </div>
-      <h1 class="sell-hero__title">
-        {{ section.settings.headline | default: 'Tu producto merece ser el regalo de alguien' }}
-      </h1>
-      <p class="sell-hero__subtitle">
-        {{ section.settings.subtitle | default: 'Únete a la comunidad de creadores mexicanos que ya venden en Gifting. Aquí tu producto encuentra a las personas que realmente lo van a valorar.' }}
-      </p>
-    </div>
-  </div>
-
-  <!-- Intro Section -->
-  <div class="sell-intro">
+    {%- endif -%}
     <div class="container">
-      <div class="sell-intro__content">
-        {{ section.settings.intro_text | default: '<p>Gifting es más que una tienda online. Es una plataforma que conecta lo que tú creas con personas que buscan regalar algo único y especial.</p><p>Nosotros nos encargamos de todo: la plataforma, el marketing, el empaque bonito y la entrega. Tú te enfocas en lo que mejor haces: crear productos increíbles.</p><p>Es como tener tu propio canal de ventas sin el estrés de manejar todo solo.</p>' }}
+      <div class="sell-hero__content">
+        <div class="sell-hero__tag collage-sticker collage-sticker--handwritten">
+          {% render 'icon-sparkle' %}
+          <span>Únete</span>
+        </div>
+        <h1 class="sell-hero__title">
+          {{ section.settings.headline | default: 'Tu producto merece ser el regalo de alguien' }}
+        </h1>
+        <p class="sell-hero__subtitle">
+          {{ section.settings.subtitle | default: 'Tú creas, nosotros vendemos. Sin costos fijos, sin estrés.' }}
+        </p>
+        <a href="#sell-form" class="btn btn--primary sell-hero__cta">
+          Quiero vender en Gifting
+          {% render 'icon-arrow-right' %}
+        </a>
       </div>
     </div>
   </div>
@@ -30,10 +39,12 @@
     <div class="container">
       <h2 class="sell-benefits__title">{{ section.settings.benefits_title | default: '¿Por qué vender en Gifting?' }}</h2>
       <div class="sell-benefits__grid">
+        {%- assign benefit_index = 0 -%}
         {%- for block in section.blocks -%}
           {%- if block.type == 'benefit' -%}
-            <div class="sell-benefit" {{ block.shopify_attributes }}>
-              <div class="sell-benefit__icon collage-sticker collage-sticker--small">
+            {%- assign benefit_index = benefit_index | plus: 1 -%}
+            <div class="sell-benefit sell-benefit--{{ benefit_index }}" {{ block.shopify_attributes }}>
+              <div class="sell-benefit__icon collage-sticker">
                 {%- case block.settings.icon -%}
                   {%- when 'visibility' -%}
                     {% render 'icon-eye' %}
@@ -62,41 +73,33 @@
   <div class="sell-products">
     <div class="container">
       <h2 class="sell-products__title">{{ section.settings.products_title | default: '¿Qué productos buscamos?' }}</h2>
-      <p class="sell-products__intro">{{ section.settings.products_intro | default: 'Buscamos productos que tengan ese "algo" especial. Cosas que cuando alguien las reciba, diga "wow, ¿de dónde sacaste esto?"' }}</p>
+      <p class="sell-products__intro">{{ section.settings.products_intro | default: 'Productos con ese "algo" especial que hacen decir wow.' }}</p>
 
-      <ul class="sell-products__list">
+      <div class="sell-products__grid">
+        {%- assign product_index = 0 -%}
         {%- for block in section.blocks -%}
           {%- if block.type == 'product_category' -%}
-            <li class="sell-products__item" {{ block.shopify_attributes }}>
-              <span class="sell-products__check collage-sticker collage-sticker--tiny">
-                {% render 'icon-check' %}
+            {%- assign product_index = product_index | plus: 1 -%}
+            <div class="sell-product-card sell-product-card--{{ product_index }}" {{ block.shopify_attributes }}>
+              <span class="sell-product-card__icon collage-sticker collage-sticker--tiny">
+                {%- case block.settings.icon -%}
+                  {%- when 'sparkle' -%}
+                    {% render 'icon-sparkle' %}
+                  {%- when 'package' -%}
+                    {% render 'icon-package' %}
+                  {%- when 'bow' -%}
+                    {% render 'icon-bow' %}
+                  {%- when 'heart' -%}
+                    {% render 'icon-heart' %}
+                  {%- when 'palette' -%}
+                    {% render 'icon-palette' %}
+                  {%- when 'home' -%}
+                    {% render 'icon-home' %}
+                  {%- else -%}
+                    {% render 'icon-gift' %}
+                {%- endcase -%}
               </span>
-              <span>{{ block.settings.category }}</span>
-            </li>
-          {%- endif -%}
-        {%- endfor -%}
-      </ul>
-
-      <p class="sell-products__note">
-        {{ section.settings.products_note | default: 'Lo importante: que sea de calidad, que tenga historia y que sea algo que a ti mismo te gustaría recibir.' }}
-      </p>
-    </div>
-  </div>
-
-  <!-- Process Section -->
-  <div class="sell-process">
-    <div class="container">
-      <h2 class="sell-process__title">{{ section.settings.process_title | default: '¿Cómo funciona?' }}</h2>
-      <div class="sell-process__steps">
-        {%- for block in section.blocks -%}
-          {%- if block.type == 'step' -%}
-            <div class="sell-step" {{ block.shopify_attributes }}>
-              <div class="sell-step__number collage-sticker">{{ block.settings.number }}</div>
-              <h3 class="sell-step__title">{{ block.settings.title }}</h3>
-              <p class="sell-step__description">{{ block.settings.description }}</p>
-              {%- unless forloop.last -%}
-                <div class="sell-step__connector" aria-hidden="true"></div>
-              {%- endunless -%}
+              <span class="sell-product-card__name">{{ block.settings.category }}</span>
             </div>
           {%- endif -%}
         {%- endfor -%}
@@ -104,48 +107,47 @@
     </div>
   </div>
 
-  <!-- Testimonials Section -->
-  {%- if section.settings.show_testimonials -%}
-    <div class="sell-testimonials">
-      <div class="container">
-        <h2 class="sell-testimonials__title">{{ section.settings.testimonials_title | default: 'Testimonios de Emprendedores' }}</h2>
-        <div class="sell-testimonials__grid">
-          {%- for block in section.blocks -%}
-            {%- if block.type == 'testimonial' -%}
-              <div class="sell-testimonial" {{ block.shopify_attributes }}>
-                <div class="sell-testimonial__avatar collage-sticker">
-                  {%- if block.settings.image != blank -%}
-                    <img src="{{ block.settings.image | image_url: width: 120 }}" alt="{{ block.settings.name }}" loading="lazy">
-                  {%- else -%}
-                    {% render 'icon-user' %}
-                  {%- endif -%}
-                </div>
-                <blockquote class="sell-testimonial__quote">"{{ block.settings.quote }}"</blockquote>
-                <cite class="sell-testimonial__author">— {{ block.settings.name }}</cite>
-              </div>
-            {%- endif -%}
-          {%- endfor -%}
-        </div>
+  <!-- Process Section -->
+  <div class="sell-process">
+    <div class="container">
+      <h2 class="sell-process__title">{{ section.settings.process_title | default: '¿Cómo funciona?' }}</h2>
+      <div class="sell-process__timeline">
+        {%- assign step_count = 0 -%}
+        {%- for block in section.blocks -%}
+          {%- if block.type == 'step' -%}
+            {%- assign step_count = step_count | plus: 1 -%}
+          {%- endif -%}
+        {%- endfor -%}
+        {%- assign step_index = 0 -%}
+        {%- for block in section.blocks -%}
+          {%- if block.type == 'step' -%}
+            {%- assign step_index = step_index | plus: 1 -%}
+            <div class="sell-step" {{ block.shopify_attributes }}>
+              <div class="sell-step__number collage-sticker collage-sticker--accent">{{ block.settings.number }}</div>
+              <h3 class="sell-step__title">{{ block.settings.title }}</h3>
+              <p class="sell-step__description">{{ block.settings.description }}</p>
+              {%- if step_index < step_count -%}
+                <div class="sell-step__connector" aria-hidden="true"></div>
+              {%- endif -%}
+            </div>
+          {%- endif -%}
+        {%- endfor -%}
       </div>
     </div>
-  {%- endif -%}
+  </div>
 
   <!-- CTA Section -->
   <div class="sell-cta">
     <div class="container">
       <div class="sell-cta__content">
-        <div class="sell-cta__icon collage-sticker collage-sticker--large">
-          {% render 'icon-sparkle' %}
-        </div>
-        <h2 class="sell-cta__title">{{ section.settings.cta_title | default: '¿Listo para que tu producto llegue a más personas?' }}</h2>
-        <p class="sell-cta__text">{{ section.settings.cta_subtitle | default: 'Llena el formulario y empecemos a trabajar juntos.' }}</p>
+        <h2 class="sell-cta__title">{{ section.settings.cta_title | default: '¿Listo para vender?' }}</h2>
+        <p class="sell-cta__text">{{ section.settings.cta_subtitle | default: 'Llena el formulario y empecemos.' }}</p>
         <a href="#sell-form" class="btn btn--primary sell-cta__btn">
           {{ section.settings.cta_text | default: 'Quiero vender en Gifting' }}
           {% render 'icon-arrow-right' %}
         </a>
       </div>
     </div>
-    <div class="sell-cta__deco" aria-hidden="true">+</div>
   </div>
 
   <!-- Application Form -->
@@ -231,6 +233,12 @@
       "content": "Hero"
     },
     {
+      "type": "image_picker",
+      "id": "background_image",
+      "label": "Imagen de fondo",
+      "info": "Recomendado: 1920x600px"
+    },
+    {
       "type": "text",
       "id": "headline",
       "label": "Titular",
@@ -240,16 +248,7 @@
       "type": "textarea",
       "id": "subtitle",
       "label": "Subtitulo",
-      "default": "Únete a la comunidad de creadores mexicanos que ya venden en Gifting. Aquí tu producto encuentra a las personas que realmente lo van a valorar."
-    },
-    {
-      "type": "header",
-      "content": "Introduccion"
-    },
-    {
-      "type": "richtext",
-      "id": "intro_text",
-      "label": "Texto de introduccion"
+      "default": "Tu creas, nosotros vendemos. Sin costos fijos, sin estres."
     },
     {
       "type": "header",
@@ -277,11 +276,6 @@
       "label": "Intro de productos"
     },
     {
-      "type": "textarea",
-      "id": "products_note",
-      "label": "Nota de productos"
-    },
-    {
       "type": "header",
       "content": "Proceso"
     },
@@ -290,22 +284,6 @@
       "id": "process_title",
       "label": "Titulo del proceso",
       "default": "¿Cómo funciona?"
-    },
-    {
-      "type": "header",
-      "content": "Testimonios"
-    },
-    {
-      "type": "checkbox",
-      "id": "show_testimonials",
-      "label": "Mostrar testimonios",
-      "default": true
-    },
-    {
-      "type": "text",
-      "id": "testimonials_title",
-      "label": "Titulo de testimonios",
-      "default": "Testimonios de Emprendedores"
     },
     {
       "type": "header",
@@ -369,7 +347,22 @@
           "type": "text",
           "id": "category",
           "label": "Categoria",
-          "default": "Velas artesanales y aromaterapia"
+          "default": "Velas artesanales"
+        },
+        {
+          "type": "select",
+          "id": "icon",
+          "label": "Icono",
+          "options": [
+            { "value": "sparkle", "label": "Estrella (velas, aroma)" },
+            { "value": "package", "label": "Paquete (comida, snacks)" },
+            { "value": "bow", "label": "Mono (joyeria, accesorios)" },
+            { "value": "heart", "label": "Corazon (skincare, cuidado)" },
+            { "value": "palette", "label": "Paleta (ropa, arte)" },
+            { "value": "home", "label": "Casa (hogar, deco)" },
+            { "value": "gift", "label": "Regalo (general)" }
+          ],
+          "default": "gift"
         }
       ]
     },
@@ -397,52 +390,23 @@
         }
       ]
     },
-    {
-      "type": "testimonial",
-      "name": "Testimonio",
-      "settings": [
-        {
-          "type": "image_picker",
-          "id": "image",
-          "label": "Foto"
-        },
-        {
-          "type": "text",
-          "id": "name",
-          "label": "Nombre",
-          "default": "María - Velas Artesanales"
-        },
-        {
-          "type": "textarea",
-          "id": "quote",
-          "label": "Testimonio",
-          "default": "Desde que estoy en Gifting, mis ventas aumentaron y conozco gente increíble. Es como tener un equipo de ventas sin tener que contratar a nadie."
-        }
-      ]
-    }
   ],
   "presets": [
     {
       "name": "Pagina Vende con Nosotros",
       "blocks": [
-        { "type": "benefit", "settings": { "title": "Visibilidad real", "description": "Tu producto aparece frente a miles de personas que ya están buscando qué regalar. No tienes que luchar solo contra el algoritmo.", "icon": "visibility" } },
-        { "type": "benefit", "settings": { "title": "Sin costos ocultos", "description": "Nada de mensualidades ni cuotas sorpresa. Solo ganas cuando vendes.", "icon": "money" } },
-        { "type": "benefit", "settings": { "title": "Nos encargamos de la logística", "description": "Nosotros armamos las cajas y entregamos. Tú solo nos mandas tu producto y listo.", "icon": "logistics" } },
-        { "type": "benefit", "settings": { "title": "Comunidad de creadores", "description": "Formas parte de un colectivo de emprendedores que, como tú, le ponen el alma a lo que hacen.", "icon": "community" } },
-        { "type": "benefit", "settings": { "title": "Marketing incluido", "description": "Promocionamos tus productos en nuestras redes y campañas. Tu marca gana exposición sin que gastes un peso extra.", "icon": "marketing" } },
-        { "type": "product_category", "settings": { "category": "Velas artesanales y aromaterapia" } },
-        { "type": "product_category", "settings": { "category": "Productos gourmet y snacks especiales" } },
-        { "type": "product_category", "settings": { "category": "Accesorios y joyería" } },
-        { "type": "product_category", "settings": { "category": "Artículos de skincare y cuidado personal" } },
-        { "type": "product_category", "settings": { "category": "Ropa y accesorios únicos" } },
-        { "type": "product_category", "settings": { "category": "Papelería y artículos de oficina con diseño" } },
-        { "type": "product_category", "settings": { "category": "Decoración para el hogar" } },
-        { "type": "product_category", "settings": { "category": "Y más... Si creas algo chido, queremos conocerlo" } },
-        { "type": "step", "settings": { "number": 1, "title": "Aplica", "description": "Llena el formulario con la info de tu marca y productos. No te preocupes, es rápido." } },
-        { "type": "step", "settings": { "number": 2, "title": "Te contactamos", "description": "Revisamos tu aplicación y, si hacemos match, te mandamos mensaje para platicar detalles." } },
-        { "type": "step", "settings": { "number": 3, "title": "Subes tus productos", "description": "Te ayudamos a crear las fichas de tus productos con fotos y descripciones que vendan." } },
-        { "type": "step", "settings": { "number": 4, "title": "¡A vender!", "description": "Tu producto ya está disponible para miles de personas que buscan el regalo perfecto." } },
-        { "type": "testimonial", "settings": { "name": "María - Velas Artesanales", "quote": "Desde que estoy en Gifting, mis ventas aumentaron y conozco gente increíble. Es como tener un equipo de ventas sin tener que contratar a nadie." } }
+        { "type": "benefit", "settings": { "title": "Visibilidad real", "description": "Tu producto llega a miles de personas buscando regalos.", "icon": "visibility" } },
+        { "type": "benefit", "settings": { "title": "Sin costos fijos", "description": "Solo ganas cuando vendes. Cero mensualidades.", "icon": "money" } },
+        { "type": "benefit", "settings": { "title": "Logistica incluida", "description": "Nosotros armamos, empacamos y entregamos.", "icon": "logistics" } },
+        { "type": "product_category", "settings": { "category": "Velas artesanales", "icon": "sparkle" } },
+        { "type": "product_category", "settings": { "category": "Snacks gourmet", "icon": "package" } },
+        { "type": "product_category", "settings": { "category": "Joyeria y accesorios", "icon": "bow" } },
+        { "type": "product_category", "settings": { "category": "Skincare y cuidado", "icon": "heart" } },
+        { "type": "product_category", "settings": { "category": "Decoracion hogar", "icon": "home" } },
+        { "type": "product_category", "settings": { "category": "Y mucho mas...", "icon": "gift" } },
+        { "type": "step", "settings": { "number": 1, "title": "Aplica", "description": "Llena el formulario" } },
+        { "type": "step", "settings": { "number": 2, "title": "Platicamos", "description": "Te contactamos para conocerte" } },
+        { "type": "step", "settings": { "number": 3, "title": "A vender", "description": "Tu producto sale al mundo" } }
       ]
     }
   ]
