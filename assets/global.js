@@ -446,76 +446,69 @@ class NewsletterPopup {
   }
 }
 
-// Collection Filters
+// Collection AJAX Filters, Search & Pagination
 class CollectionFilters {
   constructor() {
-    this.filterToggle = document.querySelector('[data-filter-toggle]');
-    this.filterSidebar = document.querySelector('[data-filter-sidebar]');
-    this.filterCloseButtons = document.querySelectorAll('[data-filter-close]');
-    this.sortSelect = document.querySelector('[data-sort-select]');
+    this.section = document.querySelector('[data-ajax-collection]');
+    if (!this.section) return;
+
+    this.sectionId = this.section.dataset.sectionId;
+    this.collectionUrl = this.section.dataset.collectionUrl;
+
+    // DOM references
+    this.productGrid = this.section.querySelector('[data-product-grid]');
+    this.productsContainer = this.section.querySelector('[data-products-container]');
+    this.activeFiltersContainer = this.section.querySelector('[data-active-filters-list]');
+    this.activeFiltersWrapper = this.section.querySelector('[data-active-filters]');
+    this.filterSidebar = this.section.querySelector('[data-filter-sidebar]');
+    this.filterToggle = this.section.querySelector('[data-filter-toggle]');
+    this.filterCloseButtons = this.section.querySelectorAll('[data-filter-close]');
+    this.sortSelect = this.section.querySelector('[data-sort-select]');
+    this.searchInput = this.section.querySelector('[data-collection-search-input]');
+    this.searchClear = this.section.querySelector('[data-search-clear]');
+    this.resultsCount = this.section.querySelector('[data-search-results-count]');
+    this.filterCount = this.section.querySelector('[data-filter-count]');
+    this.applyButton = this.section.querySelector('[data-apply-filters]');
+
+    // State
+    this.isLoading = false;
+    this.searchQuery = '';
+    this.abortController = null;
 
     this.init();
   }
 
   init() {
-    // Filter drawer toggle
-    if (this.filterToggle && this.filterSidebar) {
-      this.filterToggle.addEventListener('click', () => this.openFilters());
+    this.bindFilterDrawer();
+    this.bindFilterGroups();
+    this.bindFilterInputs();
+    this.bindSort();
+    this.bindSearch();
+    this.bindPagination();
+    this.bindActiveFilters();
+    this.updateFilterCount();
+  }
 
-      this.filterCloseButtons.forEach(btn => {
-        btn.addEventListener('click', () => this.closeFilters());
-      });
-
-      // Close on escape
-      document.addEventListener('keydown', (e) => {
-        if (e.key === 'Escape') {
-          this.closeFilters();
-        }
-      });
-    }
-
-    // Sort select
-    if (this.sortSelect) {
-      this.sortSelect.addEventListener('change', () => {
-        const url = new URL(window.location.href);
-        url.searchParams.set('sort_by', this.sortSelect.value);
-        window.location.href = url.toString();
-      });
-    }
-
-    // Filter group toggles
-    document.querySelectorAll('[data-filter-toggle-group]').forEach(toggle => {
-      toggle.addEventListener('click', () => {
-        const group = toggle.closest('[data-filter-group]');
-        if (group) {
-          group.classList.toggle('is-open');
-          const isOpen = group.classList.contains('is-open');
-          toggle.setAttribute('aria-expanded', isOpen);
-        }
-      });
+  // ========== FILTER DRAWER ==========
+  bindFilterDrawer() {
+    this.filterToggle?.addEventListener('click', () => this.openFilters());
+    this.filterCloseButtons.forEach(btn => {
+      btn.addEventListener('click', () => this.closeFilters());
     });
 
-    // Filter checkboxes
-    document.querySelectorAll('[data-filter-checkbox]').forEach(checkbox => {
-      checkbox.addEventListener('change', () => {
-        this.applyFilters();
-      });
-    });
+    // Mobile apply button closes drawer
+    this.applyButton?.addEventListener('click', () => this.closeFilters());
 
-    // Price range inputs
-    const priceInputs = document.querySelectorAll('[data-filter-price-min], [data-filter-price-max]');
-    priceInputs.forEach(input => {
-      input.addEventListener('change', debounce(() => {
-        this.applyFilters();
-      }, 500));
+    document.addEventListener('keydown', (e) => {
+      if (e.key === 'Escape') this.closeFilters();
     });
   }
 
   openFilters() {
-    this.filterSidebar.setAttribute('aria-hidden', 'false');
-    this.filterToggle.setAttribute('aria-expanded', 'true');
+    this.filterSidebar?.setAttribute('aria-hidden', 'false');
+    this.filterToggle?.setAttribute('aria-expanded', 'true');
     document.body.style.overflow = 'hidden';
-    trapFocus(this.filterSidebar);
+    if (this.filterSidebar) trapFocus(this.filterSidebar);
   }
 
   closeFilters() {
@@ -524,31 +517,300 @@ class CollectionFilters {
     document.body.style.overflow = '';
   }
 
-  applyFilters() {
-    const url = new URL(window.location.href);
+  // ========== FILTER GROUPS (accordion) ==========
+  bindFilterGroups() {
+    this.section.querySelectorAll('[data-filter-toggle-group]').forEach(toggle => {
+      toggle.addEventListener('click', () => {
+        const group = toggle.closest('[data-filter-group]');
+        if (group) {
+          group.classList.toggle('is-open');
+          toggle.setAttribute('aria-expanded', group.classList.contains('is-open'));
+        }
+      });
+    });
+  }
+
+  // ========== FILTER INPUTS (checkboxes, price) ==========
+  bindFilterInputs() {
+    // Checkboxes - immediate AJAX
+    this.section.querySelectorAll('[data-filter-checkbox]').forEach(checkbox => {
+      checkbox.addEventListener('change', () => this.applyFilters());
+    });
+
+    // Price range - debounced
+    const priceInputs = this.section.querySelectorAll('[data-filter-price-min], [data-filter-price-max]');
+    priceInputs.forEach(input => {
+      input.addEventListener('input', debounce(() => this.applyFilters(), 500));
+    });
+  }
+
+  // ========== SORTING ==========
+  bindSort() {
+    this.sortSelect?.addEventListener('change', () => this.applyFilters());
+  }
+
+  // ========== INLINE SEARCH ==========
+  bindSearch() {
+    if (!this.searchInput) return;
+
+    this.searchInput.addEventListener('input', debounce((e) => {
+      this.searchQuery = e.target.value.trim();
+      this.toggleSearchClear();
+      this.applyFilters();
+    }, 300));
+
+    this.searchClear?.addEventListener('click', () => {
+      this.searchInput.value = '';
+      this.searchQuery = '';
+      this.toggleSearchClear();
+      this.applyFilters();
+    });
+  }
+
+  toggleSearchClear() {
+    if (this.searchClear) {
+      this.searchClear.hidden = !this.searchQuery;
+    }
+  }
+
+  // ========== PAGINATION (AJAX) ==========
+  bindPagination() {
+    // Use event delegation for dynamically updated pagination
+    this.productGrid?.addEventListener('click', (e) => {
+      const paginationLink = e.target.closest('.collection-pagination__btn:not(.collection-pagination__btn--disabled), .collection-pagination__page:not(.collection-pagination__page--current):not(.collection-pagination__page--ellipsis)');
+      if (paginationLink && paginationLink.href) {
+        e.preventDefault();
+        this.fetchPage(paginationLink.href);
+      }
+    });
+  }
+
+  // ========== ACTIVE FILTER CHIPS ==========
+  bindActiveFilters() {
+    // Use event delegation for dynamically updated chips
+    this.section.addEventListener('click', (e) => {
+      const chip = e.target.closest('[data-filter-chip]');
+      if (chip) {
+        e.preventDefault();
+        this.removeFilter(chip.dataset.filterParam, chip.dataset.filterValue);
+      }
+
+      const clearAll = e.target.closest('[data-clear-all-filters]');
+      if (clearAll) {
+        e.preventDefault();
+        this.clearAllFilters();
+      }
+    });
+  }
+
+  removeFilter(paramName, value) {
+    // Handle price range specially
+    if (paramName === 'filter.v.price' || value === 'price') {
+      const minInput = this.section.querySelector('[data-filter-price-min]');
+      const maxInput = this.section.querySelector('[data-filter-price-max]');
+      if (minInput) minInput.value = '';
+      if (maxInput) maxInput.value = '';
+    } else {
+      // Find and uncheck the corresponding checkbox
+      const checkbox = this.section.querySelector(
+        `[data-filter-checkbox][name="${paramName}"][value="${value}"]`
+      );
+      if (checkbox) {
+        checkbox.checked = false;
+      }
+    }
+
+    this.applyFilters();
+  }
+
+  clearAllFilters() {
+    // Uncheck all checkboxes
+    this.section.querySelectorAll('[data-filter-checkbox]:checked').forEach(cb => {
+      cb.checked = false;
+    });
+
+    // Clear price inputs
+    this.section.querySelectorAll('[data-filter-price-min], [data-filter-price-max]').forEach(input => {
+      input.value = '';
+    });
+
+    // Clear search
+    if (this.searchInput) {
+      this.searchInput.value = '';
+      this.searchQuery = '';
+      this.toggleSearchClear();
+    }
+
+    this.applyFilters();
+  }
+
+  // ========== BUILD URL & FETCH ==========
+  buildUrl(baseUrl = null) {
+    const url = new URL(baseUrl || this.collectionUrl, window.location.origin);
 
     // Clear existing filter params
-    const filterParams = Array.from(url.searchParams.keys()).filter(key =>
-      key.startsWith('filter.')
-    );
-    filterParams.forEach(param => url.searchParams.delete(param));
+    const keysToDelete = [];
+    for (const key of url.searchParams.keys()) {
+      if (key.startsWith('filter.')) keysToDelete.push(key);
+    }
+    keysToDelete.forEach(key => url.searchParams.delete(key));
+    url.searchParams.delete('q');
 
     // Add checked filters
-    document.querySelectorAll('[data-filter-checkbox]:checked').forEach(checkbox => {
+    this.section.querySelectorAll('[data-filter-checkbox]:checked').forEach(checkbox => {
       url.searchParams.append(checkbox.name, checkbox.value);
     });
 
     // Add price range
-    const minPrice = document.querySelector('[data-filter-price-min]');
-    const maxPrice = document.querySelector('[data-filter-price-max]');
+    const minPrice = this.section.querySelector('[data-filter-price-min]');
+    const maxPrice = this.section.querySelector('[data-filter-price-max]');
     if (minPrice?.value) {
-      url.searchParams.set(minPrice.name, minPrice.value * 100);
+      url.searchParams.set(minPrice.name, Math.round(parseFloat(minPrice.value) * 100));
     }
     if (maxPrice?.value) {
-      url.searchParams.set(maxPrice.name, maxPrice.value * 100);
+      url.searchParams.set(maxPrice.name, Math.round(parseFloat(maxPrice.value) * 100));
     }
 
-    window.location.href = url.toString();
+    // Add sort
+    if (this.sortSelect?.value) {
+      url.searchParams.set('sort_by', this.sortSelect.value);
+    }
+
+    // Add search query
+    if (this.searchQuery) {
+      url.searchParams.set('q', this.searchQuery);
+    }
+
+    return url;
+  }
+
+  async applyFilters() {
+    const url = this.buildUrl();
+    // Reset to page 1 when filters change
+    url.searchParams.delete('page');
+    await this.fetchAndRender(url);
+  }
+
+  async fetchPage(pageUrl) {
+    const url = new URL(pageUrl, window.location.origin);
+    await this.fetchAndRender(url);
+  }
+
+  async fetchAndRender(url) {
+    // Abort previous request
+    if (this.abortController) {
+      this.abortController.abort();
+    }
+    this.abortController = new AbortController();
+
+    this.setLoading(true);
+
+    try {
+      // Add section parameter for Section Rendering API
+      const fetchUrl = new URL(url);
+      fetchUrl.searchParams.set('sections', this.sectionId);
+
+      const response = await fetch(fetchUrl.toString(), {
+        signal: this.abortController.signal
+      });
+
+      if (!response.ok) throw new Error('Network response was not ok');
+
+      const data = await response.json();
+      const html = data[this.sectionId];
+
+      this.renderContent(html);
+      this.updateUrl(url);
+      this.updateFilterCount();
+
+    } catch (error) {
+      if (error.name !== 'AbortError') {
+        console.error('Collection fetch error:', error);
+      }
+    } finally {
+      this.setLoading(false);
+    }
+  }
+
+  renderContent(html) {
+    const parser = new DOMParser();
+    const doc = parser.parseFromString(html, 'text/html');
+
+    // Update product grid
+    const newGrid = doc.querySelector('[data-product-grid]');
+    if (newGrid && this.productGrid) {
+      this.productGrid.innerHTML = newGrid.innerHTML;
+    }
+
+    // Update active filters
+    const newActiveFilters = doc.querySelector('[data-active-filters-list]');
+    if (newActiveFilters && this.activeFiltersContainer) {
+      this.activeFiltersContainer.innerHTML = newActiveFilters.innerHTML;
+    }
+
+    // Show/hide active filters wrapper
+    const newActiveFiltersWrapper = doc.querySelector('[data-active-filters]');
+    if (newActiveFiltersWrapper && this.activeFiltersWrapper) {
+      this.activeFiltersWrapper.className = newActiveFiltersWrapper.className;
+    }
+
+    // Update filter sidebar (to reflect new counts)
+    const newFiltersBody = doc.querySelector('.collection-filters__body');
+    const currentFiltersBody = this.section.querySelector('.collection-filters__body');
+    if (newFiltersBody && currentFiltersBody) {
+      currentFiltersBody.innerHTML = newFiltersBody.innerHTML;
+      // Rebind after DOM replacement
+      this.bindFilterInputs();
+      this.bindFilterGroups();
+    }
+
+    // Update results count
+    const newResultsCount = doc.querySelector('[data-search-results-count]');
+    if (newResultsCount && this.resultsCount) {
+      this.resultsCount.textContent = newResultsCount.textContent;
+    }
+
+    // Update apply button count
+    const newApplyButton = doc.querySelector('[data-apply-filters]');
+    if (newApplyButton && this.applyButton) {
+      this.applyButton.textContent = newApplyButton.textContent;
+    }
+
+    // Scroll to top of grid (smooth)
+    this.productGrid?.scrollIntoView({ behavior: 'smooth', block: 'start' });
+  }
+
+  updateUrl(url) {
+    // Remove sections param before updating history
+    url.searchParams.delete('sections');
+    window.history.replaceState({}, '', url.toString());
+  }
+
+  setLoading(loading) {
+    this.isLoading = loading;
+    this.section.classList.toggle('is-loading', loading);
+    this.productGrid?.setAttribute('aria-busy', loading);
+  }
+
+  updateFilterCount() {
+    const checkedCount = this.section.querySelectorAll('[data-filter-checkbox]:checked').length;
+    const minPrice = this.section.querySelector('[data-filter-price-min]');
+    const maxPrice = this.section.querySelector('[data-filter-price-max]');
+    const priceCount = (minPrice?.value || maxPrice?.value) ? 1 : 0;
+    const total = checkedCount + priceCount;
+
+    if (this.filterCount) {
+      this.filterCount.textContent = total;
+      this.filterCount.hidden = total === 0;
+    }
+
+    // Update toolbar button text
+    if (this.filterToggle) {
+      const span = this.filterToggle.querySelector('span');
+      if (span) {
+        span.textContent = total > 0 ? `Filtros (${total})` : 'Filtros';
+      }
+    }
   }
 }
 

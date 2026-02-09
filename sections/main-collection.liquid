@@ -1,7 +1,19 @@
-<section class="collection-page" data-section-id="{{ section.id }}">
+<section class="collection-page" data-section-id="{{ section.id }}" data-collection-url="{{ collection.url }}" data-ajax-collection>
 
-  <!-- Collection Hero -->
-  <div class="collection-hero">
+  <!-- Collection Hero with Background -->
+  {%- assign hero_image = section.settings.background_image | default: collection.image -%}
+  <div class="collection-hero{% if hero_image %} collection-hero--has-bg{% endif %}">
+    {%- if hero_image -%}
+      <div class="collection-hero__bg">
+        <img
+          src="{{ hero_image | image_url: width: 1920 }}"
+          alt="{{ collection.title }}"
+          loading="eager"
+          class="collection-hero__bg-image"
+        >
+        <div class="collection-hero__overlay"></div>
+      </div>
+    {%- endif -%}
     <div class="container">
       <div class="collection-hero__content">
         <div class="collection-hero__tag collage-sticker collage-sticker--handwritten">
@@ -16,39 +28,87 @@
           {{ collection.products_count }} productos
         </div>
       </div>
-      {%- if collection.image -%}
-        <div class="collection-hero__image collage-photo collage-photo--tape">
-          <img
-            src="{{ collection.image | image_url: width: 600 }}"
-            alt="{{ collection.title }}"
-            loading="eager"
-          >
-        </div>
-      {%- endif -%}
     </div>
-    <div class="collection-hero__tape collage-element collage-element--tape"></div>
   </div>
 
-  <!-- Toolbar -->
-  <div class="collection-toolbar">
+  <!-- Toolbar with Search -->
+  <div class="collection-toolbar" data-collection-search>
     <div class="container">
       <div class="collection-toolbar__inner">
-        <button class="collection-toolbar__filter-btn" data-filter-toggle aria-expanded="false" aria-controls="collection-filters">
-          {% render 'icon-filter' %}
-          <span>Filtros</span>
-        </button>
-
-        <div class="collection-toolbar__sort">
-          <label for="sort-by" class="visually-hidden">Ordenar por</label>
-          <select id="sort-by" class="collection-toolbar__select" data-sort-select>
-            {%- for option in collection.sort_options -%}
-              <option value="{{ option.value }}"{% if option.value == collection.sort_by %} selected{% endif %}>
-                {{ option.name }}
-              </option>
-            {%- endfor -%}
-          </select>
-          {% render 'icon-chevron-down' %}
+        <div class="collection-toolbar__search">
+          {% render 'icon-search' %}
+          <input
+            type="text"
+            class="collection-toolbar__search-input"
+            placeholder="Buscar en {{ collection.title }}..."
+            data-collection-search-input
+            autocomplete="off"
+          >
+          <button class="collection-toolbar__search-clear" data-search-clear aria-label="Limpiar busqueda" hidden>
+            {% render 'icon-close' %}
+          </button>
         </div>
+
+        <div class="collection-toolbar__right">
+          <span class="collection-toolbar__count" data-search-results-count>
+            {{ collection.products_count }} productos
+          </span>
+          <div class="collection-toolbar__sort">
+            <label for="sort-by" class="visually-hidden">Ordenar por</label>
+            <select id="sort-by" class="collection-toolbar__select" data-sort-select>
+              {%- for option in collection.sort_options -%}
+                <option value="{{ option.value }}"{% if option.value == collection.sort_by %} selected{% endif %}>
+                  {{ option.name }}
+                </option>
+              {%- endfor -%}
+            </select>
+            {% render 'icon-chevron-down' %}
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Active Filter Chips -->
+  {%- assign has_active_filters = false -%}
+  {%- for filter in collection.filters -%}
+    {%- if filter.active_values.size > 0 or filter.min_value.value != nil or filter.max_value.value != nil -%}
+      {%- assign has_active_filters = true -%}
+      {%- break -%}
+    {%- endif -%}
+  {%- endfor -%}
+
+  <div class="collection-active-filters{% unless has_active_filters %} is-hidden{% endunless %}" data-active-filters>
+    <div class="container">
+      <div class="active-filters-list" data-active-filters-list>
+        {%- for filter in collection.filters -%}
+          {%- for value in filter.active_values -%}
+            <button class="active-filter-chip collage-sticker collage-sticker--small"
+              type="button"
+              data-filter-chip
+              data-filter-param="{{ value.param_name }}"
+              data-filter-value="{{ value.value }}">
+              <span>{{ value.label }}</span>
+              {% render 'icon-close' %}
+            </button>
+          {%- endfor -%}
+          {%- if filter.min_value.value != nil or filter.max_value.value != nil -%}
+            <button class="active-filter-chip collage-sticker collage-sticker--small"
+              type="button"
+              data-filter-chip
+              data-filter-param="filter.v.price"
+              data-filter-value="price">
+              <span>{{ filter.min_value.value | default: 0 | money }} - {{ filter.max_value.value | default: filter.range_max | money }}</span>
+              {% render 'icon-close' %}
+            </button>
+          {%- endif -%}
+        {%- endfor -%}
+
+        {%- if has_active_filters -%}
+          <button class="active-filter-clear" type="button" data-clear-all-filters>
+            Limpiar todo
+          </button>
+        {%- endif -%}
       </div>
     </div>
   </div>
@@ -63,7 +123,10 @@
           <div class="collection-filters__overlay" data-filter-close></div>
           <div class="collection-filters__panel">
             <div class="collection-filters__header">
-              <h2 class="collection-filters__title">Filtros</h2>
+              <h2 class="collection-filters__title">
+                Filtros
+                <span class="collection-filters__badge collage-badge" data-filter-count hidden>0</span>
+              </h2>
               <button class="collection-filters__close" data-filter-close aria-label="Cerrar filtros">
                 {% render 'icon-close' %}
               </button>
@@ -71,21 +134,29 @@
             <div class="collection-filters__body">
               {% render 'collection-filters', collection: collection %}
             </div>
+            <div class="collection-filters__footer" data-filter-footer>
+              <button class="collection-filters__clear-btn" type="button" data-clear-all-filters>
+                Limpiar
+              </button>
+              <button class="btn btn--primary collection-filters__apply-btn" type="button" data-apply-filters>
+                Ver {{ collection.products_count }} productos
+              </button>
+            </div>
           </div>
         </aside>
 
         <!-- Product Grid -->
-        <div class="collection-products-wrapper">
+        <div class="collection-products-wrapper" data-product-grid>
           {%- paginate collection.products by section.settings.products_per_page -%}
             {%- if collection.products.size > 0 -%}
-              <div class="collection-products">
+              <div class="collection-products" data-products-container>
                 {%- for product in collection.products -%}
                   {% render 'product-card', product: product, index: forloop.index %}
                 {%- endfor -%}
               </div>
 
               {%- if paginate.pages > 1 -%}
-                <nav class="collection-pagination" aria-label="Paginacion">
+                <nav class="collection-pagination" aria-label="Paginacion" data-pagination>
                   <div class="collection-pagination__inner">
                     {%- if paginate.previous -%}
                       <a href="{{ paginate.previous.url }}" class="collection-pagination__btn collection-pagination__btn--prev">
@@ -154,6 +225,12 @@
   "tag": "section",
   "class": "section-main-collection",
   "settings": [
+    {
+      "type": "image_picker",
+      "id": "background_image",
+      "label": "Imagen de fondo",
+      "info": "Si no se selecciona, se usara la imagen de la coleccion"
+    },
     {
       "type": "range",
       "id": "products_per_page",
