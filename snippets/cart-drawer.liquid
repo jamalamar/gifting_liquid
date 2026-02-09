@@ -1,18 +1,18 @@
 {%- comment -%}
-  Cart drawer / mini cart component
+  Cart drawer / mini cart - Clean style
 {%- endcomment -%}
 
-<div class="cart-drawer collage-paper" data-cart-drawer aria-hidden="true">
+<div class="cart-drawer" data-cart-drawer aria-hidden="true">
   <div class="cart-drawer__overlay" data-cart-drawer-close></div>
 
-  <div class="cart-drawer__content">
+  <div class="cart-drawer__panel">
     <div class="cart-drawer__header">
       <h2 class="cart-drawer__title">
-        {% render 'icon-gift' %}
-        <span>Tu caja de regalo</span>
-        <span class="cart-drawer__count collage-badge" data-drawer-cart-count>{{ cart.item_count }}</span>
+        {% render 'icon-cart' %}
+        <span>Tu Carrito</span>
+        <span class="cart-drawer__count" data-drawer-cart-count>{{ cart.item_count }}</span>
       </h2>
-      <button class="cart-drawer__close collage-icon-btn" data-cart-drawer-close aria-label="Cerrar">
+      <button type="button" class="cart-drawer__close" data-cart-drawer-close aria-label="Cerrar carrito">
         {% render 'icon-close' %}
       </button>
     </div>
@@ -21,31 +21,52 @@
       {%- if cart.item_count > 0 -%}
         <div class="cart-drawer__items">
           {%- for item in cart.items -%}
-            <div class="cart-drawer__item collage-card" data-cart-drawer-item data-key="{{ item.key }}">
-              <div class="cart-drawer__item-image collage-polaroid collage-polaroid--tiny">
+            <div class="cart-drawer__item" data-cart-drawer-item data-key="{{ item.key }}">
+              <div class="cart-drawer__item-image">
                 {%- if item.image -%}
-                  <img src="{{ item.image | image_url: width: 150 }}" alt="{{ item.title }}" width="70" height="70" loading="lazy">
+                  <a href="{{ item.url }}">
+                    <img
+                      src="{{ item.image | image_url: width: 150 }}"
+                      alt="{{ item.title }}"
+                      width="70"
+                      height="70"
+                      loading="lazy"
+                    >
+                  </a>
                 {%- else -%}
-                  <div class="cart-drawer__item-placeholder">{% render 'icon-gift' %}</div>
+                  <div class="cart-drawer__item-placeholder">
+                    {% render 'icon-gift' %}
+                  </div>
                 {%- endif -%}
               </div>
+
               <div class="cart-drawer__item-info">
                 <h3 class="cart-drawer__item-title">
-                  <a href="{{ item.url }}" class="collage-link">{{ item.product.title }}</a>
+                  <a href="{{ item.url }}">{{ item.product.title }}</a>
                 </h3>
                 {%- unless item.product.has_only_default_variant -%}
                   <p class="cart-drawer__item-variant">{{ item.variant.title }}</p>
                 {%- endunless -%}
-                <div class="cart-drawer__item-quantity">
-                  <button type="button" class="cart-drawer__qty-btn" data-drawer-qty-minus data-key="{{ item.key }}">-</button>
-                  <span data-drawer-qty-value>{{ item.quantity }}</span>
-                  <button type="button" class="cart-drawer__qty-btn" data-drawer-qty-plus data-key="{{ item.key }}">+</button>
+
+                <div class="cart-drawer__qty-group">
+                  <button type="button" class="cart-drawer__qty-btn" data-drawer-qty-minus data-key="{{ item.key }}" aria-label="Disminuir cantidad">
+                    <span>−</span>
+                  </button>
+                  <span class="cart-drawer__qty-value" data-drawer-qty-value>{{ item.quantity }}</span>
+                  <button type="button" class="cart-drawer__qty-btn" data-drawer-qty-plus data-key="{{ item.key }}" aria-label="Aumentar cantidad">
+                    <span>+</span>
+                  </button>
                 </div>
               </div>
+
               <div class="cart-drawer__item-price">
-                <span>{{ item.final_line_price | money }}</span>
+                {%- if item.original_line_price != item.final_line_price -%}
+                  <span class="cart-drawer__item-price-compare">{{ item.original_line_price | money }}</span>
+                {%- endif -%}
+                <span class="cart-drawer__item-price-current">{{ item.final_line_price | money }}</span>
               </div>
-              <button type="button" class="cart-drawer__item-remove" data-drawer-remove-item data-key="{{ item.key }}" aria-label="Eliminar">
+
+              <button type="button" class="cart-drawer__item-remove" data-drawer-remove-item data-key="{{ item.key }}" aria-label="Eliminar {{ item.product.title }}">
                 {% render 'icon-close' %}
               </button>
             </div>
@@ -53,47 +74,57 @@
         </div>
       {%- else -%}
         <div class="cart-drawer__empty">
-          <div class="cart-drawer__empty-icon collage-sticker">
-            {% render 'icon-gift-box' %}
+          <div class="cart-drawer__empty-icon">
+            {% render 'icon-cart' %}
           </div>
           <p class="cart-drawer__empty-title">Tu carrito esta vacio</p>
-          <p class="cart-drawer__empty-text">Explora nuestros productos y arma tu caja de regalo perfecta.</p>
+          <p class="cart-drawer__empty-text">Explora nuestros productos y encuentra el regalo perfecto.</p>
+          <a href="{{ routes.all_products_collection_url }}" class="btn btn--secondary cart-drawer__empty-btn" data-cart-drawer-close>
+            Ver productos
+          </a>
         </div>
       {%- endif -%}
     </div>
 
     {%- if cart.item_count > 0 -%}
       <div class="cart-drawer__footer">
-        <div class="cart-drawer__shipping">
-          {%- assign threshold = settings.free_shipping_threshold | times: 100 -%}
-          {%- assign remaining = threshold | minus: cart.total_price -%}
-          {%- if remaining > 0 -%}
-            <p class="cart-drawer__shipping-message">
-              {% render 'icon-truck' %}
-              <span>Te faltan <strong>{{ remaining | money }}</strong> para envio gratis</span>
-            </p>
-            <div class="cart-drawer__shipping-bar">
-              <div class="cart-drawer__shipping-progress" style="width: {{ cart.total_price | times: 100 | divided_by: threshold }}%"></div>
-            </div>
-          {%- else -%}
-            <p class="cart-drawer__shipping-message cart-drawer__shipping-message--free">
-              {% render 'icon-check' %}
-              <span>¡Tienes envio gratis!</span>
-            </p>
-          {%- endif -%}
-        </div>
+        {%- assign free_shipping_threshold = settings.free_shipping_threshold | plus: 0 -%}
+        {%- if free_shipping_threshold > 0 -%}
+          <div class="cart-drawer__shipping">
+            {%- assign threshold = free_shipping_threshold | times: 100 -%}
+            {%- assign remaining = threshold | minus: cart.total_price -%}
+            {%- assign progress = cart.total_price | times: 100.0 | divided_by: threshold -%}
+            {%- if progress > 100 -%}{%- assign progress = 100 -%}{%- endif -%}
 
-        <div class="cart-drawer__total">
+            {%- if remaining > 0 -%}
+              <p class="cart-drawer__shipping-text">
+                {% render 'icon-truck' %}
+                <span>Te faltan <strong>{{ remaining | money }}</strong> para envio gratis</span>
+              </p>
+            {%- else -%}
+              <p class="cart-drawer__shipping-text cart-drawer__shipping-text--free">
+                {% render 'icon-check' %}
+                <span>Tienes envio gratis</span>
+              </p>
+            {%- endif -%}
+
+            <div class="cart-drawer__shipping-bar">
+              <div class="cart-drawer__shipping-progress" style="width: {{ progress }}%"></div>
+            </div>
+          </div>
+        {%- endif -%}
+
+        <div class="cart-drawer__subtotal">
           <span>Subtotal</span>
           <span data-drawer-subtotal>{{ cart.total_price | money }}</span>
         </div>
 
-        <a href="{{ routes.checkout_url }}" class="cart-drawer__checkout btn btn--primary collage-button">
+        <a href="{{ routes.checkout_url }}" class="btn btn--primary cart-drawer__checkout">
           Continuar al checkout
           {% render 'icon-arrow-right' %}
         </a>
 
-        <a href="{{ routes.cart_url }}" class="cart-drawer__view-cart collage-link">
+        <a href="{{ routes.cart_url }}" class="cart-drawer__view-cart">
           Ver carrito completo
         </a>
       </div>

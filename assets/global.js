@@ -170,8 +170,9 @@ class Cart {
       });
     });
 
-    // Quantity buttons
+    // Quantity buttons (cart page)
     document.addEventListener('click', (e) => {
+      // Cart page quantity buttons
       if (e.target.closest('[data-quantity-minus]')) {
         const input = e.target.closest('[data-quantity-minus]').parentElement.querySelector('input');
         if (input && parseInt(input.value) > 1) {
@@ -186,8 +187,32 @@ class Cart {
           this.updateQuantity(input);
         }
       }
+
+      // Cart drawer quantity buttons
+      if (e.target.closest('[data-drawer-qty-minus]')) {
+        const btn = e.target.closest('[data-drawer-qty-minus]');
+        const key = btn.dataset.key;
+        if (key) {
+          this.changeDrawerQuantity(key, -1);
+        }
+      }
+      if (e.target.closest('[data-drawer-qty-plus]')) {
+        const btn = e.target.closest('[data-drawer-qty-plus]');
+        const key = btn.dataset.key;
+        if (key) {
+          this.changeDrawerQuantity(key, 1);
+        }
+      }
+
+      // Remove buttons (both cart page and drawer)
       if (e.target.closest('[data-remove-item]')) {
         const key = e.target.closest('[data-remove-item]').dataset.key;
+        if (key) {
+          this.removeFromCart(key);
+        }
+      }
+      if (e.target.closest('[data-drawer-remove-item]')) {
+        const key = e.target.closest('[data-drawer-remove-item]').dataset.key;
         if (key) {
           this.removeFromCart(key);
         }
@@ -296,9 +321,70 @@ class Cart {
       if (!response.ok) throw new Error('Error removing from cart');
 
       this.updateCartUI();
+      this.refreshCartDrawer();
 
     } catch (error) {
       console.error('Remove from cart error:', error);
+    }
+  }
+
+  async changeDrawerQuantity(key, delta) {
+    // Get current quantity from the drawer item
+    const item = document.querySelector(`[data-cart-drawer-item][data-key="${key}"]`);
+    const qtyValue = item?.querySelector('[data-drawer-qty-value]');
+    if (!qtyValue) return;
+
+    const currentQty = parseInt(qtyValue.textContent) || 1;
+    const newQty = Math.max(0, currentQty + delta);
+
+    if (newQty === 0) {
+      this.removeFromCart(key);
+      return;
+    }
+
+    try {
+      const response = await fetch(window.routes.cart_change_url, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'Accept': 'application/json'
+        },
+        body: JSON.stringify({
+          id: key,
+          quantity: newQty
+        })
+      });
+
+      if (!response.ok) throw new Error('Error updating cart');
+
+      // Update the quantity display immediately
+      qtyValue.textContent = newQty;
+
+      this.updateCartUI();
+
+    } catch (error) {
+      console.error('Update cart error:', error);
+    }
+  }
+
+  async refreshCartDrawer() {
+    // Reload the page if we're on the cart page to refresh items
+    if (window.location.pathname === '/cart') {
+      window.location.reload();
+      return;
+    }
+
+    // For drawer, we'll just close it if empty
+    try {
+      const response = await fetch('/cart.js');
+      const cart = await response.json();
+
+      if (cart.item_count === 0) {
+        // Reload to show empty state in drawer
+        window.location.reload();
+      }
+    } catch (error) {
+      console.error('Refresh cart error:', error);
     }
   }
 
@@ -340,7 +426,7 @@ class Cart {
   showAddedMessage(form = null) {
     const message = form ? form.querySelector('[data-add-message]') : document.querySelector('[data-add-message]');
     if (message) {
-      message.textContent = '¡Listo! Ya esta en tu caja de regalo';
+      message.textContent = '¡Listo! Agregado al carrito';
       message.classList.remove('is-error');
       message.classList.add('is-visible');
       setTimeout(() => {
