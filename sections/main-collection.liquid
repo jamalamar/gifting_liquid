@@ -35,18 +35,33 @@
   <div class="collection-toolbar" data-collection-search>
     <div class="container">
       <div class="collection-toolbar__inner">
-        <div class="collection-toolbar__search">
-          {% render 'icon-search' %}
-          <input
-            type="text"
-            class="collection-toolbar__search-input"
-            placeholder="Buscar en {{ collection.title }}..."
-            data-collection-search-input
-            autocomplete="off"
-          >
-          <button class="collection-toolbar__search-clear" data-search-clear aria-label="Limpiar busqueda" hidden>
-            {% render 'icon-close' %}
-          </button>
+        <div class="collection-toolbar__search-wrapper">
+          <form class="collection-toolbar__search" action="{{ routes.search_url }}" method="get" data-predictive-search-form>
+            <input type="hidden" name="type" value="product">
+            {% render 'icon-search' %}
+            <input
+              type="text"
+              name="q"
+              class="collection-toolbar__search-input"
+              placeholder="Buscar productos..."
+              data-collection-search-input
+              autocomplete="off"
+            >
+            <button type="button" class="collection-toolbar__search-clear" data-search-clear aria-label="Limpiar busqueda" hidden>
+              {% render 'icon-close' %}
+            </button>
+          </form>
+
+          <!-- Predictive Search Results Dropdown -->
+          <div class="collection-toolbar__results" data-predictive-results hidden>
+            <div class="collection-toolbar__results-inner" data-predictive-results-inner>
+              <!-- Results populated by JS -->
+            </div>
+            <a href="{{ routes.search_url }}" class="collection-toolbar__results-all" data-search-all>
+              Ver todos los resultados
+              {% render 'icon-arrow-right' %}
+            </a>
+          </div>
         </div>
 
         <div class="collection-toolbar__right">

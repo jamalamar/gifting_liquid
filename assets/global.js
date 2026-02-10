@@ -767,6 +767,10 @@ class CollectionFilters {
     this.sortSelect = this.section.querySelector('[data-sort-select]');
     this.searchInput = this.section.querySelector('[data-collection-search-input]');
     this.searchClear = this.section.querySelector('[data-search-clear]');
+    this.searchForm = this.section.querySelector('[data-predictive-search-form]');
+    this.searchResults = this.section.querySelector('[data-predictive-results]');
+    this.searchResultsInner = this.section.querySelector('[data-predictive-results-inner]');
+    this.searchAllLink = this.section.querySelector('[data-search-all]');
     this.resultsCount = this.section.querySelector('[data-search-results-count]');
     this.filterCount = this.section.querySelector('[data-filter-count]');
     this.applyButton = this.section.querySelector('[data-apply-filters]');
@@ -775,6 +779,7 @@ class CollectionFilters {
     this.isLoading = false;
     this.searchQuery = '';
     this.abortController = null;
+    this.searchAbortController = null;
 
     this.init();
   }
@@ -850,27 +855,141 @@ class CollectionFilters {
     this.sortSelect?.addEventListener('change', () => this.applyFilters());
   }
 
-  // ========== INLINE SEARCH ==========
+  // ========== PREDICTIVE SEARCH ==========
   bindSearch() {
     if (!this.searchInput) return;
 
+    // Input handler - fetch predictions
     this.searchInput.addEventListener('input', debounce((e) => {
       this.searchQuery = e.target.value.trim();
       this.toggleSearchClear();
-      this.applyFilters();
-    }, 300));
 
+      if (this.searchQuery.length >= 2) {
+        this.fetchPredictiveSearch(this.searchQuery);
+      } else {
+        this.hideSearchResults();
+      }
+    }, 200));
+
+    // Clear button
     this.searchClear?.addEventListener('click', () => {
       this.searchInput.value = '';
       this.searchQuery = '';
       this.toggleSearchClear();
-      this.applyFilters();
+      this.hideSearchResults();
+    });
+
+    // Focus handler
+    this.searchInput.addEventListener('focus', () => {
+      if (this.searchQuery.length >= 2 && this.searchResultsInner?.innerHTML) {
+        this.showSearchResults();
+      }
+    });
+
+    // Click outside to close
+    document.addEventListener('click', (e) => {
+      const searchWrapper = this.section.querySelector('.collection-toolbar__search-wrapper');
+      if (searchWrapper && !searchWrapper.contains(e.target)) {
+        this.hideSearchResults();
+      }
+    });
+
+    // Keyboard navigation
+    this.searchInput.addEventListener('keydown', (e) => {
+      if (e.key === 'Escape') {
+        this.hideSearchResults();
+        this.searchInput.blur();
+      }
+    });
+
+    // Update "See all" link with query
+    this.searchForm?.addEventListener('submit', (e) => {
+      if (!this.searchQuery) {
+        e.preventDefault();
+      }
     });
   }
 
   toggleSearchClear() {
     if (this.searchClear) {
       this.searchClear.hidden = !this.searchQuery;
+    }
+  }
+
+  async fetchPredictiveSearch(query) {
+    // Abort previous request
+    if (this.searchAbortController) {
+      this.searchAbortController.abort();
+    }
+    this.searchAbortController = new AbortController();
+
+    try {
+      const response = await fetch(
+        `/search/suggest.json?q=${encodeURIComponent(query)}&resources[type]=product&resources[limit]=6&resources[options][fields]=title,vendor,product_type,tag`,
+        { signal: this.searchAbortController.signal }
+      );
+
+      if (!response.ok) throw new Error('Search failed');
+
+      const data = await response.json();
+      this.renderSearchResults(data.resources.results.products, query);
+
+    } catch (error) {
+      if (error.name !== 'AbortError') {
+        console.error('Predictive search error:', error);
+        this.hideSearchResults();
+      }
+    }
+  }
+
+  renderSearchResults(products, query) {
+    if (!this.searchResultsInner) return;
+
+    if (!products || products.length === 0) {
+      this.searchResultsInner.innerHTML = `
+        <div class="collection-toolbar__no-results">
+          No encontramos productos para "<strong>${query}</strong>"
+        </div>
+      `;
+    } else {
+      this.searchResultsInner.innerHTML = products.map(product => `
+        <a href="${product.url}" class="collection-toolbar__result-item">
+          <div class="collection-toolbar__result-image">
+            ${product.featured_image?.url
+              ? `<img src="${product.featured_image.url.replace(/(\.[^.]+)$/, '_100x100$1')}" alt="${product.title}" loading="lazy">`
+              : '<span class="collection-toolbar__result-placeholder"></span>'
+            }
+          </div>
+          <div class="collection-toolbar__result-info">
+            <span class="collection-toolbar__result-title">${product.title}</span>
+            ${product.vendor ? `<span class="collection-toolbar__result-vendor">${product.vendor}</span>` : ''}
+            <span class="collection-toolbar__result-price">${this.formatMoney(product.price)}</span>
+          </div>
+        </a>
+      `).join('');
+    }
+
+    // Update "see all" link
+    if (this.searchAllLink) {
+      this.searchAllLink.href = `/search?q=${encodeURIComponent(query)}&type=product`;
+    }
+
+    this.showSearchResults();
+  }
+
+  formatMoney(cents) {
+    return '$' + (cents / 100).toFixed(2).replace(/\B(?=(\d{3})+(?!\d))/g, ',') + ' MXN';
+  }
+
+  showSearchResults() {
+    if (this.searchResults) {
+      this.searchResults.hidden = false;
+    }
+  }
+
+  hideSearchResults() {
+    if (this.searchResults) {
+      this.searchResults.hidden = true;
     }
   }
 
@@ -977,11 +1096,7 @@ class CollectionFilters {
       url.searchParams.set('sort_by', this.sortSelect.value);
     }
 
-    // Add search query
-    if (this.searchQuery) {
-      url.searchParams.set('q', this.searchQuery);
-    }
-
+    // Note: Search is handled client-side, not via URL params
     return url;
   }
 
@@ -1076,6 +1191,9 @@ class CollectionFilters {
     if (newApplyButton && this.applyButton) {
       this.applyButton.textContent = newApplyButton.textContent;
     }
+
+    // Update products container reference (it was replaced)
+    this.productsContainer = this.section.querySelector('[data-products-container]');
 
     // Scroll to top of grid (smooth)
     this.productGrid?.scrollIntoView({ behavior: 'smooth', block: 'start' });
