@@ -684,6 +684,11 @@
   overflow: hidden;
   aspect-ratio: 1;
   background: var(--color-background-alt);
+  transition: box-shadow var(--transition-base);
+}
+
+.product-card:hover .product-card__image-wrapper {
+  box-shadow: 0 4px 20px rgba(var(--color-primary-rgb), 0.15);
 }
 
 .product-card__image {
@@ -704,7 +709,7 @@
   opacity: 1;
 }
 
-.product-card:hover .product-card__image:not(.product-card__image--hover) {
+.product-card__image-wrapper:has(.product-card__image--hover):hover .product-card__image:not(.product-card__image--hover) {
   opacity: 0;
 }
 
