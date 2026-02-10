@@ -6,6 +6,7 @@
 /* ===== Header ===== */
 .section-header {
   padding: 0;
+  margin-bottom: 0;
 }
 
 /* ===== Footer ===== */
@@ -4627,8 +4628,8 @@ a.contact-info__item:hover .contact-info__value {
    SELL WITH US PAGE - Editorial Style
    ============================================ */
 
-.sell-page {
-  padding-bottom: var(--spacing-xl);
+section.sell-page {
+  padding: 0;
 }
 
 /* Sell Hero */
@@ -4649,6 +4650,8 @@ a.contact-info__item:hover .contact-info__value {
   min-height: 350px;
   display: flex;
   align-items: center;
+  padding-top: 0;
+  padding-bottom: 0;
 }
 
 @media screen and (min-width: 750px) {
@@ -5914,4 +5917,403 @@ a.contact-info__item:hover .contact-info__value {
 
 .product-page__tag:hover {
   transform: scale(1.05) rotate(-1deg);
+}
+
+/* ==========================================================================
+   Password Page
+   ========================================================================== */
+
+.password-page {
+  min-height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: var(--spacing-lg);
+  background: linear-gradient(
+    135deg,
+    var(--color-background) 0%,
+    rgba(var(--color-accent-rgb), 0.15) 50%,
+    rgba(var(--color-primary-rgb), 0.1) 100%
+  );
+  position: relative;
+  overflow: hidden;
+}
+
+/* Floating Decorations */
+.password-decorations {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  z-index: 0;
+}
+
+.password-deco {
+  position: absolute;
+  opacity: 0.15;
+  color: var(--color-navy);
+  animation: passwordFloat 6s ease-in-out infinite;
+}
+
+.password-deco svg {
+  width: 100%;
+  height: 100%;
+}
+
+.password-deco--heart-1 {
+  top: 10%;
+  left: 8%;
+  width: 60px;
+  height: 60px;
+  animation-delay: 0s;
+}
+
+.password-deco--heart-2 {
+  bottom: 15%;
+  right: 10%;
+  width: 40px;
+  height: 40px;
+  animation-delay: 1s;
+}
+
+.password-deco--sparkle-1 {
+  top: 20%;
+  right: 15%;
+  width: 50px;
+  height: 50px;
+  animation-delay: 0.5s;
+}
+
+.password-deco--sparkle-2 {
+  bottom: 25%;
+  left: 12%;
+  width: 35px;
+  height: 35px;
+  animation-delay: 2s;
+}
+
+.password-deco--gift {
+  top: 40%;
+  left: 5%;
+  width: 70px;
+  height: 70px;
+  animation-delay: 1.5s;
+}
+
+.password-deco--star {
+  bottom: 10%;
+  right: 20%;
+  width: 45px;
+  height: 45px;
+  animation-delay: 2.5s;
+}
+
+@keyframes passwordFloat {
+  0%, 100% {
+    transform: translateY(0) rotate(0deg);
+  }
+  50% {
+    transform: translateY(-20px) rotate(5deg);
+  }
+}
+
+/* Main Card */
+.password-card {
+  max-width: 480px;
+  width: 100%;
+  padding: var(--spacing-2xl) var(--spacing-xl);
+  text-align: center;
+  transform: rotate(-1deg);
+  position: relative;
+  z-index: 1;
+  background: var(--color-white);
+  border-radius: var(--radius-lg);
+  box-shadow: var(--shadow-collage), var(--shadow-lg);
+}
+
+/* Decorative Tape */
+.password-tape {
+  position: absolute;
+  width: 80px;
+  height: 30px;
+}
+
+.password-tape--1 {
+  top: -12px;
+  left: 30px;
+  transform: rotate(-8deg);
+}
+
+.password-tape--2 {
+  top: -10px;
+  right: 40px;
+  transform: rotate(12deg);
+}
+
+/* Logo */
+.password-logo {
+  margin-bottom: var(--spacing-md);
+}
+
+.password-logo img {
+  max-width: 200px;
+  height: auto;
+}
+
+.password-logo__text {
+  font-family: var(--font-heading);
+  font-size: 2rem;
+  font-weight: 700;
+  color: var(--color-navy);
+  letter-spacing: -0.02em;
+}
+
+/* Badge */
+.password-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  margin-bottom: var(--spacing-md);
+  animation: badgePulse 2s ease-in-out infinite;
+}
+
+@keyframes badgePulse {
+  0%, 100% {
+    transform: scale(1) rotate(-2deg);
+  }
+  50% {
+    transform: scale(1.05) rotate(-2deg);
+  }
+}
+
+/* Content */
+.password-title {
+  font-family: var(--font-heading);
+  font-size: clamp(1.5rem, 5vw, 2rem);
+  font-weight: 700;
+  color: var(--color-navy);
+  margin: 0 0 var(--spacing-sm);
+  line-height: 1.2;
+}
+
+.password-text {
+  font-size: 1rem;
+  color: var(--color-text-light);
+  margin: 0 0 var(--spacing-lg);
+  line-height: 1.6;
+}
+
+/* Newsletter */
+.password-newsletter {
+  margin-bottom: var(--spacing-lg);
+}
+
+.password-newsletter__group {
+  display: flex;
+  gap: 0.5rem;
+  max-width: 320px;
+  margin: 0 auto;
+}
+
+.password-newsletter__input {
+  flex: 1;
+  padding: 0.875rem 1rem;
+  font-size: 0.9375rem;
+  border: 2px solid var(--color-border);
+  border-radius: var(--radius-md);
+  background: var(--color-white);
+  transition: border-color var(--transition-fast);
+}
+
+.password-newsletter__input:focus {
+  outline: none;
+  border-color: var(--color-navy);
+}
+
+.password-newsletter__btn {
+  flex-shrink: 0;
+  padding: 0.875rem 1.25rem;
+}
+
+.password-newsletter__success {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.75rem 1.25rem;
+  color: var(--color-navy);
+  animation: successPop 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+
+@keyframes successPop {
+  0% {
+    transform: scale(0.8);
+    opacity: 0;
+  }
+  100% {
+    transform: scale(1);
+    opacity: 1;
+  }
+}
+
+.password-newsletter__error {
+  color: #e53e3e;
+  font-size: 0.875rem;
+  margin-top: var(--spacing-xs);
+}
+
+/* Password Toggle */
+.password-toggle {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.75rem 1rem;
+  font-size: 0.875rem;
+  color: var(--color-text-light);
+  background: none;
+  border: none;
+  cursor: pointer;
+  transition: color var(--transition-fast);
+  margin-bottom: var(--spacing-sm);
+}
+
+.password-toggle svg {
+  width: 16px;
+  height: 16px;
+}
+
+.password-toggle:hover {
+  color: var(--color-navy);
+}
+
+.password-toggle.is-active {
+  color: var(--color-navy);
+}
+
+/* Password Form */
+.password-form {
+  max-height: 0;
+  overflow: hidden;
+  opacity: 0;
+  transition: max-height 0.3s ease, opacity 0.3s ease;
+}
+
+.password-form.is-visible {
+  max-height: 150px;
+  opacity: 1;
+}
+
+.password-form__inner {
+  padding-top: var(--spacing-sm);
+}
+
+.password-form__group {
+  display: flex;
+  gap: 0.5rem;
+  max-width: 280px;
+  margin: 0 auto;
+}
+
+.password-form__input {
+  flex: 1;
+  padding: 0.75rem 1rem;
+  font-size: 0.9375rem;
+  border: 2px solid var(--color-border);
+  border-radius: var(--radius-md);
+  background: var(--color-white);
+  transition: border-color var(--transition-fast);
+}
+
+.password-form__input:focus {
+  outline: none;
+  border-color: var(--color-navy);
+}
+
+.password-form__btn {
+  flex-shrink: 0;
+  padding: 0.75rem 1rem;
+}
+
+.password-form__error {
+  color: #e53e3e;
+  font-size: 0.875rem;
+  margin-bottom: var(--spacing-sm);
+}
+
+/* Social Links */
+.password-social {
+  display: flex;
+  justify-content: center;
+  gap: 1rem;
+  margin-top: var(--spacing-lg);
+  padding-top: var(--spacing-md);
+  border-top: 1px solid var(--color-border);
+}
+
+.password-social__link {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 44px;
+  height: 44px;
+  color: var(--color-text-light);
+  background: var(--color-bg-alt);
+  border-radius: var(--radius-full);
+  transition: transform var(--transition-fast), color var(--transition-fast), background var(--transition-fast);
+}
+
+.password-social__link svg {
+  width: 20px;
+  height: 20px;
+}
+
+.password-social__link:hover {
+  transform: scale(1.1) rotate(-5deg);
+  color: var(--color-white);
+  background: var(--color-navy);
+}
+
+/* Powered by */
+.password-powered {
+  font-size: 0.75rem;
+  color: var(--color-muted);
+  margin-top: var(--spacing-lg);
+}
+
+.password-powered a {
+  color: inherit;
+  text-decoration: underline;
+}
+
+.password-powered a:hover {
+  color: var(--color-navy);
+}
+
+/* Mobile Responsive */
+@media screen and (max-width: 480px) {
+  .password-page {
+    padding: var(--spacing-md);
+  }
+
+  .password-card {
+    padding: var(--spacing-xl) var(--spacing-md);
+    transform: rotate(0deg);
+  }
+
+  .password-tape--1,
+  .password-tape--2 {
+    display: none;
+  }
+
+  .password-newsletter__group,
+  .password-form__group {
+    flex-direction: column;
+  }
+
+  .password-newsletter__btn,
+  .password-form__btn {
+    width: 100%;
+  }
+
+  .password-deco {
+    display: none;
+  }
 }
