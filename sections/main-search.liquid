@@ -1,0 +1,161 @@
+<section class="search-page" data-section-id="{{ section.id }}">
+
+  <!-- Search Hero -->
+  <div class="search-hero">
+    <div class="container">
+      <div class="search-hero__content">
+        <div class="search-hero__tag collage-sticker collage-sticker--handwritten">
+          {% render 'icon-search' %}
+          <span>Buscar</span>
+        </div>
+        <h1 class="search-hero__title">
+          {%- if search.performed -%}
+            Resultados para "{{ search.terms }}"
+          {%- else -%}
+            ¿Qué estás buscando?
+          {%- endif -%}
+        </h1>
+
+        <!-- Search Form -->
+        <form action="{{ routes.search_url }}" method="get" class="search-hero__form">
+          <input type="hidden" name="type" value="product">
+          <div class="search-hero__input-group collage-paper collage-paper--note">
+            {% render 'icon-search' %}
+            <input
+              type="search"
+              name="q"
+              value="{{ search.terms | escape }}"
+              placeholder="Buscar regalos, categorías..."
+              class="search-hero__input"
+              autocomplete="off"
+            >
+            <button type="submit" class="search-hero__submit btn btn--primary collage-button">
+              Buscar
+              {% render 'icon-arrow-right' %}
+            </button>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+
+  <!-- Results Section -->
+  <div class="search-results">
+    <div class="container">
+      {%- if search.performed -%}
+
+        {%- if search.results_count > 0 -%}
+          <!-- Results Info -->
+          <div class="search-info">
+            <span class="search-info__count collage-sticker collage-sticker--small">
+              {{ search.results_count }} {% if search.results_count == 1 %}resultado{% else %}resultados{% endif %}
+            </span>
+          </div>
+
+          <!-- Product Grid (reusing collection styles) -->
+          {%- paginate search.results by section.settings.products_per_page -%}
+            <div class="collection-products">
+              {%- for item in search.results -%}
+                {%- if item.object_type == 'product' -%}
+                  {% render 'product-card', product: item, index: forloop.index %}
+                {%- endif -%}
+              {%- endfor -%}
+            </div>
+
+            <!-- Pagination -->
+            {%- if paginate.pages > 1 -%}
+              <nav class="collection-pagination" aria-label="Paginacion">
+                <div class="collection-pagination__inner">
+                  {%- if paginate.previous -%}
+                    <a href="{{ paginate.previous.url }}" class="collection-pagination__btn collection-pagination__btn--prev">
+                      {% render 'icon-chevron-left' %}
+                      <span>Anterior</span>
+                    </a>
+                  {%- else -%}
+                    <span class="collection-pagination__btn collection-pagination__btn--prev collection-pagination__btn--disabled">
+                      {% render 'icon-chevron-left' %}
+                      <span>Anterior</span>
+                    </span>
+                  {%- endif -%}
+
+                  <div class="collection-pagination__pages">
+                    {%- for part in paginate.parts -%}
+                      {%- if part.is_link -%}
+                        <a href="{{ part.url }}" class="collection-pagination__page">{{ part.title }}</a>
+                      {%- else -%}
+                        {%- if part.title == paginate.current_page -%}
+                          <span class="collection-pagination__page collection-pagination__page--current collage-sticker collage-sticker--small">{{ part.title }}</span>
+                        {%- else -%}
+                          <span class="collection-pagination__page collection-pagination__page--ellipsis">{{ part.title }}</span>
+                        {%- endif -%}
+                      {%- endif -%}
+                    {%- endfor -%}
+                  </div>
+
+                  {%- if paginate.next -%}
+                    <a href="{{ paginate.next.url }}" class="collection-pagination__btn collection-pagination__btn--next">
+                      <span>Siguiente</span>
+                      {% render 'icon-chevron-right' %}
+                    </a>
+                  {%- else -%}
+                    <span class="collection-pagination__btn collection-pagination__btn--next collection-pagination__btn--disabled">
+                      <span>Siguiente</span>
+                      {% render 'icon-chevron-right' %}
+                    </span>
+                  {%- endif -%}
+                </div>
+              </nav>
+            {%- endif -%}
+          {%- endpaginate -%}
+
+        {%- else -%}
+          <!-- No Results -->
+          <div class="collection-empty">
+            <div class="collection-empty__icon collage-sticker collage-sticker--large">
+              {% render 'icon-confused' %}
+            </div>
+            <h2 class="collection-empty__title">No encontramos "{{ search.terms }}"</h2>
+            <p class="collection-empty__text">Intenta con otras palabras o échale un ojo a nuestras categorías. Seguro hay algo que te late.</p>
+            <a href="{{ routes.all_products_collection_url }}" class="btn btn--primary collage-button">
+              {% render 'icon-gift' %}
+              <span>Ver todos los productos</span>
+            </a>
+          </div>
+        {%- endif -%}
+
+      {%- else -%}
+        <!-- Initial State (no search yet) -->
+        <div class="search-initial">
+          <p class="search-initial__text">Escribe algo arriba para buscar productos.</p>
+          <div class="search-initial__suggestions">
+            <span>Sugerencias:</span>
+            <a href="{{ routes.search_url }}?q=regalo&type=product" class="search-initial__tag collage-sticker collage-sticker--small">regalo</a>
+            <a href="{{ routes.search_url }}?q=cumpleaños&type=product" class="search-initial__tag collage-sticker collage-sticker--small">cumpleaños</a>
+            <a href="{{ routes.search_url }}?q=amor&type=product" class="search-initial__tag collage-sticker collage-sticker--small">amor</a>
+          </div>
+        </div>
+      {%- endif -%}
+
+    </div>
+  </div>
+
+</section>
+
+{% schema %}
+{
+  "name": "Pagina de busqueda",
+  "tag": "section",
+  "class": "section-main-search",
+  "settings": [
+    {
+      "type": "range",
+      "id": "products_per_page",
+      "label": "Productos por pagina",
+      "min": 8,
+      "max": 24,
+      "step": 4,
+      "default": 12
+    }
+  ]
+}
+{% endschema %}
