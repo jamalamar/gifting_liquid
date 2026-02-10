@@ -24,21 +24,13 @@
 
         <div class="header__logo">
           <a href="{{ routes.root_url }}" class="header__logo-link">
-            {%- if settings.logo != blank -%}
-              <img
-                src="{{ settings.logo | image_url: width: settings.logo_width | times: 2 }}"
-                alt="{{ shop.name }}"
-                width="{{ settings.logo_width }}"
-                height="{{ settings.logo_width | divided_by: settings.logo.aspect_ratio }}"
-                loading="eager"
-                class="header__logo-image"
-              >
-            {%- else -%}
-              <span class="header__logo-text">
-                <span class="logo-gift">gift</span><span class="logo-ing">ing</span>
-                <span class="logo-marketplace">MARKETPLACE</span>
-              </span>
-            {%- endif -%}
+            <img
+              src="{{ 'Gifting_Logo4.png' | asset_url }}"
+              alt="{{ shop.name }}"
+              width="120"
+              loading="eager"
+              class="header__logo-image"
+            >
           </a>
         </div>
 
