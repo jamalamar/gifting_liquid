@@ -6317,3 +6317,261 @@ section.sell-page {
     display: none;
   }
 }
+
+/* ============================================
+   404 Page Styles
+   ============================================ */
+
+.page-404 {
+  min-height: 70vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: var(--spacing-2xl) var(--spacing-lg);
+  position: relative;
+  overflow: hidden;
+}
+
+.page-404 .container {
+  width: 100%;
+  max-width: 600px;
+}
+
+.page-404__content {
+  padding: var(--spacing-2xl) var(--spacing-xl);
+  text-align: center;
+  position: relative;
+  transform: rotate(-1deg);
+}
+
+.page-404__tape {
+  position: absolute;
+  top: -8px;
+  left: 50%;
+  transform: translateX(-50%) rotate(2deg);
+  width: 100px;
+}
+
+.page-404__icon {
+  width: 100px;
+  height: 100px;
+  margin: 0 auto var(--spacing-lg);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 3rem;
+  transform: rotate(3deg);
+}
+
+.page-404__icon .icon {
+  width: 60px;
+  height: 60px;
+  color: var(--color-navy);
+}
+
+.page-404__title {
+  font-family: var(--font-heading);
+  font-size: clamp(1.75rem, 4vw, 2.5rem);
+  font-weight: 700;
+  color: var(--color-navy);
+  margin: 0 0 var(--spacing-sm);
+  line-height: 1.2;
+}
+
+.page-404__text {
+  font-family: var(--font-body);
+  font-size: 1.1rem;
+  color: var(--color-text-light);
+  margin: 0 0 var(--spacing-xl);
+  line-height: 1.6;
+}
+
+.page-404__actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--spacing-sm);
+  justify-content: center;
+  margin-bottom: var(--spacing-xl);
+}
+
+.page-404__actions .btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.page-404__actions .btn .icon {
+  width: 18px;
+  height: 18px;
+}
+
+.page-404__search {
+  padding: var(--spacing-md);
+  margin-top: var(--spacing-lg);
+  transform: rotate(1deg);
+}
+
+.page-404__search p {
+  font-family: var(--font-accent);
+  font-size: 0.95rem;
+  color: var(--color-text-light);
+  margin: 0 0 var(--spacing-sm);
+}
+
+.page-404__search-form {
+  display: flex;
+  gap: 0.5rem;
+}
+
+.page-404__search-input {
+  flex: 1;
+  padding: 0.75rem 1rem;
+  border: 2px solid var(--color-border);
+  border-radius: var(--radius-md);
+  font-family: var(--font-body);
+  font-size: 1rem;
+  transition: border-color var(--transition-fast);
+}
+
+.page-404__search-input:focus {
+  outline: none;
+  border-color: var(--color-primary);
+}
+
+.page-404__search-submit {
+  padding: 0.75rem 1rem;
+  min-width: auto;
+}
+
+.page-404__search-submit .icon {
+  width: 20px;
+  height: 20px;
+}
+
+/* Decorative elements */
+.page-404__decorations {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  pointer-events: none;
+  overflow: hidden;
+}
+
+.page-404-airplane {
+  position: absolute;
+  top: 20%;
+  right: -20px;
+  width: 50px;
+  height: 50px;
+  color: var(--color-accent);
+  transform: rotate(-15deg);
+  animation: float-airplane 4s ease-in-out infinite;
+}
+
+.page-404-airplane .icon {
+  width: 100%;
+  height: 100%;
+}
+
+.page-404-question {
+  position: absolute;
+  bottom: 15%;
+  left: -10px;
+  font-family: var(--font-accent);
+  font-size: 3rem;
+  color: var(--color-primary);
+  opacity: 0.6;
+  transform: rotate(-10deg);
+  animation: float-question 3s ease-in-out infinite;
+}
+
+@keyframes float-airplane {
+  0%, 100% {
+    transform: rotate(-15deg) translateY(0);
+  }
+  50% {
+    transform: rotate(-10deg) translateY(-10px);
+  }
+}
+
+@keyframes float-question {
+  0%, 100% {
+    transform: rotate(-10deg) translateY(0);
+  }
+  50% {
+    transform: rotate(-5deg) translateY(-8px);
+  }
+}
+
+/* Signature */
+.page-404__powered {
+  font-family: var(--font-accent);
+  font-size: 0.85rem;
+  color: var(--color-text-light);
+  margin-top: var(--spacing-xl);
+  margin-bottom: 0;
+}
+
+.page-404__powered a {
+  color: inherit;
+  text-decoration: underline;
+}
+
+.page-404__powered a:hover {
+  color: var(--color-navy);
+}
+
+/* Mobile Responsive */
+@media screen and (max-width: 600px) {
+  .page-404 {
+    padding: var(--spacing-xl) var(--spacing-md);
+    min-height: 60vh;
+  }
+
+  .page-404__content {
+    padding: var(--spacing-xl) var(--spacing-md);
+    transform: rotate(0deg);
+  }
+
+  .page-404__tape {
+    display: none;
+  }
+
+  .page-404__icon {
+    width: 80px;
+    height: 80px;
+  }
+
+  .page-404__icon .icon {
+    width: 45px;
+    height: 45px;
+  }
+
+  .page-404__actions {
+    flex-direction: column;
+  }
+
+  .page-404__actions .btn {
+    width: 100%;
+    justify-content: center;
+  }
+
+  .page-404__search {
+    transform: rotate(0deg);
+  }
+
+  .page-404__search-form {
+    flex-direction: column;
+  }
+
+  .page-404__search-submit {
+    width: 100%;
+  }
+
+  .page-404-airplane,
+  .page-404-question {
+    display: none;
+  }
+}
