@@ -3094,10 +3094,7 @@
 
 /* Collection Toolbar */
 .collection-toolbar {
-  position: fixed;
-  top: 60px;
-  left: 0;
-  right: 0;
+  position: relative;
   z-index: 100;
   background: var(--color-white);
   border-bottom: 1px solid var(--color-border);
@@ -3193,6 +3190,7 @@
   flex: 1;
   min-width: 0;
   max-width: 500px;
+  z-index: 1100; /* Above filter sidebar */
 }
 
 /* Predictive Search Results Dropdown */
@@ -3206,7 +3204,7 @@
   border: 1px solid var(--color-border);
   border-radius: var(--radius-md);
   box-shadow: 0 10px 40px rgba(0, 0, 0, 0.12);
-  z-index: 200;
+  z-index: 1100;
   overflow: hidden;
 }
 
@@ -3374,8 +3372,9 @@
 
 /* Collection Layout */
 .collection-main {
+  position: relative;
+  z-index: 1;
   padding: var(--spacing-lg) 0 var(--spacing-2xl);
-  padding-top: calc(60px + var(--spacing-lg)); /* Account for fixed toolbar */
 }
 
 .collection-layout {
