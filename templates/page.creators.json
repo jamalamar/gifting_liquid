@@ -1,0 +1,18 @@
+{
+  "sections": {
+    "main": {
+      "type": "page-creators",
+      "settings": {
+        "badge_text": "Hecho en Mexico",
+        "title": "Nuestros Creadores",
+        "subtitle": "Conoce a los emprendedores mexicanos que ponen el corazon en cada producto. Cada compra apoya suenos locales.",
+        "cta_title": "¿Quieres ser parte de la comunidad?",
+        "cta_text": "Si eres emprendedor y quieres que tus productos lleguen a mas personas, unete a nuestra familia de creadores.",
+        "cta_button": "Quiero ser parte de la comunidad",
+        "cta_link": "/pages/vende-con-nosotros"
+      },
+      "blocks": {}
+    }
+  },
+  "order": ["main"]
+}

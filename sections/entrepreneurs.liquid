@@ -12,8 +12,12 @@
         <p class="entrepreneurs__subtitle">
           {{ section.settings.subtitle | default: 'Todos los productos que encuentras aqui son de emprendedores mexicanos que le ponen el corazon a lo que crean. Al elegirlos, apoyas suenos locales.' }}
         </p>
-        <a href="{{ section.settings.cta_link | default: '/pages/emprendedores' }}" class="btn btn--secondary collage-button">
+        <a href="{{ section.settings.cta_link | default: '/pages/creadores' }}" class="btn btn--secondary collage-button">
           {{ section.settings.cta_text | default: 'Conocer a los creadores' }}
+          {% render 'icon-arrow-right' %}
+        </a>
+        <a href="#categories" class="btn btn--primary collage-button entrepreneurs__giftbox-cta">
+          Listo para armar mi giftbox
           {% render 'icon-arrow-right' %}
         </a>
       </div>

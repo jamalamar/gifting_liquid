@@ -13,19 +13,22 @@
       "type": "categories",
       "settings": {
         "title": "¿A quién quieres consentir hoy?",
-        "subtitle": "Dinos quién se merece ese detalle y te ayudamos a encontrar el regalo ideal."
+        "subtitle": "Dinos quién se merece ese detalle y te ayudamos a encontrar el regalo ideal.",
+        "show_view_all": true,
+        "view_all_text": "Ver todas las categorías"
       },
       "blocks": {
-        "cat-1": { "type": "category", "settings": { "name": "Para mi novia", "tagline": "Porque ella merece más que flores", "style": "tape" } },
-        "cat-2": { "type": "category", "settings": { "name": "Para mi novio", "tagline": "El detalle que no esperaba", "style": "polaroid" } },
-        "cat-3": { "type": "category", "settings": { "name": "Para mi mamá", "tagline": "Todo lo que hace por ti, en una caja", "style": "pin" } },
-        "cat-4": { "type": "category", "settings": { "name": "Para mi papá", "tagline": "Para el que 'no necesita nada'", "style": "tape" } },
-        "cat-5": { "type": "category", "settings": { "name": "Para mi esposa", "tagline": "Porque el amor se celebra todos los días", "style": "torn" } },
-        "cat-6": { "type": "category", "settings": { "name": "Para mi esposo", "tagline": "El detalle que no vio venir", "style": "polaroid" } },
-        "cat-7": { "type": "category", "settings": { "name": "Para mi mejor amiga", "tagline": "Porque nadie te conoce como ella", "style": "pin" } },
-        "cat-8": { "type": "category", "settings": { "name": "Para mi mejor amigo", "tagline": "El bro que siempre está", "style": "tape" } }
+        "cat-1": { "type": "category", "settings": { "name": "Para ella", "tagline": "Encuentra el regalo perfecto para las mujeres especiales en tu vida", "style": "tape", "link": "/collections/para-ella" } },
+        "cat-2": { "type": "category", "settings": { "name": "Para él", "tagline": "Detalles únicos para los hombres que más quieres", "style": "polaroid", "link": "/collections/para-el" } }
       },
-      "block_order": ["cat-1", "cat-2", "cat-3", "cat-4", "cat-5", "cat-6", "cat-7", "cat-8"]
+      "block_order": ["cat-1", "cat-2"]
+    },
+    "occasions": {
+      "type": "occasions",
+      "settings": {
+        "title": "Siempre hay una ocasión para regalar",
+        "subtitle": "San Valentín, cumpleaños, días festivos... aquí encuentras algo especial para cada momento."
+      }
     },
     "how-it-works": {
       "type": "how-it-works",
@@ -33,10 +36,10 @@
         "title": "Regalar nunca fue tan fácil (en serio)"
       },
       "blocks": {
-        "step-1": { "type": "step", "settings": { "number": 1, "title": "Elige a quién va el regalo", "description": "¿Es para tu novia, tu mamá, tu compa? Empezamos por ahí.", "icon": "person" } },
-        "step-2": { "type": "step", "settings": { "number": 2, "title": "Arma tu caja perfecta", "description": "Explora productos de emprendedores mexicanos y selecciona los que más le van a gustar.", "icon": "box" } },
-        "step-3": { "type": "step", "settings": { "number": 3, "title": "Personalízalo con amor", "description": "Agrega una tarjeta con tu mensaje. Nosotros lo armamos bonito.", "icon": "heart" } },
-        "step-4": { "type": "step", "settings": { "number": 4, "title": "Lo entregamos por ti", "description": "Tú solo dinos cuándo y dónde. Nosotros hacemos la magia.", "icon": "truck" } }
+        "step-1": { "type": "step", "settings": { "number": 1, "title": "Elige para quién va a ser tu gifting", "description": "¿Para tu mamá, tu suegra, novia, abuelitos, tu papá, tu compa o para ti? Empezamos por ahí.", "icon": "person" } },
+        "step-2": { "type": "step", "settings": { "number": 2, "title": "Arma tu giftbox perfecto", "description": "Busca la categoría de ocasiones y conoce los productos que te recomendamos. Selecciona los que más te gusten.", "icon": "box" } },
+        "step-3": { "type": "step", "settings": { "number": 3, "title": "Personaliza", "description": "Elige el diseño de tu giftbox y agrega una tarjeta con tu mensaje. Nosotros lo armamos aesthetic.", "icon": "heart" } },
+        "step-4": { "type": "step", "settings": { "number": 4, "title": "Lo entregamos por ti", "description": "Tú solo dinos cuándo y dónde y nosotros hacemos la magia.", "icon": "truck" } }
       },
       "block_order": ["step-1", "step-2", "step-3", "step-4"]
     },
@@ -53,20 +56,8 @@
       "settings": {
         "title": "Detrás de cada producto, hay una historia",
         "subtitle": "Todos los productos que encuentras aquí son de emprendedores mexicanos que le ponen el corazón a lo que crean. Al elegirlos, apoyas sueños locales.",
-        "cta_text": "Conocer a los creadores"
-      }
-    },
-    "occasions": {
-      "type": "occasions",
-      "settings": {
-        "title": "Siempre hay un buen pretexto para regalar",
-        "subtitle": "Ya sea San Valentín, cumpleaños, Día de las Madres o un 'porque sí', aquí encuentras algo especial para cada momento."
-      }
-    },
-    "why-gifting": {
-      "type": "why-gifting",
-      "settings": {
-        "title": "¿Por qué con nosotros?"
+        "cta_text": "Conocer a los creadores",
+        "cta_link": "/pages/creadores"
       }
     },
     "newsletter": {
@@ -81,11 +72,10 @@
   "order": [
     "hero",
     "categories",
+    "occasions",
     "how-it-works",
     "featured-products",
     "entrepreneurs",
-    "occasions",
-    "why-gifting",
     "newsletter"
   ]
 }
