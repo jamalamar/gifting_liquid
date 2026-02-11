@@ -17,38 +17,38 @@
       {
         "type": "color",
         "id": "color_primary",
-        "label": "Color primario (Terracotta)",
-        "default": "#ac5134"
+        "label": "Color primario (Naranja)",
+        "default": "#AC583B"
       },
       {
         "type": "color",
         "id": "color_secondary",
-        "label": "Color secundario (Coral)",
-        "default": "#ac5b3c"
+        "label": "Color secundario (Naranja oscuro)",
+        "default": "#934A32"
       },
       {
         "type": "color",
         "id": "color_accent",
-        "label": "Color acento (Dusty Pink)",
-        "default": "#dcae9c"
+        "label": "Color acento (Blanco)",
+        "default": "#E3E2DE"
       },
       {
         "type": "color",
         "id": "color_navy",
-        "label": "Color azul oscuro",
-        "default": "#3c4c6c"
+        "label": "Color azul (titulos)",
+        "default": "#414F69"
       },
       {
         "type": "color",
         "id": "color_navy_light",
         "label": "Color azul claro",
-        "default": "#5c6484"
+        "default": "#5A6B85"
       },
       {
         "type": "color",
         "id": "color_brown",
-        "label": "Color café",
-        "default": "#713c27"
+        "label": "Color cafe",
+        "default": "#8B4730"
       },
       {
         "type": "header",
@@ -57,14 +57,14 @@
       {
         "type": "color",
         "id": "color_background",
-        "label": "Fondo principal",
-        "default": "#faf8f5"
+        "label": "Fondo principal (Menta)",
+        "default": "#A0C2B4"
       },
       {
         "type": "color",
         "id": "color_background_alt",
         "label": "Fondo alternativo",
-        "default": "#f5f0eb"
+        "default": "#8FB3A5"
       },
       {
         "type": "header",
@@ -73,14 +73,14 @@
       {
         "type": "color",
         "id": "color_text",
-        "label": "Texto principal",
-        "default": "#2d2d2d"
+        "label": "Texto principal (Azul)",
+        "default": "#414F69"
       },
       {
         "type": "color",
         "id": "color_text_light",
         "label": "Texto secundario",
-        "default": "#666666"
+        "default": "#5A6B85"
       }
     ]
   },
