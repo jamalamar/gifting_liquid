@@ -1,0 +1,92 @@
+{
+  "sections": {
+    "main": {
+      "type": "page-recipient-occasions",
+      "settings": {
+        "recipient_type": "para-ella",
+        "tag_text": "Para ella",
+        "headline": "Regalos para ella",
+        "subtitle": "¿Cuál es la ocasión especial?",
+        "occasions_title": "Elige la ocasión",
+        "see_all_text": "¿No encuentras la ocasión? No te preocupes."
+      },
+      "blocks": {
+        "occasion_cumple": {
+          "type": "occasion",
+          "settings": {
+            "tag_value": "cumpleanos",
+            "label": "Cumpleaños",
+            "icon": "gift"
+          }
+        },
+        "occasion_valentin": {
+          "type": "occasion",
+          "settings": {
+            "tag_value": "san-valentin",
+            "label": "San Valentín",
+            "icon": "heart"
+          }
+        },
+        "occasion_mama": {
+          "type": "occasion",
+          "settings": {
+            "tag_value": "dia-de-las-madres",
+            "label": "Día de las Madres",
+            "icon": "heart"
+          }
+        },
+        "occasion_aniversario": {
+          "type": "occasion",
+          "settings": {
+            "tag_value": "aniversario",
+            "label": "Aniversario",
+            "icon": "heart"
+          }
+        },
+        "occasion_navidad": {
+          "type": "occasion",
+          "settings": {
+            "tag_value": "navidad",
+            "label": "Navidad",
+            "icon": "gift"
+          }
+        },
+        "occasion_graduacion": {
+          "type": "occasion",
+          "settings": {
+            "tag_value": "graduacion",
+            "label": "Graduación",
+            "icon": "sparkle"
+          }
+        },
+        "occasion_baby": {
+          "type": "occasion",
+          "settings": {
+            "tag_value": "baby-shower",
+            "label": "Baby Shower",
+            "icon": "gift"
+          }
+        },
+        "occasion_porque_si": {
+          "type": "occasion",
+          "settings": {
+            "tag_value": "porque-si",
+            "label": "Porque sí",
+            "icon": "sparkle"
+          }
+        }
+      },
+      "block_order": [
+        "occasion_cumple",
+        "occasion_valentin",
+        "occasion_mama",
+        "occasion_aniversario",
+        "occasion_navidad",
+        "occasion_graduacion",
+        "occasion_baby",
+        "occasion_porque_si"
+      ]
+    }
+  },
+  "order": ["main"]
+}

@@ -1,0 +1,232 @@
+{{ 'page-recipient-occasions.css' | asset_url | stylesheet_tag }}
+
+{%- comment -%}
+  Recipient Occasions Page Section
+  Shows occasions for a specific recipient (Para Ella / Para Él)
+  Links to catalog with pre-selected filters
+{%- endcomment -%}
+
+{%- assign recipient_type = section.settings.recipient_type | default: 'para-ella' -%}
+{%- assign catalog_url = '/collections/catalogo' -%}
+
+<section class="recipient-page collage-section" data-section-id="{{ section.id }}">
+
+  <!-- Hero Section -->
+  <div class="recipient-hero">
+    <div class="container">
+      <div class="recipient-hero__content">
+        <div class="recipient-hero__tag collage-sticker collage-sticker--handwritten">
+          {%- if recipient_type == 'para-ella' -%}
+            {% render 'icon-heart' %}
+          {%- else -%}
+            {% render 'icon-star' %}
+          {%- endif -%}
+          <span>{{ section.settings.tag_text | default: 'Regalos especiales' }}</span>
+        </div>
+        <h1 class="recipient-hero__title">
+          {{ section.settings.headline | default: 'Regalos para ella' }}
+        </h1>
+        <p class="recipient-hero__subtitle">
+          {{ section.settings.subtitle | default: '¿Cuál es la ocasión especial?' }}
+        </p>
+      </div>
+    </div>
+
+    <!-- Decorative Elements -->
+    <div class="recipient-deco recipient-deco--1 recipient-deco--heart">
+      {% render 'icon-heart' %}
+    </div>
+    <div class="recipient-deco recipient-deco--2 recipient-deco--star">
+      {% render 'icon-sparkle' %}
+    </div>
+    <div class="recipient-deco recipient-deco--3 recipient-deco--star">
+      {% render 'icon-star' %}
+    </div>
+    <div class="recipient-deco recipient-deco--4 recipient-deco--heart">
+      {% render 'icon-gift' %}
+    </div>
+  </div>
+
+  <!-- Occasions Grid -->
+  <div class="recipient-occasions">
+    <div class="container">
+      <h2 class="recipient-occasions__title">
+        {{ section.settings.occasions_title | default: 'Elige la ocasión' }}
+      </h2>
+
+      <div class="occasion-grid">
+        {%- for block in section.blocks -%}
+          {%- if block.type == 'occasion' -%}
+            {%- assign filter_url = catalog_url | append: '?filter.v.tag=recipient:' | append: recipient_type | append: '&filter.v.tag=occasion:' | append: block.settings.tag_value -%}
+
+            <a href="{{ filter_url }}" class="occasion-card" {{ block.shopify_attributes }}>
+              <span class="occasion-card__icon">
+                {%- case block.settings.icon -%}
+                  {%- when 'heart' -%}
+                    {% render 'icon-heart' %}
+                  {%- when 'star' -%}
+                    {% render 'icon-star' %}
+                  {%- when 'gift' -%}
+                    {% render 'icon-gift' %}
+                  {%- when 'sparkle' -%}
+                    {% render 'icon-sparkle' %}
+                  {%- when 'cake' -%}
+                    {% render 'icon-cake' %}
+                  {%- when 'tree' -%}
+                    {% render 'icon-tree' %}
+                  {%- when 'baby' -%}
+                    {% render 'icon-baby' %}
+                  {%- when 'graduation' -%}
+                    {% render 'icon-graduation' %}
+                  {%- else -%}
+                    {% render 'icon-gift' %}
+                {%- endcase -%}
+              </span>
+              <span class="occasion-card__label">{{ block.settings.label }}</span>
+            </a>
+          {%- endif -%}
+        {%- endfor -%}
+      </div>
+    </div>
+  </div>
+
+  <!-- See All Link -->
+  <div class="recipient-see-all">
+    <div class="container">
+      <p class="recipient-see-all__text">
+        {{ section.settings.see_all_text | default: '¿No encuentras la ocasión? No te preocupes.' }}
+      </p>
+      <a href="{{ catalog_url }}?filter.v.tag=recipient:{{ recipient_type }}" class="btn btn--primary recipient-see-all__link">
+        {%- if recipient_type == 'para-ella' -%}
+          Ver todos los regalos para ella
+        {%- else -%}
+          Ver todos los regalos para él
+        {%- endif -%}
+        {% render 'icon-arrow-right' %}
+      </a>
+    </div>
+  </div>
+
+</section>
+
+{% schema %}
+{
+  "name": "Seleccion de Ocasion",
+  "tag": "section",
+  "class": "section-recipient-occasions",
+  "settings": [
+    {
+      "type": "header",
+      "content": "Configuración del destinatario"
+    },
+    {
+      "type": "select",
+      "id": "recipient_type",
+      "label": "Tipo de destinatario",
+      "options": [
+        { "value": "para-ella", "label": "Para Ella" },
+        { "value": "para-el", "label": "Para Él" }
+      ],
+      "default": "para-ella"
+    },
+    {
+      "type": "header",
+      "content": "Hero"
+    },
+    {
+      "type": "text",
+      "id": "tag_text",
+      "label": "Texto del tag",
+      "default": "Regalos especiales"
+    },
+    {
+      "type": "text",
+      "id": "headline",
+      "label": "Título principal",
+      "default": "Regalos para ella"
+    },
+    {
+      "type": "text",
+      "id": "subtitle",
+      "label": "Subtítulo",
+      "default": "¿Cuál es la ocasión especial?"
+    },
+    {
+      "type": "header",
+      "content": "Ocasiones"
+    },
+    {
+      "type": "text",
+      "id": "occasions_title",
+      "label": "Título de sección de ocasiones",
+      "default": "Elige la ocasión"
+    },
+    {
+      "type": "header",
+      "content": "Ver todo"
+    },
+    {
+      "type": "text",
+      "id": "see_all_text",
+      "label": "Texto sobre el botón",
+      "default": "¿No encuentras la ocasión? No te preocupes."
+    }
+  ],
+  "blocks": [
+    {
+      "type": "occasion",
+      "name": "Ocasión",
+      "settings": [
+        {
+          "type": "text",
+          "id": "tag_value",
+          "label": "Valor del tag",
+          "info": "Sin prefijo. Ej: cumpleanos"
+        },
+        {
+          "type": "text",
+          "id": "label",
+          "label": "Etiqueta visible",
+          "default": "Cumpleaños"
+        },
+        {
+          "type": "select",
+          "id": "icon",
+          "label": "Icono",
+          "options": [
+            { "value": "heart", "label": "Corazón" },
+            { "value": "star", "label": "Estrella" },
+            { "value": "gift", "label": "Regalo" },
+            { "value": "sparkle", "label": "Destello" },
+            { "value": "cake", "label": "Pastel" },
+            { "value": "tree", "label": "Árbol (Navidad)" },
+            { "value": "baby", "label": "Bebé" },
+            { "value": "graduation", "label": "Graduación" }
+          ],
+          "default": "gift"
+        }
+      ]
+    }
+  ],
+  "presets": [
+    {
+      "name": "Seleccion de Ocasion",
+      "settings": {
+        "recipient_type": "para-ella",
+        "headline": "Regalos para ella",
+        "subtitle": "¿Cuál es la ocasión especial?"
+      },
+      "blocks": [
+        { "type": "occasion", "settings": { "tag_value": "cumpleanos", "label": "Cumpleaños", "icon": "gift" } },
+        { "type": "occasion", "settings": { "tag_value": "san-valentin", "label": "San Valentín", "icon": "heart" } },
+        { "type": "occasion", "settings": { "tag_value": "dia-de-las-madres", "label": "Día de las Madres", "icon": "heart" } },
+        { "type": "occasion", "settings": { "tag_value": "aniversario", "label": "Aniversario", "icon": "heart" } },
+        { "type": "occasion", "settings": { "tag_value": "navidad", "label": "Navidad", "icon": "gift" } },
+        { "type": "occasion", "settings": { "tag_value": "graduacion", "label": "Graduación", "icon": "sparkle" } },
+        { "type": "occasion", "settings": { "tag_value": "baby-shower", "label": "Baby Shower", "icon": "gift" } },
+        { "type": "occasion", "settings": { "tag_value": "porque-si", "label": "Porque sí", "icon": "sparkle" } }
+      ]
+    }
+  ]
+}
+{% endschema %}

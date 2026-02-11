@@ -1,0 +1,330 @@
+/* ============================================
+   Recipient Occasions Page
+   Selection page for Para Él / Para Ella
+   ============================================ */
+
+/* Hero Section */
+.recipient-hero {
+  padding: var(--spacing-xl) 0;
+  text-align: center;
+  background: linear-gradient(
+    135deg,
+    rgba(var(--color-accent-rgb), 0.15) 0%,
+    rgba(var(--color-accent-rgb), 0.05) 50%,
+    rgba(var(--color-primary-rgb), 0.08) 100%
+  );
+  position: relative;
+  overflow: hidden;
+}
+
+.recipient-hero::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-image:
+    radial-gradient(circle at 20% 80%, rgba(var(--color-primary-rgb), 0.1) 0%, transparent 50%),
+    radial-gradient(circle at 80% 20%, rgba(var(--color-accent-rgb), 0.15) 0%, transparent 50%);
+  pointer-events: none;
+}
+
+.recipient-hero__content {
+  position: relative;
+  z-index: 1;
+}
+
+.recipient-hero__tag {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  margin-bottom: var(--spacing-md);
+}
+
+.recipient-hero__title {
+  font-size: clamp(2.5rem, 6vw, 4rem);
+  font-weight: 700;
+  color: var(--color-navy);
+  margin-bottom: var(--spacing-sm);
+  transform: rotate(-1deg);
+}
+
+.recipient-hero__subtitle {
+  font-family: var(--font-accent);
+  font-size: clamp(1.25rem, 3vw, 1.75rem);
+  color: var(--color-text-light);
+  max-width: 500px;
+  margin: 0 auto;
+}
+
+/* Occasions Section */
+.recipient-occasions {
+  padding: var(--spacing-xl) 0;
+  background-color: var(--color-background);
+}
+
+.recipient-occasions__title {
+  text-align: center;
+  font-family: var(--font-accent);
+  font-size: 1.25rem;
+  color: var(--color-navy);
+  margin-bottom: var(--spacing-lg);
+}
+
+.recipient-occasions__title::before {
+  content: '✨ ';
+}
+
+.recipient-occasions__title::after {
+  content: ' ✨';
+}
+
+/* Occasions Grid */
+.occasion-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: var(--spacing-md);
+  max-width: 900px;
+  margin: 0 auto;
+  padding: 0 var(--spacing-md);
+}
+
+@media screen and (min-width: 750px) {
+  .occasion-grid {
+    grid-template-columns: repeat(3, 1fr);
+    gap: var(--spacing-lg);
+  }
+}
+
+/* Occasion Card */
+.occasion-card {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 0.75rem;
+  padding: var(--spacing-lg) var(--spacing-md);
+  background: var(--color-white);
+  border: 2px solid var(--color-accent);
+  border-radius: var(--radius-md);
+  text-decoration: none;
+  color: var(--color-navy);
+  transition: all 0.3s ease;
+  position: relative;
+  overflow: hidden;
+  min-height: 140px;
+}
+
+.occasion-card::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(
+    135deg,
+    rgba(var(--color-primary-rgb), 0.05) 0%,
+    transparent 100%
+  );
+  opacity: 0;
+  transition: opacity 0.3s ease;
+}
+
+.occasion-card:hover {
+  border-color: var(--color-primary);
+  transform: translateY(-4px) rotate(-1deg);
+  box-shadow: 4px 6px 0 rgba(var(--color-navy-rgb), 0.1);
+}
+
+.occasion-card:hover::before {
+  opacity: 1;
+}
+
+.occasion-card:active {
+  transform: translateY(-2px) rotate(0);
+}
+
+/* Occasion Icon */
+.occasion-card__icon {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 56px;
+  height: 56px;
+  background: linear-gradient(
+    135deg,
+    rgba(var(--color-accent-rgb), 0.3) 0%,
+    rgba(var(--color-accent-rgb), 0.1) 100%
+  );
+  border-radius: 50%;
+  color: var(--color-primary);
+  transition: all 0.3s ease;
+}
+
+.occasion-card__icon .icon {
+  width: 28px;
+  height: 28px;
+}
+
+.occasion-card:hover .occasion-card__icon {
+  background: var(--color-primary);
+  color: var(--color-white);
+  transform: scale(1.1) rotate(5deg);
+}
+
+/* Occasion Label */
+.occasion-card__label {
+  font-family: var(--font-body);
+  font-size: 1rem;
+  font-weight: 600;
+  text-align: center;
+  position: relative;
+  z-index: 1;
+}
+
+/* Card Variations (slight rotations for collage feel) */
+.occasion-card:nth-child(odd) {
+  transform: rotate(-0.5deg);
+}
+
+.occasion-card:nth-child(even) {
+  transform: rotate(0.5deg);
+}
+
+.occasion-card:nth-child(3n) {
+  transform: rotate(0deg);
+}
+
+.occasion-card:nth-child(odd):hover {
+  transform: translateY(-4px) rotate(-1.5deg);
+}
+
+.occasion-card:nth-child(even):hover {
+  transform: translateY(-4px) rotate(1deg);
+}
+
+/* See All Section */
+.recipient-see-all {
+  text-align: center;
+  padding: var(--spacing-xl) 0;
+  background: linear-gradient(
+    to bottom,
+    var(--color-background) 0%,
+    rgba(var(--color-accent-rgb), 0.08) 100%
+  );
+}
+
+.recipient-see-all__text {
+  font-family: var(--font-accent);
+  font-size: 1.125rem;
+  color: var(--color-text-light);
+  margin-bottom: var(--spacing-md);
+}
+
+.recipient-see-all__link {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.recipient-see-all__link .icon {
+  width: 1.25rem;
+  height: 1.25rem;
+  transition: transform 0.2s ease;
+}
+
+.recipient-see-all__link:hover .icon {
+  transform: translateX(4px);
+}
+
+/* Decorative Elements */
+.recipient-deco {
+  position: absolute;
+  pointer-events: none;
+  opacity: 0.15;
+}
+
+.recipient-deco--heart {
+  color: var(--color-primary);
+}
+
+.recipient-deco--star {
+  color: var(--color-accent);
+}
+
+.recipient-deco--1 {
+  top: 10%;
+  left: 5%;
+  transform: rotate(-15deg);
+}
+
+.recipient-deco--2 {
+  top: 20%;
+  right: 8%;
+  transform: rotate(10deg);
+}
+
+.recipient-deco--3 {
+  bottom: 15%;
+  left: 10%;
+  transform: rotate(5deg);
+}
+
+.recipient-deco--4 {
+  bottom: 25%;
+  right: 5%;
+  transform: rotate(-8deg);
+}
+
+.recipient-deco .icon {
+  width: 40px;
+  height: 40px;
+}
+
+/* Mobile Adjustments */
+@media screen and (max-width: 749px) {
+  .recipient-hero {
+    padding: var(--spacing-lg) 0;
+  }
+
+  .recipient-hero__title {
+    transform: none;
+  }
+
+  .occasion-grid {
+    gap: var(--spacing-sm);
+  }
+
+  .occasion-card {
+    padding: var(--spacing-md);
+    min-height: 120px;
+  }
+
+  .occasion-card__icon {
+    width: 48px;
+    height: 48px;
+  }
+
+  .occasion-card__icon .icon {
+    width: 24px;
+    height: 24px;
+  }
+
+  .occasion-card__label {
+    font-size: 0.9375rem;
+  }
+
+  /* Disable rotation on mobile for cleaner look */
+  .occasion-card:nth-child(odd),
+  .occasion-card:nth-child(even),
+  .occasion-card:nth-child(3n) {
+    transform: none;
+  }
+
+  .occasion-card:hover {
+    transform: translateY(-2px);
+  }
+
+  .recipient-deco {
+    display: none;
+  }
+}

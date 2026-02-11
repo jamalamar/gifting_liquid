@@ -1,0 +1,83 @@
+{
+  "sections": {
+    "main": {
+      "type": "page-recipient-occasions",
+      "settings": {
+        "recipient_type": "para-el",
+        "tag_text": "Para él",
+        "headline": "Regalos para él",
+        "subtitle": "¿Cuál es la ocasión especial?",
+        "occasions_title": "Elige la ocasión",
+        "see_all_text": "¿No encuentras la ocasión? No te preocupes."
+      },
+      "blocks": {
+        "occasion_cumple": {
+          "type": "occasion",
+          "settings": {
+            "tag_value": "cumpleanos",
+            "label": "Cumpleaños",
+            "icon": "gift"
+          }
+        },
+        "occasion_valentin": {
+          "type": "occasion",
+          "settings": {
+            "tag_value": "san-valentin",
+            "label": "San Valentín",
+            "icon": "heart"
+          }
+        },
+        "occasion_papa": {
+          "type": "occasion",
+          "settings": {
+            "tag_value": "dia-del-padre",
+            "label": "Día del Padre",
+            "icon": "star"
+          }
+        },
+        "occasion_aniversario": {
+          "type": "occasion",
+          "settings": {
+            "tag_value": "aniversario",
+            "label": "Aniversario",
+            "icon": "heart"
+          }
+        },
+        "occasion_navidad": {
+          "type": "occasion",
+          "settings": {
+            "tag_value": "navidad",
+            "label": "Navidad",
+            "icon": "gift"
+          }
+        },
+        "occasion_graduacion": {
+          "type": "occasion",
+          "settings": {
+            "tag_value": "graduacion",
+            "label": "Graduación",
+            "icon": "sparkle"
+          }
+        },
+        "occasion_porque_si": {
+          "type": "occasion",
+          "settings": {
+            "tag_value": "porque-si",
+            "label": "Porque sí",
+            "icon": "sparkle"
+          }
+        }
+      },
+      "block_order": [
+        "occasion_cumple",
+        "occasion_valentin",
+        "occasion_papa",
+        "occasion_aniversario",
+        "occasion_navidad",
+        "occasion_graduacion",
+        "occasion_porque_si"
+      ]
+    }
+  },
+  "order": ["main"]
+}
