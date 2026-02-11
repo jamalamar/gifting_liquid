@@ -1,18 +1,18 @@
-<section class="how-it-works collage-section collage-section--alt" data-section-id="{{ section.id }}" data-animate="steps">
+<section class="how-it-works" data-section-id="{{ section.id }}" data-animate="steps">
   <div class="container">
     <div class="section-header animate-item" style="--i:0">
-      <h2 class="section-title collage-heading collage-heading--underline">
+      <h2 class="section-title">
         {{ section.settings.title | default: 'Regalar nunca fue tan facil (en serio)' }}
       </h2>
     </div>
 
     <div class="how-it-works__steps">
       {%- for block in section.blocks -%}
-        <div class="step collage-card collage-card--step animate-item" style="--i:{{ forloop.index }}" {{ block.shopify_attributes }}>
-          <div class="step__number collage-sticker collage-sticker--circle">
-            <span>{{ block.settings.number | default: forloop.index }}</span>
-          </div>
-          <div class="step__content collage-paper collage-paper--note">
+        <div class="step animate-item" style="--i:{{ forloop.index }}" {{ block.shopify_attributes }}>
+          <div class="step__card">
+            <div class="step__number">
+              <span>{{ block.settings.number | default: forloop.index }}</span>
+            </div>
             <div class="step__icon">
               {%- case block.settings.icon -%}
                 {%- when 'person' -%}
@@ -32,8 +32,8 @@
           </div>
           {%- unless forloop.last -%}
             <div class="step__connector">
-              <svg class="connector-line" viewBox="0 0 100 20" preserveAspectRatio="none">
-                <path d="M0 10 Q 25 0, 50 10 T 100 10" stroke="currentColor" stroke-width="2" fill="none" stroke-dasharray="5,5"/>
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <path d="M5 12h14M12 5l7 7-7 7"/>
               </svg>
             </div>
           {%- endunless -%}
@@ -42,18 +42,11 @@
     </div>
 
     <div class="how-it-works__cta animate-item" style="--i:{{ section.blocks.size | plus: 1 }}">
-      <a href="#categories" class="btn btn--primary collage-button collage-button--large">
-        Listo para armar mi giftbox
+      <a href="{{ section.settings.cta_link | default: '#categories' }}" class="btn btn--primary btn--large">
+        {{ section.settings.cta_text | default: 'Listo para armar mi giftbox' }}
         {% render 'icon-arrow-right' %}
       </a>
     </div>
-  </div>
-
-  <div class="how-it-works__decorations">
-    <div class="collage-element collage-element--paper-airplane">
-      {% render 'icon-paper-airplane' %}
-    </div>
-    <div class="collage-element collage-element--confetti"></div>
   </div>
 </section>
 
