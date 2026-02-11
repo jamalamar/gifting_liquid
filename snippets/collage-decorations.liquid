@@ -1,29 +1,111 @@
 {%- comment -%}
-  Configurable global decorations - renders images from theme settings
+  Random decorations with depth effect
+  - Collects up to 12 images from settings
+  - Shows 6 random ones with varying depths (far/mid/near)
 {%- endcomment -%}
 
+{%- liquid
+  assign all_decos = ''
+
+  if settings.deco_image_1 != blank
+    assign img_url = settings.deco_image_1 | image_url: width: 200
+    assign all_decos = all_decos | append: img_url | append: '|||'
+  endif
+  if settings.deco_image_2 != blank
+    assign img_url = settings.deco_image_2 | image_url: width: 200
+    assign all_decos = all_decos | append: img_url | append: '|||'
+  endif
+  if settings.deco_image_3 != blank
+    assign img_url = settings.deco_image_3 | image_url: width: 200
+    assign all_decos = all_decos | append: img_url | append: '|||'
+  endif
+  if settings.deco_image_4 != blank
+    assign img_url = settings.deco_image_4 | image_url: width: 200
+    assign all_decos = all_decos | append: img_url | append: '|||'
+  endif
+  if settings.deco_image_5 != blank
+    assign img_url = settings.deco_image_5 | image_url: width: 200
+    assign all_decos = all_decos | append: img_url | append: '|||'
+  endif
+  if settings.deco_image_6 != blank
+    assign img_url = settings.deco_image_6 | image_url: width: 200
+    assign all_decos = all_decos | append: img_url | append: '|||'
+  endif
+  if settings.deco_image_7 != blank
+    assign img_url = settings.deco_image_7 | image_url: width: 200
+    assign all_decos = all_decos | append: img_url | append: '|||'
+  endif
+  if settings.deco_image_8 != blank
+    assign img_url = settings.deco_image_8 | image_url: width: 200
+    assign all_decos = all_decos | append: img_url | append: '|||'
+  endif
+  if settings.deco_image_9 != blank
+    assign img_url = settings.deco_image_9 | image_url: width: 200
+    assign all_decos = all_decos | append: img_url | append: '|||'
+  endif
+  if settings.deco_image_10 != blank
+    assign img_url = settings.deco_image_10 | image_url: width: 200
+    assign all_decos = all_decos | append: img_url | append: '|||'
+  endif
+  if settings.deco_image_11 != blank
+    assign img_url = settings.deco_image_11 | image_url: width: 200
+    assign all_decos = all_decos | append: img_url | append: '|||'
+  endif
+  if settings.deco_image_12 != blank
+    assign img_url = settings.deco_image_12 | image_url: width: 200
+    assign all_decos = all_decos | append: img_url | append: '|||'
+  endif
+
+  assign deco_array = all_decos | split: '|||'
+  assign deco_count = deco_array.size
+-%}
+
+{%- if deco_count > 0 -%}
 <div class="collage-decorations" aria-hidden="true">
-  {%- if settings.deco_1_image != blank -%}
-    <div class="global-deco global-deco--{{ settings.deco_1_position | default: 'top-right' }}" style="--deco-size: {{ settings.deco_1_size | default: 50 }}px;">
-      <img src="{{ settings.deco_1_image | image_url: width: 240 }}" alt="" loading="lazy">
-    </div>
-  {%- endif -%}
-
-  {%- if settings.deco_2_image != blank -%}
-    <div class="global-deco global-deco--{{ settings.deco_2_position | default: 'bottom-left' }}" style="--deco-size: {{ settings.deco_2_size | default: 40 }}px; animation-delay: 1.5s;">
-      <img src="{{ settings.deco_2_image | image_url: width: 240 }}" alt="" loading="lazy">
-    </div>
-  {%- endif -%}
-
-  {%- if settings.deco_3_image != blank -%}
-    <div class="global-deco global-deco--{{ settings.deco_3_position | default: 'top-left' }}" style="--deco-size: {{ settings.deco_3_size | default: 60 }}px; animation-delay: 3s;">
-      <img src="{{ settings.deco_3_image | image_url: width: 240 }}" alt="" loading="lazy">
-    </div>
-  {%- endif -%}
-
-  {%- if settings.deco_4_image != blank -%}
-    <div class="global-deco global-deco--{{ settings.deco_4_position | default: 'bottom-right' }}" style="--deco-size: {{ settings.deco_4_size | default: 40 }}px; animation-delay: 4.5s;">
-      <img src="{{ settings.deco_4_image | image_url: width: 240 }}" alt="" loading="lazy">
-    </div>
-  {%- endif -%}
+  {%- comment -%} Output all images as hidden, JS will randomize and show 6 {%- endcomment -%}
+  {%- for deco in deco_array -%}
+    {%- if deco != blank -%}
+      <div class="global-deco" data-deco-item>
+        <img src="{{ deco }}" alt="" loading="lazy">
+      </div>
+    {%- endif -%}
+  {%- endfor -%}
 </div>
+
+<script>
+  (function() {
+    const container = document.querySelector('.collage-decorations');
+    if (!container) return;
+
+    const items = [...container.querySelectorAll('[data-deco-item]')];
+    if (items.length === 0) return;
+
+    // Shuffle array (Fisher-Yates)
+    for (let i = items.length - 1; i > 0; i--) {
+      const j = Math.floor(Math.random() * (i + 1));
+      [items[i], items[j]] = [items[j], items[i]];
+    }
+
+    // Slot configurations: [depth, position-class]
+    const slots = [
+      ['far', 'slot-1'],
+      ['far', 'slot-2'],
+      ['mid', 'slot-3'],
+      ['mid', 'slot-4'],
+      ['near', 'slot-5'],
+      ['near', 'slot-6']
+    ];
+
+    // Show first 6 (or less) with assigned slots
+    items.forEach((item, i) => {
+      if (i < 6 && i < slots.length) {
+        item.classList.add('global-deco--' + slots[i][0]);
+        item.classList.add('global-deco--' + slots[i][1]);
+        item.classList.add('is-visible');
+      } else {
+        item.remove();
+      }
+    });
+  })();
+</script>
+{%- endif -%}

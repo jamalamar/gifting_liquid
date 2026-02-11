@@ -153,9 +153,7 @@
     {{ "accessibility.skip_to_content" | t }}
   </a>
 
-  {%- if settings.show_collage_elements -%}
-    {% render 'collage-decorations' %}
-  {%- endif -%}
+  {% render 'collage-decorations' %}
 
   {% sections 'header-group' %}
 

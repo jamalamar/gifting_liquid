@@ -218,131 +218,67 @@
     "settings": [
       {
         "type": "paragraph",
-        "content": "Sube imagenes o iconos para decorar el fondo del sitio. Cada decoracion aparece flotando en el fondo."
-      },
-      {
-        "type": "header",
-        "content": "Decoracion 1"
+        "content": "Sube hasta 12 imagenes/iconos. En cada carga de pagina, 6 apareceran aleatoriamente con diferentes profundidades (algunos mas lejos, otros mas cerca)."
       },
       {
         "type": "image_picker",
-        "id": "deco_1_image",
-        "label": "Imagen o icono"
-      },
-      {
-        "type": "select",
-        "id": "deco_1_position",
-        "label": "Posicion",
-        "options": [
-          { "value": "top-left", "label": "Arriba izquierda" },
-          { "value": "top-right", "label": "Arriba derecha" },
-          { "value": "bottom-left", "label": "Abajo izquierda" },
-          { "value": "bottom-right", "label": "Abajo derecha" }
-        ],
-        "default": "top-right"
-      },
-      {
-        "type": "range",
-        "id": "deco_1_size",
-        "label": "Tamano",
-        "min": 30,
-        "max": 120,
-        "step": 10,
-        "default": 50,
-        "unit": "px"
-      },
-      {
-        "type": "header",
-        "content": "Decoracion 2"
+        "id": "deco_image_1",
+        "label": "Imagen 1"
       },
       {
         "type": "image_picker",
-        "id": "deco_2_image",
-        "label": "Imagen o icono"
-      },
-      {
-        "type": "select",
-        "id": "deco_2_position",
-        "label": "Posicion",
-        "options": [
-          { "value": "top-left", "label": "Arriba izquierda" },
-          { "value": "top-right", "label": "Arriba derecha" },
-          { "value": "bottom-left", "label": "Abajo izquierda" },
-          { "value": "bottom-right", "label": "Abajo derecha" }
-        ],
-        "default": "bottom-left"
-      },
-      {
-        "type": "range",
-        "id": "deco_2_size",
-        "label": "Tamano",
-        "min": 30,
-        "max": 120,
-        "step": 10,
-        "default": 40,
-        "unit": "px"
-      },
-      {
-        "type": "header",
-        "content": "Decoracion 3"
+        "id": "deco_image_2",
+        "label": "Imagen 2"
       },
       {
         "type": "image_picker",
-        "id": "deco_3_image",
-        "label": "Imagen o icono"
-      },
-      {
-        "type": "select",
-        "id": "deco_3_position",
-        "label": "Posicion",
-        "options": [
-          { "value": "top-left", "label": "Arriba izquierda" },
-          { "value": "top-right", "label": "Arriba derecha" },
-          { "value": "bottom-left", "label": "Abajo izquierda" },
-          { "value": "bottom-right", "label": "Abajo derecha" }
-        ],
-        "default": "top-left"
-      },
-      {
-        "type": "range",
-        "id": "deco_3_size",
-        "label": "Tamano",
-        "min": 30,
-        "max": 120,
-        "step": 10,
-        "default": 60,
-        "unit": "px"
-      },
-      {
-        "type": "header",
-        "content": "Decoracion 4"
+        "id": "deco_image_3",
+        "label": "Imagen 3"
       },
       {
         "type": "image_picker",
-        "id": "deco_4_image",
-        "label": "Imagen o icono"
+        "id": "deco_image_4",
+        "label": "Imagen 4"
       },
       {
-        "type": "select",
-        "id": "deco_4_position",
-        "label": "Posicion",
-        "options": [
-          { "value": "top-left", "label": "Arriba izquierda" },
-          { "value": "top-right", "label": "Arriba derecha" },
-          { "value": "bottom-left", "label": "Abajo izquierda" },
-          { "value": "bottom-right", "label": "Abajo derecha" }
-        ],
-        "default": "bottom-right"
+        "type": "image_picker",
+        "id": "deco_image_5",
+        "label": "Imagen 5"
       },
       {
-        "type": "range",
-        "id": "deco_4_size",
-        "label": "Tamano",
-        "min": 30,
-        "max": 120,
-        "step": 10,
-        "default": 40,
-        "unit": "px"
+        "type": "image_picker",
+        "id": "deco_image_6",
+        "label": "Imagen 6"
+      },
+      {
+        "type": "image_picker",
+        "id": "deco_image_7",
+        "label": "Imagen 7"
+      },
+      {
+        "type": "image_picker",
+        "id": "deco_image_8",
+        "label": "Imagen 8"
+      },
+      {
+        "type": "image_picker",
+        "id": "deco_image_9",
+        "label": "Imagen 9"
+      },
+      {
+        "type": "image_picker",
+        "id": "deco_image_10",
+        "label": "Imagen 10"
+      },
+      {
+        "type": "image_picker",
+        "id": "deco_image_11",
+        "label": "Imagen 11"
+      },
+      {
+        "type": "image_picker",
+        "id": "deco_image_12",
+        "label": "Imagen 12"
       }
     ]
   }

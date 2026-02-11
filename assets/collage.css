@@ -358,7 +358,10 @@
   background: linear-gradient(135deg, rgba(var(--color-accent-rgb), 0.2) 0%, rgba(var(--color-accent-rgb), 0.05) 100%);
 }
 
-/* ===== Global Decorations ===== */
+/* =============================================
+   RANDOM DECORATIONS WITH DEPTH
+   ============================================= */
+
 .collage-decorations {
   position: fixed;
   top: 0;
@@ -370,57 +373,82 @@
   overflow: hidden;
 }
 
-/* =============================================
-   CONFIGURABLE GLOBAL DECORATIONS
-   ============================================= */
-
 .global-deco {
   position: fixed;
-  z-index: -1;
   pointer-events: none;
-  opacity: 0.7;
-  animation: float 6s ease-in-out infinite;
+  opacity: 0;
+  transition: opacity 0.5s ease;
+}
+
+.global-deco.is-visible {
+  opacity: 1;
 }
 
 .global-deco img {
-  width: var(--deco-size, 50px);
-  height: var(--deco-size, 50px);
+  width: var(--deco-size);
+  height: var(--deco-size);
   object-fit: contain;
 }
 
-/* Position variants */
-.global-deco--top-left {
-  top: 12%;
-  left: 4%;
+/* === DEPTH LAYERS === */
+
+/* Far - small, faint, slow float */
+.global-deco--far {
+  --deco-size: 70px;
+  z-index: -3;
+  filter: blur(0.5px);
+  animation: float-slow 12s ease-in-out infinite;
+}
+.global-deco--far.is-visible {
+  opacity: 0.25;
 }
 
-.global-deco--top-right {
-  top: 15%;
-  right: 6%;
+/* Mid - medium size and visibility */
+.global-deco--mid {
+  --deco-size: 110px;
+  z-index: -2;
+  animation: float 8s ease-in-out infinite;
+}
+.global-deco--mid.is-visible {
+  opacity: 0.45;
 }
 
-.global-deco--bottom-left {
-  bottom: 18%;
-  left: 5%;
+/* Near - larger, more visible, faster */
+.global-deco--near {
+  --deco-size: 150px;
+  z-index: -1;
+  animation: float-fast 5s ease-in-out infinite;
+}
+.global-deco--near.is-visible {
+  opacity: 0.65;
 }
 
-.global-deco--bottom-right {
-  bottom: 12%;
-  right: 4%;
+/* === SLOT POSITIONS (distributed across screen) === */
+.global-deco--slot-1 { top: 8%; left: 3%; }
+.global-deco--slot-2 { bottom: 12%; right: 4%; }
+.global-deco--slot-3 { top: 22%; right: 6%; }
+.global-deco--slot-4 { bottom: 28%; left: 5%; }
+.global-deco--slot-5 { top: 50%; right: 3%; }
+.global-deco--slot-6 { bottom: 45%; left: 4%; }
+
+/* === ANIMATIONS === */
+@keyframes float-slow {
+  0%, 100% { transform: translateY(0) rotate(0deg); }
+  50% { transform: translateY(-6px) rotate(2deg); }
 }
 
-/* Hide on mobile for cleaner look */
+@keyframes float-fast {
+  0%, 100% { transform: translateY(0) rotate(0deg); }
+  50% { transform: translateY(-18px) rotate(3deg); }
+}
+
+/* Hide on mobile */
 @media screen and (max-width: 749px) {
-  .global-deco {
-    display: none;
-  }
+  .global-deco { display: none; }
 }
 
-/* Respect reduced motion preference */
 @media (prefers-reduced-motion: reduce) {
-  .global-deco {
-    animation: none;
-  }
+  .global-deco { animation: none; }
 }
 
 /* ===== Doodle Elements ===== */
