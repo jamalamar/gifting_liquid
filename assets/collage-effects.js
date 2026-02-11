@@ -191,6 +191,79 @@ class Carousel {
   }
 }
 
+// Hero Carousel with fade transition
+class HeroCarousel {
+  constructor(container) {
+    this.container = container;
+    this.slides = container.querySelectorAll('.hero__slide');
+    this.dots = container.querySelectorAll('.hero__dot');
+    this.currentIndex = 0;
+    this.autoPlayInterval = null;
+    this.autoPlaySpeed = parseInt(container.closest('[data-section-id]')?.querySelector('[data-autoplay-speed]')?.dataset.autoplaySpeed) || 4000;
+
+    this.init();
+  }
+
+  init() {
+    if (this.slides.length <= 1) return;
+
+    // Bind dot clicks
+    this.dots.forEach((dot, index) => {
+      dot.addEventListener('click', () => {
+        this.goToSlide(index);
+        this.resetAutoPlay();
+      });
+    });
+
+    // Start autoplay
+    this.startAutoPlay();
+
+    // Pause on hover
+    this.container.addEventListener('mouseenter', () => this.pauseAutoPlay());
+    this.container.addEventListener('mouseleave', () => this.startAutoPlay());
+  }
+
+  goToSlide(index) {
+    // Remove active from current
+    this.slides[this.currentIndex].classList.remove('is-active');
+    this.dots[this.currentIndex]?.classList.remove('is-active');
+
+    // Update index
+    this.currentIndex = index;
+
+    // Add active to new slide
+    this.slides[this.currentIndex].classList.add('is-active');
+    this.dots[this.currentIndex]?.classList.add('is-active');
+  }
+
+  nextSlide() {
+    const nextIndex = (this.currentIndex + 1) % this.slides.length;
+    this.goToSlide(nextIndex);
+  }
+
+  prevSlide() {
+    const prevIndex = (this.currentIndex - 1 + this.slides.length) % this.slides.length;
+    this.goToSlide(prevIndex);
+  }
+
+  startAutoPlay() {
+    if (this.autoPlayInterval) return;
+    this.autoPlayInterval = setInterval(() => this.nextSlide(), this.autoPlaySpeed);
+  }
+
+  pauseAutoPlay() {
+    if (this.autoPlayInterval) {
+      clearInterval(this.autoPlayInterval);
+      this.autoPlayInterval = null;
+    }
+  }
+
+  resetAutoPlay() {
+    this.pauseAutoPlay();
+    this.startAutoPlay();
+  }
+}
+
 // Add CSS for legacy animations
 const style = document.createElement('style');
 style.textContent = `
@@ -268,5 +341,10 @@ document.addEventListener('DOMContentLoaded', () => {
   // Initialize carousels
   document.querySelectorAll('[data-carousel]').forEach(carousel => {
     new Carousel(carousel);
+  });
+
+  // Initialize hero carousels
+  document.querySelectorAll('[data-hero-carousel]').forEach(heroCarousel => {
+    new HeroCarousel(heroCarousel);
   });
 });

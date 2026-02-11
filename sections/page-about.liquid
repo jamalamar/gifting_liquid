@@ -13,18 +13,17 @@
     </div>
     <div class="about-hero__image">
       {%- if section.settings.hero_image != blank -%}
-        <div class="about-hero__image-wrapper collage-photo collage-photo--tape">
+        <div class="about-hero__image-wrapper collage-photo collage-photo--style-2">
           <img src="{{ section.settings.hero_image | image_url: width: 800 }}" alt="Gifting Marketplace" loading="eager">
         </div>
       {%- else -%}
-        <div class="about-hero__image-wrapper collage-photo collage-photo--tape about-hero__placeholder">
+        <div class="about-hero__image-wrapper collage-photo collage-photo--style-2 about-hero__placeholder">
           <div class="image-placeholder">
             {% render 'icon-gift' %}
             <span>Hero Image</span>
           </div>
         </div>
       {%- endif -%}
-      <div class="about-hero__tape collage-element collage-element--tape"></div>
     </div>
   </div>
 
@@ -155,11 +154,11 @@
   <div class="about-team">
     <div class="about-team__image">
       {%- if section.settings.team_image != blank -%}
-        <div class="about-team__photo collage-photo collage-photo--tape">
+        <div class="about-team__photo collage-photo collage-photo--style-2">
           <img src="{{ section.settings.team_image | image_url: width: 800 }}" alt="El Equipo" loading="lazy">
         </div>
       {%- else -%}
-        <div class="about-team__photo collage-photo collage-photo--tape about-team__placeholder">
+        <div class="about-team__photo collage-photo collage-photo--style-2 about-team__placeholder">
           <div class="image-placeholder">
             {% render 'icon-user' %}
             <span>Team Photo</span>

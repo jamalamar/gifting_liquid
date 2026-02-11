@@ -6,8 +6,30 @@
         "tag": "Elige, personaliza y regala",
         "headline": "El regalo perfecto sí existe. Y está aquí.",
         "subheadline": "Arma cajas de regalo únicas con productos de emprendedores locales. Tú eliges, nosotros lo hacemos realidad.",
-        "cta_text": "Empezar a armar mi regalo"
-      }
+        "cta_text": "Empezar a armar mi regalo",
+        "autoplay_speed": 4
+      },
+      "blocks": {
+        "slide-1": {
+          "type": "slide",
+          "settings": {
+            "title": "Caja del mes"
+          }
+        },
+        "slide-2": {
+          "type": "slide",
+          "settings": {
+            "title": "Edición especial"
+          }
+        },
+        "slide-3": {
+          "type": "slide",
+          "settings": {
+            "title": "Para ella"
+          }
+        }
+      },
+      "block_order": ["slide-1", "slide-2", "slide-3"]
     },
     "categories": {
       "type": "categories",

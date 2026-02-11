@@ -22,10 +22,6 @@ body {
   font-weight: var(--font-body-weight);
   color: var(--color-text);
   background-color: var(--color-background);
-  background-image:
-    linear-gradient(90deg, transparent 0%, transparent 50%, rgba(0,0,0,0.012) 50%),
-    linear-gradient(transparent 0%, transparent 50%, rgba(0,0,0,0.008) 50%);
-  background-size: 4px 4px;
   line-height: 1.6;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
@@ -140,20 +136,22 @@ section {
   margin: 0 auto;
 }
 
-/* Buttons */
+/* Buttons - Rounded Pills */
 .btn {
   display: inline-flex;
   align-items: center;
   justify-content: center;
   gap: 0.5rem;
-  padding: 0.875rem 1.5rem;
+  padding: 1rem 2rem;
+  font-family: var(--font-heading);
   font-size: 1rem;
   font-weight: 600;
   text-align: center;
-  border-radius: var(--radius-md);
-  transition: all var(--transition-base);
+  border-radius: 100px;
+  transition: all 0.3s ease;
   cursor: pointer;
   border: 2px solid transparent;
+  text-decoration: none;
 }
 
 .btn--primary {
@@ -167,7 +165,7 @@ section {
   border-color: var(--color-secondary);
   color: var(--color-white);
   transform: translateY(-2px);
-  box-shadow: var(--shadow-md);
+  box-shadow: 0 4px 12px rgba(172, 81, 52, 0.3);
 }
 
 .btn--secondary {
@@ -183,7 +181,7 @@ section {
 }
 
 .btn--large {
-  padding: 1rem 2rem;
+  padding: 1.125rem 2.5rem;
   font-size: 1.125rem;
 }
 

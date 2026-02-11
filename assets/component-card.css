@@ -72,7 +72,6 @@
 
 .logo-gift {
   color: var(--color-navy);
-  font-style: italic;
 }
 
 .logo-ing {
@@ -639,15 +638,7 @@
 }
 
 /* Footer Decoration Positions */
-.footer-tape-1 {
-  position: absolute;
-  top: 15%;
-  right: 10%;
-  width: 80px;
-  height: 20px;
-  background: rgba(255, 255, 255, 0.04);
-  transform: rotate(-25deg);
-}
+/* .footer-tape-1 removed from design */
 
 .footer-doodle-1 {
   position: absolute;
@@ -812,11 +803,7 @@
   color: var(--color-primary);
 }
 
-.product-card__tape {
-  top: -8px;
-  left: 50%;
-  transform: translateX(-50%) rotate(2deg);
-}
+/* .product-card__tape removed from design */
 
 .product-card__placeholder {
   display: flex;
@@ -882,6 +869,162 @@
   position: relative;
 }
 
+/* Hero Carousel */
+.hero__carousel {
+  position: relative;
+  width: 100%;
+  max-width: 500px;
+  margin: 0 auto;
+}
+
+.hero__carousel-track {
+  position: relative;
+  aspect-ratio: 4/5;
+  overflow: hidden;
+  border-radius: var(--radius-lg);
+  box-shadow: var(--shadow-lg);
+  background: var(--color-background-alt);
+}
+
+.hero__slide {
+  position: absolute;
+  inset: 0;
+  opacity: 0;
+  transition: opacity 0.6s ease;
+}
+
+.hero__slide.is-active {
+  opacity: 1;
+}
+
+.hero__slide-image {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.hero__slide-placeholder {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 1rem;
+  width: 100%;
+  height: 100%;
+  background: var(--color-background-alt);
+  color: var(--color-accent);
+}
+
+.hero__slide-placeholder .icon {
+  width: 4rem;
+  height: 4rem;
+}
+
+.hero__slide-label {
+  position: absolute;
+  bottom: 1.5rem;
+  left: 1.5rem;
+  z-index: 2;
+}
+
+.hero__carousel-dots {
+  display: flex;
+  justify-content: center;
+  gap: 0.75rem;
+  margin-top: 1.5rem;
+}
+
+.hero__dot {
+  width: 12px;
+  height: 12px;
+  border-radius: 50%;
+  background: var(--color-accent);
+  border: 2px solid var(--color-navy);
+  cursor: pointer;
+  transition: all 0.3s ease;
+  padding: 0;
+}
+
+.hero__dot:hover {
+  background: var(--color-primary);
+  border-color: var(--color-primary);
+  transform: scale(1.2);
+}
+
+.hero__dot.is-active {
+  background: var(--color-primary);
+  border-color: var(--color-primary);
+}
+
+.hero__carousel-placeholder {
+  width: 100%;
+  max-width: 500px;
+  margin: 0 auto;
+  aspect-ratio: 4/5;
+  border-radius: var(--radius-lg);
+  overflow: hidden;
+}
+
+/* Hero Decorations */
+.hero__decorations {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  pointer-events: none;
+  overflow: hidden;
+}
+
+.hero-star-1 {
+  position: absolute;
+  top: 15%;
+  right: 10%;
+  width: 30px;
+  height: 30px;
+  color: var(--color-accent);
+  animation: float 4s ease-in-out infinite;
+}
+
+.hero-dot-1,
+.hero-dot-2 {
+  position: absolute;
+  border-radius: 50%;
+  background: var(--color-primary);
+  opacity: 0.2;
+}
+
+.hero-dot-1 {
+  bottom: 20%;
+  left: 5%;
+  width: 12px;
+  height: 12px;
+}
+
+.hero-dot-2 {
+  top: 30%;
+  left: 15%;
+  width: 8px;
+  height: 8px;
+}
+
+@media screen and (max-width: 989px) {
+  .hero__carousel {
+    max-width: 400px;
+  }
+}
+
+@media screen and (max-width: 749px) {
+  .hero__carousel {
+    max-width: 100%;
+  }
+
+  .hero__carousel-track {
+    aspect-ratio: 3/4;
+  }
+}
+
+/* Legacy collage styles (kept for backwards compatibility) */
 .hero__image-collage {
   position: relative;
   min-height: 480px;
@@ -5037,7 +5180,6 @@ section.sell-page {
   line-height: 1.7;
   color: var(--color-text);
   margin: 0 0 var(--spacing-md);
-  font-style: italic;
 }
 
 .sell-testimonial__author {
@@ -6903,7 +7045,6 @@ section.sell-page {
   font-size: 0.9rem;
   color: var(--color-primary);
   margin: 0 0 0.5rem;
-  font-style: italic;
 }
 
 .creator-card__story {

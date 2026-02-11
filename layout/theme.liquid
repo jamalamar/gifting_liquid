@@ -17,6 +17,12 @@
     <link rel="preconnect" href="https://fonts.shopifycdn.com" crossorigin>
   {%- endunless -%}
 
+  <!-- Custom Fonts: Aileron (headings) & Kalam (body) -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Kalam:wght@300;400;700&display=swap" rel="stylesheet">
+  <link href="https://fonts.cdnfonts.com/css/aileron" rel="stylesheet">
+
   <title>
     {{ page_title }}
     {%- if current_tags %} &ndash; tagged "{{ current_tags | join: ', ' }}"{% endif -%}
@@ -70,12 +76,12 @@
       --color-bg-alt: #f8f8f8;
       --color-primary-light: rgba(var(--color-primary-rgb), 0.1);
 
-      /* Fonts */
-      --font-heading: {{ font_heading.family }}, {{ font_heading.fallback_families }};
-      --font-body: {{ font_body.family }}, {{ font_body.fallback_families }};
-      --font-accent: {{ font_accent.family }}, {{ font_accent.fallback_families }};
-      --font-heading-weight: {{ font_heading.weight }};
-      --font-body-weight: {{ font_body.weight }};
+      /* Fonts - Custom: Aileron (headings) + Kalam (body) */
+      --font-heading: 'Aileron', sans-serif;
+      --font-body: 'Kalam', cursive;
+      --font-accent: 'Kalam', cursive;
+      --font-heading-weight: 700;
+      --font-body-weight: 400;
 
       /* Spacing */
       --spacing-xs: 0.5rem;
