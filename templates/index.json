@@ -40,8 +40,8 @@
         "view_all_text": "Ver todas las categorías"
       },
       "blocks": {
-        "cat-1": { "type": "category", "settings": { "name": "Para ella", "tagline": "Encuentra el regalo perfecto para las mujeres especiales en tu vida", "style": "tape", "link": "/collections/para-ella" } },
-        "cat-2": { "type": "category", "settings": { "name": "Para él", "tagline": "Detalles únicos para los hombres que más quieres", "style": "polaroid", "link": "/collections/para-el" } }
+        "cat-1": { "type": "category", "settings": { "name": "Para ella", "tagline": "Encuentra el regalo perfecto para las mujeres especiales en tu vida", "link": "/collections/para-ella" } },
+        "cat-2": { "type": "category", "settings": { "name": "Para él", "tagline": "Detalles únicos para los hombres que más quieres", "link": "/collections/para-el" } }
       },
       "block_order": ["cat-1", "cat-2"]
     },

@@ -7,15 +7,15 @@
 
     <div class="categories__grid">
       {%- for block in section.blocks -%}
-        <a href="{{ block.settings.link | default: '#' }}" class="category-card collage-card collage-card--{{ forloop.index | modulo: 4 | plus: 1 }} animate-item" style="--i:{{ forloop.index }}" {{ block.shopify_attributes }}>
+        <a href="{{ block.settings.link | default: '#' }}" class="category-card animate-item" style="--i:{{ forloop.index }}" {{ block.shopify_attributes }}>
           <div class="category-card__inner">
-            <div class="category-card__image-wrapper collage-photo collage-photo--{{ block.settings.style | default: 'tape' }}">
+            <div class="category-card__image-wrapper">
               {%- if block.settings.image != blank -%}
                 <img
-                  src="{{ block.settings.image | image_url: width: 400 }}"
+                  src="{{ block.settings.image | image_url: width: 600 }}"
                   alt="{{ block.settings.name }}"
-                  width="200"
-                  height="250"
+                  width="400"
+                  height="500"
                   loading="lazy"
                   class="category-card__image"
                 >
@@ -24,13 +24,21 @@
                   {% render 'icon-gift' %}
                 </div>
               {%- endif -%}
+              <span class="category-card__label">
+                {%- if block.settings.name contains 'ella' or block.settings.name contains 'Ella' -%}
+                  {% render 'icon-heart' %}
+                {%- else -%}
+                  {% render 'icon-sparkle' %}
+                {%- endif -%}
+                {{ block.settings.name }}
+              </span>
+              <div class="category-card__sticker">
+                {% render 'icon-arrow-right' %}
+              </div>
             </div>
             <div class="category-card__content">
               <h3 class="category-card__name">{{ block.settings.name }}</h3>
               <p class="category-card__tagline">{{ block.settings.tagline }}</p>
-            </div>
-            <div class="category-card__sticker collage-sticker collage-sticker--small">
-              {% render 'icon-arrow-right' %}
             </div>
           </div>
         </a>
@@ -117,18 +125,6 @@
           "type": "url",
           "id": "link",
           "label": "Enlace"
-        },
-        {
-          "type": "select",
-          "id": "style",
-          "label": "Estilo de foto",
-          "options": [
-            { "value": "tape", "label": "Con cinta" },
-            { "value": "pin", "label": "Con pin" },
-            { "value": "polaroid", "label": "Polaroid" },
-            { "value": "torn", "label": "Rasgado" }
-          ],
-          "default": "tape"
         }
       ]
     }
