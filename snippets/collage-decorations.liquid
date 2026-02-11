@@ -1,22 +1,29 @@
 {%- comment -%}
-  Global collage decoration elements for the digital collage style
-  These are positioned fixed/absolute across the page
+  Configurable global decorations - renders images from theme settings
 {%- endcomment -%}
 
 <div class="collage-decorations" aria-hidden="true">
-  <div class="collage-deco collage-deco--paper-1"></div>
-  <div class="collage-deco collage-deco--paper-2"></div>
-  <div class="collage-deco collage-deco--star-1">
-    <svg viewBox="0 0 24 24" fill="currentColor">
-      <path d="M12 2L15.09 8.26L22 9.27L17 14.14L18.18 21.02L12 17.77L5.82 21.02L7 14.14L2 9.27L8.91 8.26L12 2Z"/>
-    </svg>
-  </div>
-  <div class="collage-deco collage-deco--star-2">
-    <svg viewBox="0 0 24 24" fill="currentColor">
-      <path d="M12 2L15.09 8.26L22 9.27L17 14.14L18.18 21.02L12 17.77L5.82 21.02L7 14.14L2 9.27L8.91 8.26L12 2Z"/>
-    </svg>
-  </div>
-  <div class="collage-deco collage-deco--dot-1"></div>
-  <div class="collage-deco collage-deco--dot-2"></div>
-  <div class="collage-deco collage-deco--dot-3"></div>
+  {%- if settings.deco_1_image != blank -%}
+    <div class="global-deco global-deco--{{ settings.deco_1_position | default: 'top-right' }}" style="--deco-size: {{ settings.deco_1_size | default: 50 }}px;">
+      <img src="{{ settings.deco_1_image | image_url: width: 240 }}" alt="" loading="lazy">
+    </div>
+  {%- endif -%}
+
+  {%- if settings.deco_2_image != blank -%}
+    <div class="global-deco global-deco--{{ settings.deco_2_position | default: 'bottom-left' }}" style="--deco-size: {{ settings.deco_2_size | default: 40 }}px; animation-delay: 1.5s;">
+      <img src="{{ settings.deco_2_image | image_url: width: 240 }}" alt="" loading="lazy">
+    </div>
+  {%- endif -%}
+
+  {%- if settings.deco_3_image != blank -%}
+    <div class="global-deco global-deco--{{ settings.deco_3_position | default: 'top-left' }}" style="--deco-size: {{ settings.deco_3_size | default: 60 }}px; animation-delay: 3s;">
+      <img src="{{ settings.deco_3_image | image_url: width: 240 }}" alt="" loading="lazy">
+    </div>
+  {%- endif -%}
+
+  {%- if settings.deco_4_image != blank -%}
+    <div class="global-deco global-deco--{{ settings.deco_4_position | default: 'bottom-right' }}" style="--deco-size: {{ settings.deco_4_size | default: 40 }}px; animation-delay: 4.5s;">
+      <img src="{{ settings.deco_4_image | image_url: width: 240 }}" alt="" loading="lazy">
+    </div>
+  {%- endif -%}
 </div>

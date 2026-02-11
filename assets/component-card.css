@@ -637,27 +637,6 @@
   color: var(--color-accent);
 }
 
-/* Footer Decoration Positions */
-/* .footer-tape-1 removed from design */
-
-.footer-doodle-1 {
-  position: absolute;
-  bottom: 20%;
-  left: 3%;
-  width: 80px;
-  height: 80px;
-  color: var(--color-white);
-}
-
-.footer-doodle-2 {
-  position: absolute;
-  top: 30%;
-  right: 3%;
-  width: 50px;
-  height: 50px;
-  color: var(--color-white);
-}
-
 /* ===== Product Card ===== */
 .product-card {
   display: block;
@@ -963,49 +942,6 @@
   aspect-ratio: 4/5;
   border-radius: var(--radius-lg);
   overflow: hidden;
-}
-
-/* Hero Decorations */
-.hero__decorations {
-  position: absolute;
-  top: 0;
-  left: 0;
-  right: 0;
-  bottom: 0;
-  pointer-events: none;
-  overflow: hidden;
-}
-
-.hero-star-1 {
-  position: absolute;
-  top: 15%;
-  right: 10%;
-  width: 30px;
-  height: 30px;
-  color: var(--color-accent);
-  animation: float 4s ease-in-out infinite;
-}
-
-.hero-dot-1,
-.hero-dot-2 {
-  position: absolute;
-  border-radius: 50%;
-  background: var(--color-primary);
-  opacity: 0.2;
-}
-
-.hero-dot-1 {
-  bottom: 20%;
-  left: 5%;
-  width: 12px;
-  height: 12px;
-}
-
-.hero-dot-2 {
-  top: 30%;
-  left: 15%;
-  width: 8px;
-  height: 8px;
 }
 
 @media screen and (max-width: 989px) {

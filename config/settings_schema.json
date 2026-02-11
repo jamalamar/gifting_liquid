@@ -214,45 +214,135 @@
     ]
   },
   {
-    "name": "Estilo collage",
+    "name": "Decoraciones de fondo",
     "settings": [
       {
+        "type": "paragraph",
+        "content": "Sube imagenes o iconos para decorar el fondo del sitio. Cada decoracion aparece flotando en el fondo."
+      },
+      {
         "type": "header",
-        "content": "Elementos decorativos"
+        "content": "Decoracion 1"
       },
       {
-        "type": "checkbox",
-        "id": "show_collage_elements",
-        "label": "Mostrar elementos de collage",
-        "default": true
+        "type": "image_picker",
+        "id": "deco_1_image",
+        "label": "Imagen o icono"
       },
       {
-        "type": "checkbox",
-        "id": "show_paper_textures",
-        "label": "Mostrar texturas de papel",
-        "default": true
-      },
-      {
-        "type": "checkbox",
-        "id": "show_tape_elements",
-        "label": "Mostrar elementos de cinta adhesiva",
-        "default": true
-      },
-      {
-        "type": "checkbox",
-        "id": "show_sticker_effects",
-        "label": "Mostrar efectos de sticker",
-        "default": true
+        "type": "select",
+        "id": "deco_1_position",
+        "label": "Posicion",
+        "options": [
+          { "value": "top-left", "label": "Arriba izquierda" },
+          { "value": "top-right", "label": "Arriba derecha" },
+          { "value": "bottom-left", "label": "Abajo izquierda" },
+          { "value": "bottom-right", "label": "Abajo derecha" }
+        ],
+        "default": "top-right"
       },
       {
         "type": "range",
-        "id": "collage_rotation_max",
-        "label": "Rotacion maxima de elementos",
-        "min": 0,
-        "max": 15,
-        "step": 1,
-        "default": 5,
-        "unit": "deg"
+        "id": "deco_1_size",
+        "label": "Tamano",
+        "min": 30,
+        "max": 120,
+        "step": 10,
+        "default": 50,
+        "unit": "px"
+      },
+      {
+        "type": "header",
+        "content": "Decoracion 2"
+      },
+      {
+        "type": "image_picker",
+        "id": "deco_2_image",
+        "label": "Imagen o icono"
+      },
+      {
+        "type": "select",
+        "id": "deco_2_position",
+        "label": "Posicion",
+        "options": [
+          { "value": "top-left", "label": "Arriba izquierda" },
+          { "value": "top-right", "label": "Arriba derecha" },
+          { "value": "bottom-left", "label": "Abajo izquierda" },
+          { "value": "bottom-right", "label": "Abajo derecha" }
+        ],
+        "default": "bottom-left"
+      },
+      {
+        "type": "range",
+        "id": "deco_2_size",
+        "label": "Tamano",
+        "min": 30,
+        "max": 120,
+        "step": 10,
+        "default": 40,
+        "unit": "px"
+      },
+      {
+        "type": "header",
+        "content": "Decoracion 3"
+      },
+      {
+        "type": "image_picker",
+        "id": "deco_3_image",
+        "label": "Imagen o icono"
+      },
+      {
+        "type": "select",
+        "id": "deco_3_position",
+        "label": "Posicion",
+        "options": [
+          { "value": "top-left", "label": "Arriba izquierda" },
+          { "value": "top-right", "label": "Arriba derecha" },
+          { "value": "bottom-left", "label": "Abajo izquierda" },
+          { "value": "bottom-right", "label": "Abajo derecha" }
+        ],
+        "default": "top-left"
+      },
+      {
+        "type": "range",
+        "id": "deco_3_size",
+        "label": "Tamano",
+        "min": 30,
+        "max": 120,
+        "step": 10,
+        "default": 60,
+        "unit": "px"
+      },
+      {
+        "type": "header",
+        "content": "Decoracion 4"
+      },
+      {
+        "type": "image_picker",
+        "id": "deco_4_image",
+        "label": "Imagen o icono"
+      },
+      {
+        "type": "select",
+        "id": "deco_4_position",
+        "label": "Posicion",
+        "options": [
+          { "value": "top-left", "label": "Arriba izquierda" },
+          { "value": "top-right", "label": "Arriba derecha" },
+          { "value": "bottom-left", "label": "Abajo izquierda" },
+          { "value": "bottom-right", "label": "Abajo derecha" }
+        ],
+        "default": "bottom-right"
+      },
+      {
+        "type": "range",
+        "id": "deco_4_size",
+        "label": "Tamano",
+        "min": 30,
+        "max": 120,
+        "step": 10,
+        "default": 40,
+        "unit": "px"
       }
     ]
   }
