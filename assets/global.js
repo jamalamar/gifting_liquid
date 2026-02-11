@@ -775,6 +775,10 @@ class CollectionFilters {
     this.filterCount = this.section.querySelector('[data-filter-count]');
     this.applyButton = this.section.querySelector('[data-apply-filters]');
 
+    // Guided filters (catalog page)
+    this.guidedFiltersContainer = this.section.querySelector('[data-guided-filters]');
+    this.clearGuidedButton = this.section.querySelector('[data-clear-guided-filters]');
+
     // State
     this.isLoading = false;
     this.searchQuery = '';
@@ -792,6 +796,7 @@ class CollectionFilters {
     this.bindSearch();
     this.bindPagination();
     this.bindActiveFilters();
+    this.bindGuidedChips();
     this.updateFilterCount();
   }
 
@@ -1023,6 +1028,110 @@ class CollectionFilters {
     });
   }
 
+  // ========== GUIDED CHIPS (Catalog Page) ==========
+  bindGuidedChips() {
+    if (!this.guidedFiltersContainer) return;
+
+    // Event delegation for chip clicks
+    this.guidedFiltersContainer.addEventListener('click', (e) => {
+      const chip = e.target.closest('[data-guided-chip]');
+      if (chip) {
+        e.preventDefault();
+        this.handleGuidedChipClick(chip);
+      }
+    });
+
+    // Clear guided filters button
+    this.clearGuidedButton?.addEventListener('click', () => {
+      this.clearAllGuidedFilters();
+    });
+  }
+
+  handleGuidedChipClick(chip) {
+    const tagValue = chip.dataset.tagValue;
+    const filterType = chip.dataset.filterType;
+    const isActive = chip.classList.contains('is-active');
+
+    // For recipient: single select (toggle off others in same group)
+    if (filterType === 'recipient' && !isActive) {
+      this.clearGuidedGroup('recipient');
+    }
+
+    // Toggle the clicked chip
+    chip.classList.toggle('is-active');
+    chip.setAttribute('aria-pressed', !isActive);
+
+    // Apply filters via AJAX
+    this.applyGuidedFilters();
+  }
+
+  clearGuidedGroup(filterType) {
+    const chips = this.guidedFiltersContainer?.querySelectorAll(
+      `[data-filter-type="${filterType}"][data-guided-chip].is-active`
+    );
+    chips?.forEach(chip => {
+      chip.classList.remove('is-active');
+      chip.setAttribute('aria-pressed', 'false');
+    });
+  }
+
+  clearAllGuidedFilters() {
+    const allChips = this.guidedFiltersContainer?.querySelectorAll('[data-guided-chip].is-active');
+    allChips?.forEach(chip => {
+      chip.classList.remove('is-active');
+      chip.setAttribute('aria-pressed', 'false');
+    });
+
+    this.applyGuidedFilters();
+  }
+
+  applyGuidedFilters() {
+    const url = this.buildUrlWithGuidedFilters();
+    // Reset to page 1 when filters change
+    url.searchParams.delete('page');
+    this.fetchAndRender(url);
+  }
+
+  buildUrlWithGuidedFilters() {
+    const url = new URL(this.collectionUrl, window.location.origin);
+
+    // Clear existing tag filters
+    const keysToDelete = [];
+    for (const key of url.searchParams.keys()) {
+      if (key.startsWith('filter.v.tag')) keysToDelete.push(key);
+    }
+    keysToDelete.forEach(key => url.searchParams.delete(key));
+
+    // Add active guided chip filters
+    const activeChips = this.guidedFiltersContainer?.querySelectorAll('[data-guided-chip].is-active');
+    activeChips?.forEach(chip => {
+      url.searchParams.append('filter.v.tag', chip.dataset.tagValue);
+    });
+
+    // Preserve sort
+    if (this.sortSelect?.value) {
+      url.searchParams.set('sort_by', this.sortSelect.value);
+    }
+
+    // Preserve other filters (price, etc.)
+    this.section.querySelectorAll('[data-filter-checkbox]:checked').forEach(checkbox => {
+      if (!checkbox.name.includes('filter.v.tag')) {
+        url.searchParams.append(checkbox.name, checkbox.value);
+      }
+    });
+
+    const minPrice = this.section.querySelector('[data-filter-price-min]');
+    const maxPrice = this.section.querySelector('[data-filter-price-max]');
+    if (minPrice?.value) {
+      url.searchParams.set(minPrice.name, Math.round(parseFloat(minPrice.value) * 100));
+    }
+    if (maxPrice?.value) {
+      url.searchParams.set(maxPrice.name, Math.round(parseFloat(maxPrice.value) * 100));
+    }
+
+    return url;
+  }
+
   removeFilter(paramName, value) {
     // Handle price range specially
     if (paramName === 'filter.v.price' || value === 'price') {
@@ -1192,6 +1301,28 @@ class CollectionFilters {
       this.applyButton.textContent = newApplyButton.textContent;
     }
 
+    // Update guided chips state (catalog page)
+    const newGuidedFilters = doc.querySelector('[data-guided-filters]');
+    if (newGuidedFilters && this.guidedFiltersContainer) {
+      // Update chip active states from new HTML
+      const newChips = newGuidedFilters.querySelectorAll('[data-guided-chip]');
+      newChips.forEach(newChip => {
+        const tagValue = newChip.dataset.tagValue;
+        const currentChip = this.guidedFiltersContainer.querySelector(`[data-tag-value="${tagValue}"]`);
+        if (currentChip) {
+          const isActive = newChip.classList.contains('is-active');
+          currentChip.classList.toggle('is-active', isActive);
+          currentChip.setAttribute('aria-pressed', isActive);
+        }
+      });
+
+      // Update clear button visibility
+      const newClearButton = doc.querySelector('[data-clear-guided-filters]');
+      if (newClearButton && this.clearGuidedButton) {
+        this.clearGuidedButton.hidden = newClearButton.hidden;
+      }
+    }
+
     // Update products container reference (it was replaced)
     this.productsContainer = this.section.querySelector('[data-products-container]');
 
@@ -1209,6 +1340,7 @@ class CollectionFilters {
     this.isLoading = loading;
     this.section.classList.toggle('is-loading', loading);
     this.productGrid?.setAttribute('aria-busy', loading);
+    this.guidedFiltersContainer?.classList.toggle('is-loading', loading);
   }
 
   updateFilterCount() {

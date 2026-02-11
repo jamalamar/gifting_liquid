@@ -1,0 +1,405 @@
+{{ 'collection-catalogo.css' | asset_url | stylesheet_tag }}
+
+<section class="collection-page collection-page--catalogo" data-section-id="{{ section.id }}" data-collection-url="{{ collection.url }}" data-ajax-collection>
+
+  <!-- Collection Hero with Background -->
+  {%- assign hero_image = section.settings.background_image | default: collection.image -%}
+  <div class="collection-hero{% if hero_image %} collection-hero--has-bg{% endif %}">
+    {%- if hero_image -%}
+      <div class="collection-hero__bg">
+        <img
+          src="{{ hero_image | image_url: width: 1920 }}"
+          alt="{{ collection.title }}"
+          loading="eager"
+          class="collection-hero__bg-image"
+        >
+        <div class="collection-hero__overlay"></div>
+      </div>
+    {%- endif -%}
+    <div class="container">
+      <div class="collection-hero__content">
+        <div class="collection-hero__tag collage-sticker collage-sticker--handwritten">
+          {% render 'icon-sparkle' %}
+          <span>Catálogo</span>
+        </div>
+        <h1 class="collection-hero__title">{{ collection.title }}</h1>
+        {%- if collection.description != blank -%}
+          <p class="collection-hero__description">{{ collection.description | strip_html | truncate: 200 }}</p>
+        {%- endif -%}
+        <div class="collection-hero__count collage-sticker collage-sticker--small">
+          {{ collection.products_count }} productos
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Guided Filters Section -->
+  <div class="catalog-guided-filters" data-guided-filters>
+    <div class="catalog-guided-filters__inner">
+
+      {%- if section.settings.show_recipient_filter -%}
+        <div class="guided-filter-group" data-filter-group="recipient">
+          <h3 class="guided-filter-group__title">
+            {{ section.settings.recipient_title }}
+          </h3>
+          <div class="guided-filter-group__chips">
+            {% render 'guided-filter-chips',
+               type: 'recipient',
+               blocks: section.blocks,
+               collection: collection %}
+          </div>
+        </div>
+      {%- endif -%}
+
+      {%- if section.settings.show_occasion_filter -%}
+        <div class="guided-filter-group" data-filter-group="occasion">
+          <h3 class="guided-filter-group__title">
+            {{ section.settings.occasion_title }}
+          </h3>
+          <div class="guided-filter-group__chips">
+            {% render 'guided-filter-chips',
+               type: 'occasion',
+               blocks: section.blocks,
+               collection: collection %}
+          </div>
+        </div>
+      {%- endif -%}
+
+      <!-- Clear Filters Button -->
+      {%- assign has_active_guided_filters = false -%}
+      {%- for filter in collection.filters -%}
+        {%- if filter.param_name contains 'filter.v.tag' and filter.active_values.size > 0 -%}
+          {%- assign has_active_guided_filters = true -%}
+          {%- break -%}
+        {%- endif -%}
+      {%- endfor -%}
+
+      <button
+        type="button"
+        class="guided-filters__clear"
+        data-clear-guided-filters
+        {% unless has_active_guided_filters %}hidden{% endunless %}
+      >
+        {% render 'icon-close' %}
+        <span>Limpiar filtros</span>
+      </button>
+
+    </div>
+  </div>
+
+  <!-- Toolbar with Search -->
+  <div class="collection-toolbar" data-collection-search>
+    <div class="container">
+      <div class="collection-toolbar__inner">
+        <div class="collection-toolbar__search-wrapper">
+          <form class="collection-toolbar__search" action="{{ routes.search_url }}" method="get" data-predictive-search-form>
+            <input type="hidden" name="type" value="product">
+            {% render 'icon-search' %}
+            <input
+              type="text"
+              name="q"
+              class="collection-toolbar__search-input"
+              placeholder="Buscar productos..."
+              data-collection-search-input
+              autocomplete="off"
+            >
+            <button type="button" class="collection-toolbar__search-clear" data-search-clear aria-label="Limpiar busqueda" hidden>
+              {% render 'icon-close' %}
+            </button>
+          </form>
+
+          <!-- Predictive Search Results Dropdown -->
+          <div class="collection-toolbar__results" data-predictive-results hidden>
+            <div class="collection-toolbar__results-inner" data-predictive-results-inner>
+              <!-- Results populated by JS -->
+            </div>
+            <a href="{{ routes.search_url }}" class="collection-toolbar__results-all" data-search-all>
+              Ver todos los resultados
+              {% render 'icon-arrow-right' %}
+            </a>
+          </div>
+        </div>
+
+        <div class="collection-toolbar__right">
+          <span class="collection-toolbar__count" data-search-results-count>
+            {{ collection.products_count }} productos
+          </span>
+          <div class="collection-toolbar__sort">
+            <label for="sort-by" class="visually-hidden">Ordenar por</label>
+            <select id="sort-by" class="collection-toolbar__select" data-sort-select>
+              {%- for option in collection.sort_options -%}
+                <option value="{{ option.value }}"{% if option.value == collection.sort_by %} selected{% endif %}>
+                  {{ option.name }}
+                </option>
+              {%- endfor -%}
+            </select>
+            {% render 'icon-chevron-down' %}
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Active Filter Chips (for non-guided filters like price) -->
+  {%- assign has_active_filters = false -%}
+  {%- for filter in collection.filters -%}
+    {%- unless filter.param_name contains 'filter.v.tag' -%}
+      {%- if filter.active_values.size > 0 or filter.min_value.value != nil or filter.max_value.value != nil -%}
+        {%- assign has_active_filters = true -%}
+        {%- break -%}
+      {%- endif -%}
+    {%- endunless -%}
+  {%- endfor -%}
+
+  <div class="collection-active-filters{% unless has_active_filters %} is-hidden{% endunless %}" data-active-filters>
+    <div class="container">
+      <div class="active-filters-list" data-active-filters-list>
+        {%- for filter in collection.filters -%}
+          {%- unless filter.param_name contains 'filter.v.tag' -%}
+            {%- for value in filter.active_values -%}
+              <button class="active-filter-chip collage-sticker collage-sticker--small"
+                type="button"
+                data-filter-chip
+                data-filter-param="{{ value.param_name }}"
+                data-filter-value="{{ value.value }}">
+                <span>{{ value.label }}</span>
+                {% render 'icon-close' %}
+              </button>
+            {%- endfor -%}
+            {%- if filter.min_value.value != nil or filter.max_value.value != nil -%}
+              <button class="active-filter-chip collage-sticker collage-sticker--small"
+                type="button"
+                data-filter-chip
+                data-filter-param="filter.v.price"
+                data-filter-value="price">
+                <span>{{ filter.min_value.value | default: 0 | money }} - {{ filter.max_value.value | default: filter.range_max | money }}</span>
+                {% render 'icon-close' %}
+              </button>
+            {%- endif -%}
+          {%- endunless -%}
+        {%- endfor -%}
+
+        {%- if has_active_filters -%}
+          <button class="active-filter-clear" type="button" data-clear-all-filters>
+            Limpiar todo
+          </button>
+        {%- endif -%}
+      </div>
+    </div>
+  </div>
+
+  <!-- Main Content -->
+  <div class="collection-main">
+    <div class="container">
+      <div class="collection-layout collection-layout--full-width">
+
+        <!-- Product Grid -->
+        <div class="collection-products-wrapper" data-product-grid>
+          {%- paginate collection.products by section.settings.products_per_page -%}
+            {%- if collection.products.size > 0 -%}
+              <div class="collection-products" data-products-container>
+                {%- for product in collection.products -%}
+                  {% render 'product-card', product: product, index: forloop.index %}
+                {%- endfor -%}
+              </div>
+
+              {%- if paginate.pages > 1 -%}
+                <nav class="collection-pagination" aria-label="Paginacion" data-pagination>
+                  <div class="collection-pagination__inner">
+                    {%- if paginate.previous -%}
+                      <a href="{{ paginate.previous.url }}" class="collection-pagination__btn collection-pagination__btn--prev">
+                        {% render 'icon-chevron-left' %}
+                        <span>Anterior</span>
+                      </a>
+                    {%- else -%}
+                      <span class="collection-pagination__btn collection-pagination__btn--prev collection-pagination__btn--disabled">
+                        {% render 'icon-chevron-left' %}
+                        <span>Anterior</span>
+                      </span>
+                    {%- endif -%}
+
+                    <div class="collection-pagination__pages">
+                      {%- for part in paginate.parts -%}
+                        {%- if part.is_link -%}
+                          <a href="{{ part.url }}" class="collection-pagination__page">{{ part.title }}</a>
+                        {%- else -%}
+                          {%- if part.title == paginate.current_page -%}
+                            <span class="collection-pagination__page collection-pagination__page--current collage-sticker collage-sticker--small">{{ part.title }}</span>
+                          {%- else -%}
+                            <span class="collection-pagination__page collection-pagination__page--ellipsis">{{ part.title }}</span>
+                          {%- endif -%}
+                        {%- endif -%}
+                      {%- endfor -%}
+                    </div>
+
+                    {%- if paginate.next -%}
+                      <a href="{{ paginate.next.url }}" class="collection-pagination__btn collection-pagination__btn--next">
+                        <span>Siguiente</span>
+                        {% render 'icon-chevron-right' %}
+                      </a>
+                    {%- else -%}
+                      <span class="collection-pagination__btn collection-pagination__btn--next collection-pagination__btn--disabled">
+                        <span>Siguiente</span>
+                        {% render 'icon-chevron-right' %}
+                      </span>
+                    {%- endif -%}
+                  </div>
+                </nav>
+              {%- endif -%}
+            {%- else -%}
+              <div class="collection-empty">
+                <div class="collection-empty__icon collage-sticker collage-sticker--large">
+                  {% render 'icon-confused' %}
+                </div>
+                <h2 class="collection-empty__title">No encontramos lo que buscas</h2>
+                <p class="collection-empty__text">Intenta con otras palabras o échale un ojo a nuestras categorías. Seguro hay algo que te late.</p>
+                <a href="{{ routes.all_products_collection_url }}" class="btn btn--primary">
+                  Ver todos los productos
+                </a>
+              </div>
+            {%- endif -%}
+          {%- endpaginate -%}
+        </div>
+
+      </div>
+    </div>
+  </div>
+
+</section>
+
+{% schema %}
+{
+  "name": "Catálogo guiado",
+  "tag": "section",
+  "class": "section-collection-catalogo",
+  "settings": [
+    {
+      "type": "image_picker",
+      "id": "background_image",
+      "label": "Imagen de fondo del hero",
+      "info": "Si no se selecciona, se usará la imagen de la colección"
+    },
+    {
+      "type": "range",
+      "id": "products_per_page",
+      "label": "Productos por página",
+      "min": 8,
+      "max": 24,
+      "step": 4,
+      "default": 12
+    },
+    {
+      "type": "header",
+      "content": "Filtro de destinatario"
+    },
+    {
+      "type": "checkbox",
+      "id": "show_recipient_filter",
+      "label": "Mostrar filtro de destinatario",
+      "default": true
+    },
+    {
+      "type": "text",
+      "id": "recipient_title",
+      "label": "Título del filtro",
+      "default": "¿Para quién es el gifting?"
+    },
+    {
+      "type": "header",
+      "content": "Filtro de ocasión"
+    },
+    {
+      "type": "checkbox",
+      "id": "show_occasion_filter",
+      "label": "Mostrar filtro de ocasión",
+      "default": true
+    },
+    {
+      "type": "text",
+      "id": "occasion_title",
+      "label": "Título del filtro",
+      "default": "¿Para qué ocasión es tu giftbox?"
+    }
+  ],
+  "blocks": [
+    {
+      "type": "recipient",
+      "name": "Destinatario",
+      "settings": [
+        {
+          "type": "text",
+          "id": "tag_value",
+          "label": "Valor del tag",
+          "info": "Sin el prefijo. Ej: para-ella"
+        },
+        {
+          "type": "text",
+          "id": "label",
+          "label": "Etiqueta visible",
+          "default": "Para ella"
+        },
+        {
+          "type": "select",
+          "id": "icon",
+          "label": "Icono",
+          "options": [
+            { "value": "heart", "label": "Corazón" },
+            { "value": "star", "label": "Estrella" },
+            { "value": "gift", "label": "Regalo" },
+            { "value": "sparkle", "label": "Destello" }
+          ],
+          "default": "heart"
+        }
+      ]
+    },
+    {
+      "type": "occasion",
+      "name": "Ocasión",
+      "settings": [
+        {
+          "type": "text",
+          "id": "tag_value",
+          "label": "Valor del tag",
+          "info": "Sin el prefijo. Ej: cumpleanos"
+        },
+        {
+          "type": "text",
+          "id": "label",
+          "label": "Etiqueta visible",
+          "default": "Cumpleaños"
+        },
+        {
+          "type": "select",
+          "id": "icon",
+          "label": "Icono",
+          "options": [
+            { "value": "heart", "label": "Corazón" },
+            { "value": "star", "label": "Estrella" },
+            { "value": "gift", "label": "Regalo" },
+            { "value": "sparkle", "label": "Destello" }
+          ],
+          "default": "gift"
+        }
+      ]
+    }
+  ],
+  "presets": [
+    {
+      "name": "Catálogo guiado",
+      "blocks": [
+        { "type": "recipient", "settings": { "tag_value": "para-ella", "label": "Para ella", "icon": "heart" } },
+        { "type": "recipient", "settings": { "tag_value": "para-el", "label": "Para él", "icon": "star" } },
+        { "type": "occasion", "settings": { "tag_value": "cumpleanos", "label": "Cumpleaños", "icon": "gift" } },
+        { "type": "occasion", "settings": { "tag_value": "san-valentin", "label": "San Valentín", "icon": "heart" } },
+        { "type": "occasion", "settings": { "tag_value": "dia-de-las-madres", "label": "Día de las Madres", "icon": "heart" } },
+        { "type": "occasion", "settings": { "tag_value": "dia-del-padre", "label": "Día del Padre", "icon": "gift" } },
+        { "type": "occasion", "settings": { "tag_value": "aniversario", "label": "Aniversario", "icon": "heart" } },
+        { "type": "occasion", "settings": { "tag_value": "navidad", "label": "Navidad", "icon": "gift" } },
+        { "type": "occasion", "settings": { "tag_value": "graduacion", "label": "Graduación", "icon": "sparkle" } },
+        { "type": "occasion", "settings": { "tag_value": "baby-shower", "label": "Baby Shower", "icon": "gift" } },
+        { "type": "occasion", "settings": { "tag_value": "porque-si", "label": "Porque sí", "icon": "sparkle" } }
+      ]
+    }
+  ]
+}
+{% endschema %}

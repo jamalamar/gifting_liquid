@@ -1,0 +1,248 @@
+/* ============================================
+   Collection Catalogo - Guided Filters
+   ============================================ */
+
+/* Guided Filters Container */
+.catalog-guided-filters {
+  padding: var(--spacing-lg) 0;
+  background: linear-gradient(
+    135deg,
+    rgba(var(--color-accent-rgb), 0.08) 0%,
+    rgba(var(--color-accent-rgb), 0.02) 100%
+  );
+  border-bottom: 2px dashed var(--color-accent);
+  margin-bottom: var(--spacing-lg);
+}
+
+.catalog-guided-filters__inner {
+  max-width: var(--page-width);
+  margin: 0 auto;
+  padding: 0 var(--spacing-md);
+}
+
+/* Filter Group */
+.guided-filter-group {
+  margin-bottom: var(--spacing-lg);
+}
+
+.guided-filter-group:last-child {
+  margin-bottom: 0;
+}
+
+.guided-filter-group__title {
+  font-family: var(--font-accent);
+  font-size: 1.375rem;
+  font-weight: 600;
+  color: var(--color-navy);
+  margin-bottom: var(--spacing-sm);
+  text-align: center;
+  transform: rotate(-0.5deg);
+}
+
+.guided-filter-group__title::before {
+  content: '✨ ';
+}
+
+.guided-filter-group__title::after {
+  content: ' ✨';
+}
+
+/* Chips Container */
+.guided-chips {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.75rem;
+  justify-content: center;
+}
+
+/* Guided Chip Button */
+.guided-chip {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.625rem 1.25rem;
+  background: var(--color-white);
+  color: var(--color-navy);
+  border: 2px solid var(--color-accent);
+  border-radius: 9999px;
+  font-family: var(--font-body);
+  font-size: 0.9375rem;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  box-shadow: 2px 2px 0 rgba(var(--color-navy-rgb), 0.08);
+  position: relative;
+  overflow: hidden;
+}
+
+.guided-chip::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(135deg, transparent 0%, rgba(var(--color-accent-rgb), 0.1) 100%);
+  opacity: 0;
+  transition: opacity 0.2s ease;
+}
+
+.guided-chip:hover {
+  transform: translateY(-2px) rotate(-1deg);
+  box-shadow: 3px 4px 0 rgba(var(--color-navy-rgb), 0.12);
+  border-color: var(--color-primary);
+}
+
+.guided-chip:hover::before {
+  opacity: 1;
+}
+
+.guided-chip:focus-visible {
+  outline: 2px solid var(--color-primary);
+  outline-offset: 2px;
+}
+
+.guided-chip:active {
+  transform: translateY(0) rotate(0);
+  box-shadow: 1px 1px 0 rgba(var(--color-navy-rgb), 0.08);
+}
+
+/* Active State */
+.guided-chip.is-active {
+  background: var(--color-primary);
+  color: var(--color-white);
+  border-color: var(--color-primary);
+  transform: rotate(-1deg);
+  box-shadow: 3px 3px 0 rgba(var(--color-navy-rgb), 0.15);
+}
+
+.guided-chip.is-active::before {
+  display: none;
+}
+
+.guided-chip.is-active:hover {
+  background: var(--color-secondary);
+  border-color: var(--color-secondary);
+  transform: translateY(-2px) rotate(-2deg);
+}
+
+.guided-chip.is-active .guided-chip__icon {
+  animation: chip-pop 0.3s ease;
+}
+
+@keyframes chip-pop {
+  0%, 100% { transform: scale(1); }
+  50% { transform: scale(1.2); }
+}
+
+/* Chip Icon */
+.guided-chip__icon {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 1.125rem;
+  height: 1.125rem;
+  flex-shrink: 0;
+}
+
+.guided-chip__icon .icon {
+  width: 100%;
+  height: 100%;
+}
+
+/* Chip Label */
+.guided-chip__label {
+  position: relative;
+  z-index: 1;
+}
+
+/* Clear Filters Button */
+.guided-filters__clear {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  margin-top: var(--spacing-md);
+  padding: 0.5rem 1rem;
+  background: transparent;
+  border: none;
+  color: var(--color-navy);
+  font-size: 0.875rem;
+  font-weight: 500;
+  cursor: pointer;
+  opacity: 0.7;
+  transition: opacity 0.2s ease;
+}
+
+.guided-filters__clear:hover {
+  opacity: 1;
+  text-decoration: underline;
+}
+
+.guided-filters__clear[hidden] {
+  display: none;
+}
+
+.guided-filters__clear .icon {
+  width: 0.875rem;
+  height: 0.875rem;
+}
+
+/* Loading State */
+.catalog-guided-filters.is-loading .guided-chip {
+  pointer-events: none;
+  opacity: 0.5;
+}
+
+/* Responsive */
+@media screen and (max-width: 749px) {
+  .catalog-guided-filters {
+    padding: var(--spacing-md) 0;
+  }
+
+  .catalog-guided-filters__inner {
+    padding: 0 var(--spacing-sm);
+  }
+
+  .guided-filter-group {
+    margin-bottom: var(--spacing-md);
+  }
+
+  .guided-filter-group__title {
+    font-size: 1.125rem;
+    margin-bottom: 0.75rem;
+  }
+
+  .guided-chips {
+    gap: 0.5rem;
+  }
+
+  .guided-chip {
+    padding: 0.5rem 1rem;
+    font-size: 0.8125rem;
+  }
+
+  .guided-chip__icon {
+    width: 1rem;
+    height: 1rem;
+  }
+}
+
+/* Full Width Layout (no sidebar) */
+.collection-layout--full-width {
+  grid-template-columns: 1fr !important;
+}
+
+/* Animation for filter updates */
+@keyframes filter-update {
+  0% {
+    opacity: 1;
+  }
+  50% {
+    opacity: 0.5;
+  }
+  100% {
+    opacity: 1;
+  }
+}
+
+.collection-page.is-loading .collection-products {
+  animation: filter-update 0.5s ease infinite;
+}
