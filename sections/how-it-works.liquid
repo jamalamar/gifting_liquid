@@ -10,22 +10,18 @@
       {%- for block in section.blocks -%}
         <div class="step animate-item" style="--i:{{ forloop.index }}" {{ block.shopify_attributes }}>
           <div class="step__card">
-            <div class="step__number">
-              <span>{{ block.settings.number | default: forloop.index }}</span>
-            </div>
             <div class="step__icon">
-              {%- case block.settings.icon -%}
-                {%- when 'person' -%}
-                  {% render 'icon-user' %}
-                {%- when 'box' -%}
-                  {% render 'icon-gift-box' %}
-                {%- when 'heart' -%}
-                  {% render 'icon-heart' %}
-                {%- when 'truck' -%}
-                  {% render 'icon-truck' %}
-                {%- else -%}
-                  {% render 'icon-star' %}
-              {%- endcase -%}
+              {%- if block.settings.image != blank -%}
+                <img
+                  src="{{ block.settings.image | image_url: width: 128 }}"
+                  alt="{{ block.settings.title }}"
+                  width="64"
+                  height="64"
+                  loading="lazy"
+                >
+              {%- else -%}
+                {% render 'icon-star' %}
+              {%- endif -%}
             </div>
             <h3 class="step__title">{{ block.settings.title }}</h3>
             <p class="step__description">{{ block.settings.description }}</p>
@@ -80,10 +76,9 @@
       "name": "Paso",
       "settings": [
         {
-          "type": "number",
-          "id": "number",
-          "label": "Numero del paso",
-          "default": 1
+          "type": "image_picker",
+          "id": "image",
+          "label": "Icono o imagen"
         },
         {
           "type": "text",
@@ -96,19 +91,6 @@
           "id": "description",
           "label": "Descripcion",
           "default": "¿Es para tu novia, tu mama, tu compa? Empezamos por ahi."
-        },
-        {
-          "type": "select",
-          "id": "icon",
-          "label": "Icono",
-          "options": [
-            { "value": "person", "label": "Persona" },
-            { "value": "box", "label": "Caja de regalo" },
-            { "value": "heart", "label": "Corazon" },
-            { "value": "truck", "label": "Entrega" },
-            { "value": "star", "label": "Estrella" }
-          ],
-          "default": "person"
         }
       ]
     }
@@ -117,10 +99,10 @@
     {
       "name": "Como funciona",
       "blocks": [
-        { "type": "step", "settings": { "number": 1, "title": "Elige a quien va el regalo", "description": "¿Es para tu novia, tu mama, tu compa? Empezamos por ahi.", "icon": "person" } },
-        { "type": "step", "settings": { "number": 2, "title": "Arma tu caja perfecta", "description": "Explora productos de emprendedores mexicanos y selecciona los que mas le van a gustar.", "icon": "box" } },
-        { "type": "step", "settings": { "number": 3, "title": "Personalizalo con amor", "description": "Agrega una tarjeta con tu mensaje. Nosotros lo armamos bonito.", "icon": "heart" } },
-        { "type": "step", "settings": { "number": 4, "title": "Lo entregamos por ti", "description": "Tu solo dinos cuando y donde. Nosotros hacemos la magia.", "icon": "truck" } }
+        { "type": "step", "settings": { "title": "Elige a quien va el regalo", "description": "¿Es para tu novia, tu mama, tu compa? Empezamos por ahi." } },
+        { "type": "step", "settings": { "title": "Arma tu caja perfecta", "description": "Explora productos de emprendedores mexicanos y selecciona los que mas le van a gustar." } },
+        { "type": "step", "settings": { "title": "Personalizalo con amor", "description": "Agrega una tarjeta con tu mensaje. Nosotros lo armamos bonito." } },
+        { "type": "step", "settings": { "title": "Lo entregamos por ti", "description": "Tu solo dinos cuando y donde. Nosotros hacemos la magia." } }
       ]
     }
   ]
