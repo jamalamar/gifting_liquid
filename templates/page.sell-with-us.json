@@ -3,8 +3,8 @@
     "main": {
       "type": "page-sell-with-us",
       "settings": {
-        "headline": "Tu producto merece ser el regalo de alguien",
-        "subtitle": "Tu creas, nosotros vendemos. Sin costos fijos, sin estres.",
+        "headline": "Suma tu marca",
+        "subtitle": "Tú creas, nosotros vendemos.",
         "benefits_title": "¿Por qué vender en Gifting?",
         "products_title": "¿Qué productos buscamos?",
         "products_intro": "Productos con ese \"algo\" especial que hacen decir wow.",
@@ -15,7 +15,6 @@
       },
       "blocks": {
         "benefit-1": { "type": "benefit", "settings": { "title": "Visibilidad real", "description": "Tu producto llega a miles de personas buscando regalos.", "icon": "visibility" } },
-        "benefit-2": { "type": "benefit", "settings": { "title": "Sin costos fijos", "description": "Solo ganas cuando vendes. Cero mensualidades.", "icon": "money" } },
         "benefit-3": { "type": "benefit", "settings": { "title": "Logistica incluida", "description": "Nosotros armamos, empacamos y entregamos.", "icon": "logistics" } },
         "cat-1": { "type": "product_category", "settings": { "category": "Velas artesanales", "icon": "sparkle" } },
         "cat-2": { "type": "product_category", "settings": { "category": "Snacks gourmet", "icon": "package" } },
@@ -27,7 +26,7 @@
         "step-2": { "type": "step", "settings": { "number": 2, "title": "Platicamos", "description": "Te contactamos para conocerte" } },
         "step-3": { "type": "step", "settings": { "number": 3, "title": "A vender", "description": "Tu producto sale al mundo" } }
       },
-      "block_order": ["benefit-1", "benefit-2", "benefit-3", "cat-1", "cat-2", "cat-3", "cat-4", "cat-5", "cat-6", "step-1", "step-2", "step-3"]
+      "block_order": ["benefit-1", "benefit-3", "cat-1", "cat-2", "cat-3", "cat-4", "cat-5", "cat-6", "step-1", "step-2", "step-3"]
     }
   },
   "order": ["main"]
