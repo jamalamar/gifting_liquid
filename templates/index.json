@@ -3,7 +3,7 @@
     "hero": {
       "type": "hero",
       "settings": {
-        "tag": "Elige, Personaliza y Consiente",
+        "tag": "Elige, personaliza y regala",
         "headline": "El regalo perfecto sí existe. Y está aquí.",
         "subheadline": "Arma cajas de regalo únicas con productos de emprendedores locales. Tú eliges, nosotros lo hacemos realidad.",
         "cta_text": "Empezar a armar mi regalo"
@@ -12,7 +12,7 @@
     "categories": {
       "type": "categories",
       "settings": {
-        "title": "¿A quién quieres consentir hoy?",
+        "title": "¿Para quién es este gifting?",
         "subtitle": "Dinos quién se merece ese detalle y te ayudamos a encontrar el regalo ideal.",
         "show_view_all": true,
         "view_all_text": "Ver todas las categorías"
