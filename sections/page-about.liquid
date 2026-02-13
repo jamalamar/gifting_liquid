@@ -1,181 +1,163 @@
-<section class="page-about collage-section" data-section-id="{{ section.id }}">
+<section class="page-about collage-section" data-section-id="{{ section.id }}" data-animate="stagger">
 
   <!-- Hero Section -->
   <div class="about-hero">
     <div class="about-hero__content">
-      <div class="about-hero__tag collage-sticker collage-sticker--handwritten">
+      <div class="about-hero__tag sticker-badge animate-item" style="--i:0">
         {% render 'icon-heart' %}
         <span>Nosotros</span>
       </div>
-      <h1 class="about-hero__headline">
-        {{ section.settings.headline | default: 'Somos el match entre quien quiere regalar y quien sabe crear' }}
+      <h1 class="about-hero__headline animate-item" style="--i:1">
+        {{ section.settings.hero_title | default: '¿Qué es Gifting?' }}
       </h1>
+      <p class="about-hero__tagline animate-item" style="--i:2">
+        {{ section.settings.hero_tagline | default: 'Somos el punto de encuentro entre quien quiere regalar algo especial y quien lo sabe crear.' }}
+      </p>
+      <!-- Sticker decoration 1 -->
+      {%- if section.settings.sticker_1 != blank -%}
+        <div class="about-hero__deco about-sticker">
+          <img src="{{ section.settings.sticker_1 | image_url: width: 150 }}" alt="Decoration" loading="lazy">
+        </div>
+      {%- endif -%}
     </div>
-    <div class="about-hero__image">
+    <div class="about-hero__image animate-item" style="--i:2">
       {%- if section.settings.hero_image != blank -%}
-        <div class="about-hero__image-wrapper collage-photo collage-photo--style-2">
+        <div class="about-hero__image-wrapper collage-photo">
           <img src="{{ section.settings.hero_image | image_url: width: 800 }}" alt="Gifting Marketplace" loading="eager">
+          <div class="about-hero__tape collage-tape"></div>
         </div>
       {%- else -%}
-        <div class="about-hero__image-wrapper collage-photo collage-photo--style-2 about-hero__placeholder">
+        <div class="about-hero__image-wrapper collage-photo about-hero__placeholder">
           <div class="image-placeholder">
             {% render 'icon-gift' %}
             <span>Hero Image</span>
           </div>
+          <div class="about-hero__tape collage-tape"></div>
         </div>
       {%- endif -%}
     </div>
   </div>
 
-  <!-- Story Section -->
-  <div class="about-story">
-    <div class="about-story__image-col">
-      {%- if section.settings.story_image_1 != blank -%}
-        <div class="about-story__main-image collage-photo">
-          <img src="{{ section.settings.story_image_1 | image_url: width: 600 }}" alt="Nuestra historia" loading="lazy">
-        </div>
-      {%- else -%}
-        <div class="about-story__main-image collage-photo about-story__placeholder">
-          <div class="image-placeholder">
-            {% render 'icon-gift' %}
-            <span>Story Image</span>
-          </div>
-        </div>
-      {%- endif -%}
-      {%- if section.settings.story_image_2 != blank -%}
-        <div class="about-story__polaroid collage-polaroid collage-polaroid--2">
-          <img src="{{ section.settings.story_image_2 | image_url: width: 300 }}" alt="Nuestra historia" loading="lazy">
-          <span class="collage-polaroid__caption">{{ 'now' | date: '%Y' }}</span>
-        </div>
-      {%- else -%}
-        <div class="about-story__polaroid collage-polaroid collage-polaroid--2 about-story__placeholder-small">
-          <div class="image-placeholder image-placeholder--small">
-            {% render 'icon-heart' %}
-          </div>
-          <span class="collage-polaroid__caption">{{ 'now' | date: '%Y' }}</span>
-        </div>
-      {%- endif -%}
-    </div>
-    <div class="about-story__content">
-      <h2 class="about-story__title">{{ section.settings.story_title | default: 'Nuestra Historia' }}</h2>
-      <div class="about-story__text">
-        {{ section.settings.story_text | default: '<p>Todo empezó con una pregunta que seguro te ha pasado: "¿Qué le regalo?"</p><p>Esa duda que te da vueltas en la cabeza cuando quieres dar algo especial pero todo lo que encuentras es... lo mismo de siempre.</p><p>Ahí nació Gifting: un espacio donde puedes armar regalos únicos con productos de emprendedores mexicanos que le ponen el corazón a lo que hacen.</p><p>No somos una tienda más. Somos el punto de encuentro entre las ganas de regalar algo inolvidable y las manos que crean cosas increíbles.</p>' }}
+  <!-- Value Propositions Section -->
+  <div class="about-props">
+    <!-- Sticker decoration 2 -->
+    {%- if section.settings.sticker_2 != blank -%}
+      <div class="about-props__deco about-sticker">
+        <img src="{{ section.settings.sticker_2 | image_url: width: 150 }}" alt="Decoration" loading="lazy">
       </div>
-      <div class="about-story__deco collage-element collage-element--paper-airplane">
-        {% render 'icon-paper-airplane' %}
-      </div>
-    </div>
-  </div>
+    {%- endif -%}
 
-  <!-- Golden Circle Section -->
-  <div class="about-circle">
-    <h2 class="about-circle__main-title">¿Por Qué Existimos?</h2>
-
-    <div class="about-circle__item about-circle__item--why">
-      <div class="about-circle__number collage-sticker collage-sticker--circle">1</div>
-      <div class="about-circle__content">
-        <h3 class="about-circle__title">{{ section.settings.why_title | default: 'Creemos que...' }}</h3>
-        <p class="about-circle__text">{{ section.settings.why_text | default: 'Un regalo bien elegido puede decir lo que a veces las palabras no alcanzan. Y quienes crean con amor merecen un espacio para ser encontrados.' }}</p>
-      </div>
-      <div class="about-circle__image">
-        {%- if section.settings.why_image != blank -%}
-          <div class="collage-polaroid collage-polaroid--1">
-            <img src="{{ section.settings.why_image | image_url: width: 400 }}" alt="{{ section.settings.why_title }}" loading="lazy">
-          </div>
-        {%- else -%}
-          <div class="collage-polaroid collage-polaroid--1 about-circle__placeholder">
+    <div class="about-props__grid">
+      <!-- Card 1: Para los clientes -->
+      <div class="about-props__card animate-item" style="--i:0">
+        <div class="about-props__image">
+          {%- if section.settings.clients_image != blank -%}
+            <img src="{{ section.settings.clients_image | image_url: width: 400 }}" alt="Para los clientes" loading="lazy">
+          {%- else -%}
             <div class="image-placeholder">
-              {% render 'icon-heart' %}
+              {% render 'icon-user' %}
+              <span>Imagen</span>
             </div>
-          </div>
-        {%- endif -%}
+          {%- endif -%}
+        </div>
+        <div class="about-props__content">
+          <h3 class="about-props__title">Para los clientes</h3>
+          <p class="about-props__text">
+            {{ section.settings.clients_text | default: 'Resolvemos el problema de no saber qué regalar o no tener tiempo para buscar. Acercamos marcas únicas que normalmente solo encontrarían en marketplaces, pero ahora disponibles siempre en un solo lugar.' }}
+          </p>
+        </div>
       </div>
-    </div>
 
-    <div class="about-circle__item about-circle__item--how">
-      <div class="about-circle__number collage-sticker collage-sticker--circle">2</div>
-      <div class="about-circle__image">
-        {%- if section.settings.how_image != blank -%}
-          <div class="collage-photo collage-photo--pin">
-            <img src="{{ section.settings.how_image | image_url: width: 400 }}" alt="{{ section.settings.how_title }}" loading="lazy">
-          </div>
-        {%- else -%}
-          <div class="collage-photo collage-photo--pin about-circle__placeholder">
+      <!-- Card 2: Para los emprendedores -->
+      <div class="about-props__card animate-item" style="--i:1">
+        <div class="about-props__image">
+          {%- if section.settings.entrepreneurs_image != blank -%}
+            <img src="{{ section.settings.entrepreneurs_image | image_url: width: 400 }}" alt="Para los emprendedores" loading="lazy">
+          {%- else -%}
             <div class="image-placeholder">
               {% render 'icon-sparkle' %}
+              <span>Imagen</span>
             </div>
-          </div>
-        {%- endif -%}
-      </div>
-      <div class="about-circle__content">
-        <h3 class="about-circle__title">{{ section.settings.how_title | default: '¿Cómo lo hacemos?' }}</h3>
-        <p class="about-circle__text">{{ section.settings.how_text | default: 'Unimos a quienes quieren regalar con intención con manos creadoras. Juntos, damos forma a cajas de regalo personalizadas llenas de historia y significado.' }}</p>
+          {%- endif -%}
+        </div>
+        <div class="about-props__content">
+          <h3 class="about-props__title">Para los emprendedores</h3>
+          <p class="about-props__text">
+            {{ section.settings.entrepreneurs_text | default: 'Somos un punto de venta digital abierto 24/7, que convierte sus productos en parte de una experiencia de regalo fácil y práctica. Impulsamos su marca con exposición constante mediante creadores de contenido reconocidos que promueven el consumo local.' }}
+          </p>
+        </div>
       </div>
     </div>
+  </div>
 
-    <div class="about-circle__item about-circle__item--what">
-      <div class="about-circle__number collage-sticker collage-sticker--circle">3</div>
-      <div class="about-circle__content">
-        <h3 class="about-circle__title">{{ section.settings.what_title | default: '¿Qué somos?' }}</h3>
-        <p class="about-circle__text">{{ section.settings.what_text | default: 'Una plataforma donde nacen regalos únicos a partir de productos de emprendedores locales, pensados para emocionar y compartir.' }}</p>
+  <!-- Target Audience Section -->
+  <div class="about-audience">
+    <!-- Sticker decoration 3 -->
+    {%- if section.settings.sticker_3 != blank -%}
+      <div class="about-audience__deco about-sticker">
+        <img src="{{ section.settings.sticker_3 | image_url: width: 150 }}" alt="Decoration" loading="lazy">
       </div>
-      <div class="about-circle__image">
-        {%- if section.settings.what_image != blank -%}
-          <div class="collage-polaroid collage-polaroid--3">
-            <img src="{{ section.settings.what_image | image_url: width: 400 }}" alt="{{ section.settings.what_title }}" loading="lazy">
-          </div>
-        {%- else -%}
-          <div class="collage-polaroid collage-polaroid--3 about-circle__placeholder">
+    {%- endif -%}
+
+    <h2 class="about-audience__title section-title collage-heading animate-item" style="--i:0">
+      ¿Para quién somos?
+    </h2>
+    <div class="about-audience__grid">
+      <!-- Personas -->
+      <div class="about-audience__card animate-item" style="--i:1">
+        <div class="about-audience__image">
+          {%- if section.settings.personas_image != blank -%}
+            <img src="{{ section.settings.personas_image | image_url: width: 400 }}" alt="Personas" loading="lazy">
+          {%- else -%}
             <div class="image-placeholder">
-              {% render 'icon-gift' %}
+              {% render 'icon-heart' %}
+              <span>Imagen</span>
             </div>
-          </div>
-        {%- endif -%}
+          {%- endif -%}
+        </div>
+        <h3 class="about-audience__name">Personas</h3>
+        <p class="about-audience__desc">
+          {{ section.settings.personas_text | default: 'Que buscan un regalo para cualquier ser querido en cualquier ocasión y quieren hacerlo de una forma rápida, sencilla, con productos personalizados y de calidad.' }}
+        </p>
+      </div>
+
+      <!-- Marcas locales -->
+      <div class="about-audience__card animate-item" style="--i:2">
+        <div class="about-audience__image">
+          {%- if section.settings.marcas_image != blank -%}
+            <img src="{{ section.settings.marcas_image | image_url: width: 400 }}" alt="Marcas locales" loading="lazy">
+          {%- else -%}
+            <div class="image-placeholder">
+              {% render 'icon-sparkle' %}
+              <span>Imagen</span>
+            </div>
+          {%- endif -%}
+        </div>
+        <h3 class="about-audience__name">Marcas locales</h3>
+        <p class="about-audience__desc">
+          {{ section.settings.marcas_text | default: 'Que buscan un canal de venta permanente, con menor costo por exposición y menor inversión de tiempo.' }}
+        </p>
       </div>
     </div>
   </div>
 
-  <!-- Values Section -->
-  <div class="about-values">
-    <h2 class="about-values__title">{{ section.settings.values_title | default: 'Nuestros Valores' }}</h2>
-    <div class="about-values__list">
-      {%- for block in section.blocks -%}
-        {%- if block.type == 'value' -%}
-          <div class="about-values__item" {{ block.shopify_attributes }}>
-            <span class="about-values__name">{{ block.settings.name }}</span>
-            <span class="about-values__description">{{ block.settings.description }}</span>
-          </div>
-        {%- endif -%}
-      {%- endfor -%}
-    </div>
-  </div>
-
-  <!-- Team Section -->
-  <div class="about-team">
-    <div class="about-team__image">
-      {%- if section.settings.team_image != blank -%}
-        <div class="about-team__photo collage-photo collage-photo--style-2">
-          <img src="{{ section.settings.team_image | image_url: width: 800 }}" alt="El Equipo" loading="lazy">
-        </div>
-      {%- else -%}
-        <div class="about-team__photo collage-photo collage-photo--style-2 about-team__placeholder">
-          <div class="image-placeholder">
-            {% render 'icon-user' %}
-            <span>Team Photo</span>
-          </div>
-        </div>
-      {%- endif -%}
-    </div>
-    <div class="about-team__content">
-      <h2 class="about-team__title">{{ section.settings.team_title | default: 'El Equipo' }}</h2>
-      <div class="about-team__text">
-        {{ section.settings.team_text | default: '<p>Somos un equipo pequeño pero matón, basado en CDMX. Nos mueve la idea de que regalar puede ser una experiencia chida, no un estrés.</p><p>Detrás de cada caja que armamos hay risas, café y muchas ganas de que tu regalo sea exactamente lo que imaginaste.</p>' }}
+  <!-- Summary Section -->
+  <div class="about-summary animate-item" style="--i:0">
+    <!-- Sticker decoration 4 -->
+    {%- if section.settings.sticker_4 != blank -%}
+      <div class="about-summary__deco about-sticker">
+        <img src="{{ section.settings.sticker_4 | image_url: width: 150 }}" alt="Decoration" loading="lazy">
       </div>
-    </div>
+    {%- endif -%}
+
+    <span class="about-summary__label sticker-badge">En pocas palabras</span>
+    <p class="about-summary__text">
+      {{ section.settings.summary_text | default: 'Gifting es el marketplace que vive en línea, todos los días del año.' }}
+    </p>
   </div>
 
   <!-- CTA Section -->
-  <div class="about-cta">
+  <div class="about-cta animate-item" style="--i:0">
     <div class="about-cta__content">
       <h2 class="about-cta__title">{{ section.settings.cta_title | default: '¿Listo para armar algo especial?' }}</h2>
       <a href="{{ section.settings.cta_link | default: routes.all_products_collection_url }}" class="btn btn--primary btn--large collage-button">
@@ -201,10 +183,16 @@
       "content": "Hero"
     },
     {
+      "type": "text",
+      "id": "hero_title",
+      "label": "Titulo",
+      "default": "¿Qué es Gifting?"
+    },
+    {
       "type": "textarea",
-      "id": "headline",
-      "label": "Titular",
-      "default": "Somos el match entre quien quiere regalar y quien sabe crear"
+      "id": "hero_tagline",
+      "label": "Tagline",
+      "default": "Somos el punto de encuentro entre quien quiere regalar algo especial y quien lo sabe crear."
     },
     {
       "type": "image_picker",
@@ -213,110 +201,65 @@
     },
     {
       "type": "header",
-      "content": "Historia"
-    },
-    {
-      "type": "text",
-      "id": "story_title",
-      "label": "Titulo de historia",
-      "default": "Nuestra Historia"
-    },
-    {
-      "type": "richtext",
-      "id": "story_text",
-      "label": "Texto de historia"
+      "content": "Propuestas de valor"
     },
     {
       "type": "image_picker",
-      "id": "story_image_1",
-      "label": "Imagen de historia principal"
-    },
-    {
-      "type": "image_picker",
-      "id": "story_image_2",
-      "label": "Imagen de historia (polaroid)"
-    },
-    {
-      "type": "header",
-      "content": "Circulo dorado"
-    },
-    {
-      "type": "text",
-      "id": "why_title",
-      "label": "Titulo del Por que",
-      "default": "Creemos que..."
+      "id": "clients_image",
+      "label": "Imagen clientes"
     },
     {
       "type": "textarea",
-      "id": "why_text",
-      "label": "Texto del Por que"
+      "id": "clients_text",
+      "label": "Texto para clientes",
+      "default": "Resolvemos el problema de no saber qué regalar o no tener tiempo para buscar. Acercamos marcas únicas que normalmente solo encontrarían en marketplaces, pero ahora disponibles siempre en un solo lugar."
     },
     {
       "type": "image_picker",
-      "id": "why_image",
-      "label": "Imagen del Por que"
-    },
-    {
-      "type": "text",
-      "id": "how_title",
-      "label": "Titulo del Como",
-      "default": "¿Cómo lo hacemos?"
+      "id": "entrepreneurs_image",
+      "label": "Imagen emprendedores"
     },
     {
       "type": "textarea",
-      "id": "how_text",
-      "label": "Texto del Como"
+      "id": "entrepreneurs_text",
+      "label": "Texto para emprendedores",
+      "default": "Somos un punto de venta digital abierto 24/7, que convierte sus productos en parte de una experiencia de regalo fácil y práctica. Impulsamos su marca con exposición constante mediante creadores de contenido reconocidos que promueven el consumo local."
+    },
+    {
+      "type": "header",
+      "content": "Audiencia objetivo"
     },
     {
       "type": "image_picker",
-      "id": "how_image",
-      "label": "Imagen del Como"
-    },
-    {
-      "type": "text",
-      "id": "what_title",
-      "label": "Titulo del Que",
-      "default": "¿Qué somos?"
+      "id": "personas_image",
+      "label": "Imagen personas"
     },
     {
       "type": "textarea",
-      "id": "what_text",
-      "label": "Texto del Que"
+      "id": "personas_text",
+      "label": "Texto para personas",
+      "default": "Que buscan un regalo para cualquier ser querido en cualquier ocasión y quieren hacerlo de una forma rápida, sencilla, con productos personalizados y de calidad."
     },
     {
       "type": "image_picker",
-      "id": "what_image",
-      "label": "Imagen del Que"
+      "id": "marcas_image",
+      "label": "Imagen marcas locales"
+    },
+    {
+      "type": "textarea",
+      "id": "marcas_text",
+      "label": "Texto para marcas locales",
+      "default": "Que buscan un canal de venta permanente, con menor costo por exposición y menor inversión de tiempo."
     },
     {
       "type": "header",
-      "content": "Valores"
+      "content": "Resumen"
     },
     {
-      "type": "text",
-      "id": "values_title",
-      "label": "Titulo de valores",
-      "default": "Nuestros Valores"
-    },
-    {
-      "type": "header",
-      "content": "Equipo"
-    },
-    {
-      "type": "text",
-      "id": "team_title",
-      "label": "Titulo del equipo",
-      "default": "El Equipo"
-    },
-    {
-      "type": "richtext",
-      "id": "team_text",
-      "label": "Texto del equipo"
-    },
-    {
-      "type": "image_picker",
-      "id": "team_image",
-      "label": "Foto del equipo"
+      "type": "textarea",
+      "id": "summary_text",
+      "label": "Texto resumen",
+      "default": "Gifting es el marketplace que vive en línea, todos los días del año."
     },
     {
       "type": "header",
@@ -338,38 +281,35 @@
       "type": "url",
       "id": "cta_link",
       "label": "Enlace del boton"
-    }
-  ],
-  "blocks": [
+    },
     {
-      "type": "value",
-      "name": "Valor",
-      "settings": [
-        {
-          "type": "text",
-          "id": "name",
-          "label": "Nombre",
-          "default": "Creatividad"
-        },
-        {
-          "type": "textarea",
-          "id": "description",
-          "label": "Descripcion",
-          "default": "Aquí lo diferente es lo que manda. Buscamos productos que sorprendan."
-        }
-      ]
+      "type": "header",
+      "content": "Stickers decorativos"
+    },
+    {
+      "type": "image_picker",
+      "id": "sticker_1",
+      "label": "Sticker 1 (Hero)"
+    },
+    {
+      "type": "image_picker",
+      "id": "sticker_2",
+      "label": "Sticker 2 (Propuestas)"
+    },
+    {
+      "type": "image_picker",
+      "id": "sticker_3",
+      "label": "Sticker 3 (Audiencia)"
+    },
+    {
+      "type": "image_picker",
+      "id": "sticker_4",
+      "label": "Sticker 4 (Resumen)"
     }
   ],
   "presets": [
     {
-      "name": "Pagina Nosotros",
-      "blocks": [
-        { "type": "value", "settings": { "name": "Creatividad", "description": "Aquí lo diferente es lo que manda. Buscamos productos que sorprendan." } },
-        { "type": "value", "settings": { "name": "Calidad", "description": "Solo trabajamos con creadores que cuidan cada detalle de lo que hacen." } },
-        { "type": "value", "settings": { "name": "Servicio", "description": "Somos tu compa que te ayuda a encontrar el regalo perfecto, siempre." } },
-        { "type": "value", "settings": { "name": "Confianza", "description": "Lo que ves es lo que recibes. Sin letras chiquitas, sin sorpresas feas." } },
-        { "type": "value", "settings": { "name": "Diversidad", "description": "Cada persona es diferente, cada regalo también. Aquí hay para todos los gustos." } }
-      ]
+      "name": "Pagina Nosotros"
     }
   ]
 }
