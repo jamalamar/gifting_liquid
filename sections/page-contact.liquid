@@ -1,18 +1,30 @@
-<section class="contact-page" data-section-id="{{ section.id }}">
+<section class="contact-page collage-section" data-section-id="{{ section.id }}" data-animate="stagger">
 
   <!-- Contact Hero -->
-  <div class="contact-hero">
-    <div class="container">
-      <div class="contact-hero__tag collage-sticker collage-sticker--handwritten">
+  <div class="contact-hero{% if section.settings.hero_image != blank %} contact-hero--has-bg{% endif %}">
+    {%- if section.settings.hero_image != blank -%}
+      <div class="contact-hero__bg">
+        <img src="{{ section.settings.hero_image | image_url: width: 1920 }}" alt="" loading="eager" class="contact-hero__bg-image">
+        <div class="contact-hero__overlay"></div>
+      </div>
+    {%- endif -%}
+    <div class="contact-hero__content">
+      <div class="contact-hero__tag sticker-badge animate-item" style="--i:0">
         {% render 'icon-email' %}
         <span>Contacto</span>
       </div>
-      <h1 class="contact-hero__title">
+      <h1 class="contact-hero__title animate-item" style="--i:1">
         {{ section.settings.headline | default: '¿Tienes dudas? Aquí andamos' }}
       </h1>
-      <p class="contact-hero__subtitle">
+      <p class="contact-hero__subtitle animate-item" style="--i:2">
         {{ section.settings.subtitle | default: 'Ya sea que quieras preguntarnos algo sobre tu pedido, tengas una idea loca o simplemente quieras saludar, escríbenos. Prometemos contestar rápido (somos bien platicadores).' }}
       </p>
+      <!-- Sticker decoration 1 -->
+      {%- if section.settings.sticker_1 != blank -%}
+        <div class="contact-hero__deco contact-sticker">
+          <img src="{{ section.settings.sticker_1 | image_url: width: 150 }}" alt="Decoration" loading="lazy">
+        </div>
+      {%- endif -%}
     </div>
   </div>
 
@@ -22,7 +34,13 @@
       <div class="contact-grid">
 
         <!-- Contact Info -->
-        <div class="contact-info">
+        <div class="contact-info animate-item" style="--i:3">
+          <!-- Sticker decoration 2 -->
+          {%- if section.settings.sticker_2 != blank -%}
+            <div class="contact-info__deco contact-sticker">
+              <img src="{{ section.settings.sticker_2 | image_url: width: 150 }}" alt="Decoration" loading="lazy">
+            </div>
+          {%- endif -%}
           <h2 class="contact-info__title">Contáctanos</h2>
 
           <div class="contact-info__list">
@@ -93,7 +111,19 @@
         </div>
 
         <!-- Contact Form -->
-        <div class="contact-form-wrapper">
+        <div class="contact-form-wrapper animate-item" style="--i:4">
+          <!-- Sticker decoration 3 -->
+          {%- if section.settings.sticker_3 != blank -%}
+            <div class="contact-form__deco contact-form__deco--left contact-sticker">
+              <img src="{{ section.settings.sticker_3 | image_url: width: 150 }}" alt="Decoration" loading="lazy">
+            </div>
+          {%- endif -%}
+          <!-- Sticker decoration 4 -->
+          {%- if section.settings.sticker_4 != blank -%}
+            <div class="contact-form__deco contact-form__deco--right contact-sticker">
+              <img src="{{ section.settings.sticker_4 | image_url: width: 150 }}" alt="Decoration" loading="lazy">
+            </div>
+          {%- endif -%}
           <h2 class="contact-form__title">Escríbenos</h2>
 
           {% form 'contact', class: 'contact-form' %}
@@ -197,6 +227,11 @@
       "default": "Ya sea que quieras preguntarnos algo sobre tu pedido, tengas una idea loca o simplemente quieras saludar, escríbenos. Prometemos contestar rápido (somos bien platicadores)."
     },
     {
+      "type": "image_picker",
+      "id": "hero_image",
+      "label": "Imagen hero"
+    },
+    {
       "type": "header",
       "content": "Informacion de contacto"
     },
@@ -297,6 +332,30 @@
       "id": "submit_text",
       "label": "Texto del boton",
       "default": "Enviar mensaje"
+    },
+    {
+      "type": "header",
+      "content": "Stickers decorativos"
+    },
+    {
+      "type": "image_picker",
+      "id": "sticker_1",
+      "label": "Sticker 1 (Hero)"
+    },
+    {
+      "type": "image_picker",
+      "id": "sticker_2",
+      "label": "Sticker 2 (Info)"
+    },
+    {
+      "type": "image_picker",
+      "id": "sticker_3",
+      "label": "Sticker 3 (Formulario izquierda)"
+    },
+    {
+      "type": "image_picker",
+      "id": "sticker_4",
+      "label": "Sticker 4 (Formulario derecha)"
     }
   ],
   "presets": [
