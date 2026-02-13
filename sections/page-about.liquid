@@ -156,20 +156,6 @@
     </p>
   </div>
 
-  <!-- CTA Section -->
-  <div class="about-cta animate-item" style="--i:0">
-    <div class="about-cta__content">
-      <h2 class="about-cta__title">{{ section.settings.cta_title | default: '¿Listo para armar algo especial?' }}</h2>
-      <a href="{{ section.settings.cta_link | default: routes.all_products_collection_url }}" class="btn btn--primary btn--large collage-button">
-        {{ section.settings.cta_text | default: 'Ver productos' }}
-        {% render 'icon-arrow-right' %}
-      </a>
-    </div>
-    <div class="about-cta__deco">
-      {% render 'icon-gift' %}
-    </div>
-  </div>
-
 </section>
 
 {% schema %}
@@ -260,27 +246,6 @@
       "id": "summary_text",
       "label": "Texto resumen",
       "default": "Gifting es el marketplace que vive en línea, todos los días del año."
-    },
-    {
-      "type": "header",
-      "content": "CTA"
-    },
-    {
-      "type": "text",
-      "id": "cta_title",
-      "label": "Titulo del CTA",
-      "default": "¿Listo para armar algo especial?"
-    },
-    {
-      "type": "text",
-      "id": "cta_text",
-      "label": "Texto del boton",
-      "default": "Ver productos"
-    },
-    {
-      "type": "url",
-      "id": "cta_link",
-      "label": "Enlace del boton"
     },
     {
       "type": "header",

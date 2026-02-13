@@ -1,78 +1,81 @@
-<section class="faqs-page" data-section-id="{{ section.id }}">
+<section class="faqs-page collage-section" data-section-id="{{ section.id }}" data-animate="stagger">
 
-  <!-- FAQs Hero with Background -->
-  {%- assign hero_image = section.settings.background_image -%}
-  <div class="faqs-hero{% if hero_image %} faqs-hero--has-bg{% endif %}">
-    {%- if hero_image -%}
+  <!-- FAQs Hero -->
+  <div class="faqs-hero{% if section.settings.hero_image != blank %} faqs-hero--has-bg{% endif %}">
+    {%- if section.settings.hero_image != blank -%}
       <div class="faqs-hero__bg">
-        <img
-          src="{{ hero_image | image_url: width: 1920 }}"
-          alt="{{ section.settings.headline | default: 'Preguntas frecuentes' }}"
-          loading="eager"
-          class="faqs-hero__bg-image"
-        >
+        <img src="{{ section.settings.hero_image | image_url: width: 1920 }}" alt="" loading="eager" class="faqs-hero__bg-image">
         <div class="faqs-hero__overlay"></div>
       </div>
     {%- endif -%}
-    <div class="container">
-      <div class="faqs-hero__content">
-        <div class="faqs-hero__tag collage-sticker collage-sticker--handwritten">
-          {% render 'icon-confused' %}
-          <span>Preguntas</span>
-        </div>
-        <h1 class="faqs-hero__title">
-          {{ section.settings.headline | default: 'Las dudas más comunes (y sus respuestas)' }}
-        </h1>
-        <p class="faqs-hero__subtitle">
-          {{ section.settings.subtitle | default: 'Si tu pregunta no está aquí, escríbenos por WhatsApp y te ayudamos al tiro.' }}
-        </p>
-        <div class="faqs-hero__count collage-sticker collage-sticker--small">
-          {{ section.blocks.size }} preguntas
-        </div>
+    <div class="faqs-hero__content">
+      <div class="faqs-hero__tag sticker-badge animate-item" style="--i:0">
+        {% render 'icon-confused' %}
+        <span>Preguntas</span>
       </div>
+      <h1 class="faqs-hero__title animate-item" style="--i:1">
+        {{ section.settings.headline | default: 'Las dudas más comunes (y sus respuestas)' }}
+      </h1>
+      <p class="faqs-hero__subtitle animate-item" style="--i:2">
+        {{ section.settings.subtitle | default: 'Si tu pregunta no está aquí, escríbenos por WhatsApp y te ayudamos al tiro.' }}
+      </p>
+      <!-- Sticker decoration 1 -->
+      {%- if section.settings.sticker_1 != blank -%}
+        <div class="faqs-hero__deco faqs-sticker">
+          <img src="{{ section.settings.sticker_1 | image_url: width: 150 }}" alt="Decoration" loading="lazy">
+        </div>
+      {%- endif -%}
     </div>
   </div>
 
   <!-- FAQ List -->
   <div class="faqs-content">
-    <div class="container">
-      <div class="faqs-list">
-        {%- for block in section.blocks -%}
-          <div class="faqs-item" data-faq-item {{ block.shopify_attributes }}>
-            <button class="faqs-item__header" data-faq-toggle aria-expanded="false">
-              <span class="faqs-item__number">{{ forloop.index | prepend: '0' | slice: -2, 2 }}</span>
-              <span class="faqs-item__question">{{ block.settings.question }}</span>
-              <span class="faqs-item__icon">
-                {% render 'icon-plus' %}
-              </span>
-            </button>
-            <div class="faqs-item__body" data-faq-answer>
-              <div class="faqs-item__answer">
-                {{ block.settings.answer }}
-              </div>
+    <!-- Sticker decoration 2 -->
+    {%- if section.settings.sticker_2 != blank -%}
+      <div class="faqs-content__deco faqs-sticker">
+        <img src="{{ section.settings.sticker_2 | image_url: width: 150 }}" alt="Decoration" loading="lazy">
+      </div>
+    {%- endif -%}
+    <div class="faqs-list">
+      {%- for block in section.blocks -%}
+        <div class="faqs-item collage-paper animate-item" style="--i:{{ forloop.index | plus: 2 }}" data-faq-item {{ block.shopify_attributes }}>
+          <button class="faqs-item__header" data-faq-toggle aria-expanded="false">
+            <span class="faqs-item__number">{{ forloop.index | prepend: '0' | slice: -2, 2 }}</span>
+            <span class="faqs-item__question">{{ block.settings.question }}</span>
+            <span class="faqs-item__icon">
+              {% render 'icon-plus' %}
+            </span>
+          </button>
+          <div class="faqs-item__body" data-faq-answer>
+            <div class="faqs-item__answer">
+              {{ block.settings.answer }}
             </div>
           </div>
-        {%- endfor -%}
-      </div>
+        </div>
+      {%- endfor -%}
     </div>
   </div>
 
   <!-- CTA Section -->
-  <div class="faqs-cta">
-    <div class="container">
-      <div class="faqs-cta__content">
-        <div class="faqs-cta__icon collage-sticker collage-sticker--large">
-          {% render 'icon-confused' %}
-        </div>
-        <h2 class="faqs-cta__title">{{ section.settings.cta_title | default: '¿Tienes otra duda?' }}</h2>
-        <p class="faqs-cta__text">{{ section.settings.cta_text | default: 'Escríbenos por WhatsApp y te ayudamos' }}</p>
-        <a href="https://wa.me/52{{ settings.social_whatsapp | remove: ' ' }}?text={{ section.settings.whatsapp_message | default: '¡Hola! Tengo una duda...' | url_encode }}" target="_blank" rel="noopener" class="btn btn--primary faqs-cta__btn">
-          {% render 'icon-whatsapp' %}
-          <span>Escribir por WhatsApp</span>
-        </a>
+  <div class="faqs-cta animate-item" style="--i:0">
+    <!-- Sticker decoration 3 -->
+    {%- if section.settings.sticker_3 != blank -%}
+      <div class="faqs-cta__deco faqs-cta__deco--left faqs-sticker">
+        <img src="{{ section.settings.sticker_3 | image_url: width: 150 }}" alt="Decoration" loading="lazy">
       </div>
-    </div>
-    <div class="faqs-cta__deco">?</div>
+    {%- endif -%}
+    <!-- Sticker decoration 4 -->
+    {%- if section.settings.sticker_4 != blank -%}
+      <div class="faqs-cta__deco faqs-cta__deco--right faqs-sticker">
+        <img src="{{ section.settings.sticker_4 | image_url: width: 150 }}" alt="Decoration" loading="lazy">
+      </div>
+    {%- endif -%}
+    <span class="faqs-cta__label sticker-badge">{{ section.settings.cta_title | default: '¿Tienes otra duda?' }}</span>
+    <p class="faqs-cta__text">{{ section.settings.cta_text | default: 'Escríbenos por WhatsApp y te ayudamos' }}</p>
+    <a href="https://wa.me/52{{ settings.social_whatsapp | remove: ' ' }}?text={{ section.settings.whatsapp_message | default: '¡Hola! Tengo una duda...' | url_encode }}" target="_blank" rel="noopener" class="btn btn--primary faqs-cta__btn">
+      {% render 'icon-whatsapp' %}
+      <span>Escribir por WhatsApp</span>
+    </a>
   </div>
 
 </section>
@@ -115,10 +118,8 @@
   "class": "section-page-faqs",
   "settings": [
     {
-      "type": "image_picker",
-      "id": "background_image",
-      "label": "Imagen de fondo",
-      "info": "Imagen de fondo para el hero. Recomendado: 1920x600px"
+      "type": "header",
+      "content": "Hero"
     },
     {
       "type": "text",
@@ -131,6 +132,11 @@
       "id": "subtitle",
       "label": "Subtitulo",
       "default": "Si tu pregunta no está aquí, escríbenos por WhatsApp y te ayudamos al tiro."
+    },
+    {
+      "type": "image_picker",
+      "id": "hero_image",
+      "label": "Imagen hero"
     },
     {
       "type": "header",
@@ -153,6 +159,30 @@
       "id": "whatsapp_message",
       "label": "Mensaje predeterminado WhatsApp",
       "default": "¡Hola! Tengo una duda..."
+    },
+    {
+      "type": "header",
+      "content": "Stickers decorativos"
+    },
+    {
+      "type": "image_picker",
+      "id": "sticker_1",
+      "label": "Sticker 1 (Hero)"
+    },
+    {
+      "type": "image_picker",
+      "id": "sticker_2",
+      "label": "Sticker 2 (Lista)"
+    },
+    {
+      "type": "image_picker",
+      "id": "sticker_3",
+      "label": "Sticker 3 (CTA izquierda)"
+    },
+    {
+      "type": "image_picker",
+      "id": "sticker_4",
+      "label": "Sticker 4 (CTA derecha)"
     }
   ],
   "blocks": [
