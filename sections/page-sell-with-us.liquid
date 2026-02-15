@@ -1,4 +1,4 @@
-<section class="sell-page" data-section-id="{{ section.id }}">
+<section class="sell-page collage-section" data-section-id="{{ section.id }}" data-animate="stagger">
 
   <!-- Sell Hero with Background -->
   {%- assign hero_image = section.settings.background_image -%}
@@ -16,26 +16,36 @@
     {%- endif -%}
     <div class="container">
       <div class="sell-hero__content">
-        <div class="sell-hero__tag collage-sticker collage-sticker--handwritten">
+        <div class="sell-hero__tag sticker-badge animate-item" style="--i:0">
           {% render 'icon-sparkle' %}
           <span>Únete</span>
         </div>
-        <h1 class="sell-hero__title">
+        <h1 class="sell-hero__title animate-item" style="--i:1">
           {{ section.settings.headline | default: 'Tu producto merece ser el regalo de alguien' }}
         </h1>
-        <p class="sell-hero__subtitle">
+        <p class="sell-hero__subtitle animate-item" style="--i:2">
           {{ section.settings.subtitle | default: 'Tú creas, nosotros vendemos. Sin costos fijos, sin estrés.' }}
         </p>
-        <a href="#sell-form" class="btn btn--primary sell-hero__cta">
+        <a href="#sell-form" class="btn btn--primary sell-hero__cta animate-item" style="--i:3">
           Quiero vender en Gifting
           {% render 'icon-arrow-right' %}
         </a>
+        {%- if section.settings.sticker_1 != blank -%}
+          <div class="sell-hero__deco sell-sticker">
+            <img src="{{ section.settings.sticker_1 | image_url: width: 150 }}" alt="Decoration" loading="lazy">
+          </div>
+        {%- endif -%}
       </div>
     </div>
   </div>
 
   <!-- Benefits Section -->
-  <div class="sell-benefits">
+  <div class="sell-benefits animate-item" style="--i:4">
+    {%- if section.settings.sticker_2 != blank -%}
+      <div class="sell-benefits__deco sell-sticker">
+        <img src="{{ section.settings.sticker_2 | image_url: width: 150 }}" alt="Decoration" loading="lazy">
+      </div>
+    {%- endif -%}
     <div class="container">
       <h2 class="sell-benefits__title">{{ section.settings.benefits_title | default: '¿Por qué vender en Gifting?' }}</h2>
       <div class="sell-benefits__grid">
@@ -43,22 +53,13 @@
         {%- for block in section.blocks -%}
           {%- if block.type == 'benefit' -%}
             {%- assign benefit_index = benefit_index | plus: 1 -%}
-            <div class="sell-benefit sell-benefit--{{ benefit_index }}" {{ block.shopify_attributes }}>
-              <div class="sell-benefit__icon collage-sticker">
-                {%- case block.settings.icon -%}
-                  {%- when 'visibility' -%}
-                    {% render 'icon-eye' %}
-                  {%- when 'money' -%}
-                    {% render 'icon-money' %}
-                  {%- when 'logistics' -%}
-                    {% render 'icon-truck' %}
-                  {%- when 'community' -%}
-                    {% render 'icon-users' %}
-                  {%- when 'marketing' -%}
-                    {% render 'icon-megaphone' %}
-                  {%- else -%}
-                    {% render 'icon-star' %}
-                {%- endcase -%}
+            <div class="sell-benefit sell-benefit--{{ benefit_index }} animate-item" style="--i:{{ benefit_index }}" {{ block.shopify_attributes }}>
+              <div class="sell-benefit__icon">
+                {%- if block.settings.icon_image != blank -%}
+                  <img src="{{ block.settings.icon_image | image_url: width: 120 }}" alt="{{ block.settings.title }}" loading="lazy">
+                {%- else -%}
+                  {% render 'icon-star' %}
+                {%- endif -%}
               </div>
               <h3 class="sell-benefit__title">{{ block.settings.title }}</h3>
               <p class="sell-benefit__description">{{ block.settings.description }}</p>
@@ -70,7 +71,12 @@
   </div>
 
   <!-- Products Section -->
-  <div class="sell-products">
+  <div class="sell-products animate-item" style="--i:5">
+    {%- if section.settings.sticker_3 != blank -%}
+      <div class="sell-products__deco sell-sticker">
+        <img src="{{ section.settings.sticker_3 | image_url: width: 150 }}" alt="Decoration" loading="lazy">
+      </div>
+    {%- endif -%}
     <div class="container">
       <h2 class="sell-products__title">{{ section.settings.products_title | default: '¿Qué productos buscamos?' }}</h2>
       <p class="sell-products__intro">{{ section.settings.products_intro | default: 'Productos con ese "algo" especial que hacen decir wow.' }}</p>
@@ -80,24 +86,13 @@
         {%- for block in section.blocks -%}
           {%- if block.type == 'product_category' -%}
             {%- assign product_index = product_index | plus: 1 -%}
-            <div class="sell-product-card sell-product-card--{{ product_index }}" {{ block.shopify_attributes }}>
-              <span class="sell-product-card__icon collage-sticker collage-sticker--tiny">
-                {%- case block.settings.icon -%}
-                  {%- when 'sparkle' -%}
-                    {% render 'icon-sparkle' %}
-                  {%- when 'package' -%}
-                    {% render 'icon-package' %}
-                  {%- when 'bow' -%}
-                    {% render 'icon-bow' %}
-                  {%- when 'heart' -%}
-                    {% render 'icon-heart' %}
-                  {%- when 'palette' -%}
-                    {% render 'icon-palette' %}
-                  {%- when 'home' -%}
-                    {% render 'icon-home' %}
-                  {%- else -%}
-                    {% render 'icon-gift' %}
-                {%- endcase -%}
+            <div class="sell-product-card sell-product-card--{{ product_index }} animate-item" style="--i:{{ product_index }}" {{ block.shopify_attributes }}>
+              <span class="sell-product-card__icon">
+                {%- if block.settings.icon_image != blank -%}
+                  <img src="{{ block.settings.icon_image | image_url: width: 80 }}" alt="{{ block.settings.category }}" loading="lazy">
+                {%- else -%}
+                  {% render 'icon-gift' %}
+                {%- endif -%}
               </span>
               <span class="sell-product-card__name">{{ block.settings.category }}</span>
             </div>
@@ -108,7 +103,12 @@
   </div>
 
   <!-- Process Section -->
-  <div class="sell-process">
+  <div class="sell-process animate-item" style="--i:6">
+    {%- if section.settings.sticker_4 != blank -%}
+      <div class="sell-process__deco sell-sticker">
+        <img src="{{ section.settings.sticker_4 | image_url: width: 150 }}" alt="Decoration" loading="lazy">
+      </div>
+    {%- endif -%}
     <div class="container">
       <h2 class="sell-process__title">{{ section.settings.process_title | default: '¿Cómo funciona?' }}</h2>
       <div class="sell-process__timeline">
@@ -122,7 +122,7 @@
         {%- for block in section.blocks -%}
           {%- if block.type == 'step' -%}
             {%- assign step_index = step_index | plus: 1 -%}
-            <div class="sell-step" {{ block.shopify_attributes }}>
+            <div class="sell-step animate-item" style="--i:{{ step_index }}" {{ block.shopify_attributes }}>
               <div class="sell-step__number collage-sticker collage-sticker--accent">{{ block.settings.number }}</div>
               <h3 class="sell-step__title">{{ block.settings.title }}</h3>
               <p class="sell-step__description">{{ block.settings.description }}</p>
@@ -137,7 +137,12 @@
   </div>
 
   <!-- CTA Section -->
-  <div class="sell-cta">
+  <div class="sell-cta animate-item" style="--i:7">
+    {%- if section.settings.sticker_5 != blank -%}
+      <div class="sell-cta__deco sell-sticker">
+        <img src="{{ section.settings.sticker_5 | image_url: width: 150 }}" alt="Decoration" loading="lazy">
+      </div>
+    {%- endif -%}
     <div class="container">
       <div class="sell-cta__content">
         <h2 class="sell-cta__title">{{ section.settings.cta_title | default: '¿Listo para vender?' }}</h2>
@@ -151,7 +156,12 @@
   </div>
 
   <!-- Application Form -->
-  <div class="sell-form-section" id="sell-form">
+  <div class="sell-form-section animate-item" style="--i:8" id="sell-form">
+    {%- if section.settings.sticker_6 != blank -%}
+      <div class="sell-form__deco sell-sticker">
+        <img src="{{ section.settings.sticker_6 | image_url: width: 150 }}" alt="Decoration" loading="lazy">
+      </div>
+    {%- endif -%}
     <div class="container">
       <div class="sell-form-wrapper">
         <h2 class="sell-form__title">Formulario de Aplicación</h2>
@@ -306,6 +316,40 @@
       "id": "cta_text",
       "label": "Texto del boton",
       "default": "Quiero vender en Gifting"
+    },
+    {
+      "type": "header",
+      "content": "Stickers decorativos"
+    },
+    {
+      "type": "image_picker",
+      "id": "sticker_1",
+      "label": "Sticker 1 (Hero)"
+    },
+    {
+      "type": "image_picker",
+      "id": "sticker_2",
+      "label": "Sticker 2 (Beneficios)"
+    },
+    {
+      "type": "image_picker",
+      "id": "sticker_3",
+      "label": "Sticker 3 (Productos)"
+    },
+    {
+      "type": "image_picker",
+      "id": "sticker_4",
+      "label": "Sticker 4 (Proceso)"
+    },
+    {
+      "type": "image_picker",
+      "id": "sticker_5",
+      "label": "Sticker 5 (CTA)"
+    },
+    {
+      "type": "image_picker",
+      "id": "sticker_6",
+      "label": "Sticker 6 (Formulario)"
     }
   ],
   "blocks": [
@@ -325,17 +369,9 @@
           "label": "Descripcion"
         },
         {
-          "type": "select",
-          "id": "icon",
-          "label": "Icono",
-          "options": [
-            { "value": "visibility", "label": "Visibilidad (ojo)" },
-            { "value": "money", "label": "Dinero" },
-            { "value": "logistics", "label": "Logistica (camion)" },
-            { "value": "community", "label": "Comunidad (personas)" },
-            { "value": "marketing", "label": "Marketing (megafono)" }
-          ],
-          "default": "visibility"
+          "type": "image_picker",
+          "id": "icon_image",
+          "label": "Icono (imagen)"
         }
       ]
     },
@@ -350,19 +386,9 @@
           "default": "Velas artesanales"
         },
         {
-          "type": "select",
-          "id": "icon",
-          "label": "Icono",
-          "options": [
-            { "value": "sparkle", "label": "Estrella (velas, aroma)" },
-            { "value": "package", "label": "Paquete (comida, snacks)" },
-            { "value": "bow", "label": "Mono (joyeria, accesorios)" },
-            { "value": "heart", "label": "Corazon (skincare, cuidado)" },
-            { "value": "palette", "label": "Paleta (ropa, arte)" },
-            { "value": "home", "label": "Casa (hogar, deco)" },
-            { "value": "gift", "label": "Regalo (general)" }
-          ],
-          "default": "gift"
+          "type": "image_picker",
+          "id": "icon_image",
+          "label": "Icono (imagen)"
         }
       ]
     },
@@ -395,15 +421,15 @@
     {
       "name": "Pagina Vende con Nosotros",
       "blocks": [
-        { "type": "benefit", "settings": { "title": "Visibilidad real", "description": "Tu producto llega a miles de personas buscando regalos.", "icon": "visibility" } },
-        { "type": "benefit", "settings": { "title": "Sin costos fijos", "description": "Solo ganas cuando vendes. Cero mensualidades.", "icon": "money" } },
-        { "type": "benefit", "settings": { "title": "Logistica incluida", "description": "Nosotros armamos, empacamos y entregamos.", "icon": "logistics" } },
-        { "type": "product_category", "settings": { "category": "Velas artesanales", "icon": "sparkle" } },
-        { "type": "product_category", "settings": { "category": "Snacks gourmet", "icon": "package" } },
-        { "type": "product_category", "settings": { "category": "Joyeria y accesorios", "icon": "bow" } },
-        { "type": "product_category", "settings": { "category": "Skincare y cuidado", "icon": "heart" } },
-        { "type": "product_category", "settings": { "category": "Decoracion hogar", "icon": "home" } },
-        { "type": "product_category", "settings": { "category": "Y mucho mas...", "icon": "gift" } },
+        { "type": "benefit", "settings": { "title": "Visibilidad real", "description": "Tu producto llega a miles de personas buscando regalos." } },
+        { "type": "benefit", "settings": { "title": "Sin costos fijos", "description": "Solo ganas cuando vendes. Cero mensualidades." } },
+        { "type": "benefit", "settings": { "title": "Logistica incluida", "description": "Nosotros armamos, empacamos y entregamos." } },
+        { "type": "product_category", "settings": { "category": "Velas artesanales" } },
+        { "type": "product_category", "settings": { "category": "Snacks gourmet" } },
+        { "type": "product_category", "settings": { "category": "Joyeria y accesorios" } },
+        { "type": "product_category", "settings": { "category": "Skincare y cuidado" } },
+        { "type": "product_category", "settings": { "category": "Decoracion hogar" } },
+        { "type": "product_category", "settings": { "category": "Y mucho mas..." } },
         { "type": "step", "settings": { "number": 1, "title": "Aplica", "description": "Llena el formulario" } },
         { "type": "step", "settings": { "number": 2, "title": "Platicamos", "description": "Te contactamos para conocerte" } },
         { "type": "step", "settings": { "number": 3, "title": "A vender", "description": "Tu producto sale al mundo" } }

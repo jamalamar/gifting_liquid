@@ -5277,21 +5277,23 @@ section.sell-page {
 }
 
 .sell-benefits__grid {
-  display: grid;
-  grid-template-columns: 1fr;
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
   gap: var(--spacing-md);
-  max-width: 900px;
+  max-width: 1000px;
   margin: 0 auto;
 }
 
 @media screen and (min-width: 750px) {
   .sell-benefits__grid {
-    grid-template-columns: repeat(3, 1fr);
     gap: var(--spacing-lg);
   }
 }
 
 .sell-benefit {
+  flex: 0 1 280px;
+  max-width: 320px;
   background: var(--color-white);
   border: 2px solid var(--color-background-alt);
   border-radius: var(--radius-md);
@@ -5318,12 +5320,18 @@ section.sell-page {
 }
 
 .sell-benefit__icon {
-  width: 70px;
-  height: 70px;
+  width: 80px;
+  height: 80px;
   margin: 0 auto var(--spacing-md);
   display: flex;
   align-items: center;
   justify-content: center;
+}
+
+.sell-benefit__icon img {
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
 }
 
 .sell-benefit__icon .icon {
@@ -5404,17 +5412,23 @@ section.sell-page {
 }
 
 .sell-product-card__icon {
-  width: 32px;
-  height: 32px;
+  width: 40px;
+  height: 40px;
   flex-shrink: 0;
   display: flex;
   align-items: center;
   justify-content: center;
 }
 
+.sell-product-card__icon img {
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+}
+
 .sell-product-card__icon .icon {
-  width: 1rem;
-  height: 1rem;
+  width: 1.25rem;
+  height: 1.25rem;
 }
 
 .sell-product-card__name {
@@ -5746,6 +5760,143 @@ section.sell-page {
   border-radius: var(--radius-md);
   color: #dc2626;
   font-size: 0.9rem;
+}
+
+/* Sell Page Stickers */
+.sell-sticker {
+  pointer-events: none;
+}
+
+.sell-sticker img {
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+}
+
+.sell-hero__deco,
+.sell-benefits__deco,
+.sell-products__deco,
+.sell-process__deco,
+.sell-cta__deco,
+.sell-form__deco {
+  position: absolute;
+  width: 140px;
+  height: 140px;
+  z-index: 2;
+}
+
+@media screen and (min-width: 750px) {
+  .sell-hero__deco,
+  .sell-benefits__deco,
+  .sell-products__deco,
+  .sell-process__deco,
+  .sell-cta__deco,
+  .sell-form__deco {
+    width: 180px;
+    height: 180px;
+  }
+}
+
+/* Hero sticker - bottom right */
+.sell-hero__deco {
+  bottom: -40px;
+  right: 0;
+  transform: rotate(-15deg);
+}
+
+@media screen and (min-width: 750px) {
+  .sell-hero__deco {
+    bottom: -20px;
+    right: -60px;
+  }
+}
+
+/* Benefits sticker - top right */
+.sell-benefits {
+  position: relative;
+}
+
+.sell-benefits__deco {
+  top: -20px;
+  right: 5%;
+  transform: rotate(10deg);
+}
+
+@media screen and (min-width: 750px) {
+  .sell-benefits__deco {
+    top: -40px;
+    right: 10%;
+  }
+}
+
+/* Products sticker - top left */
+.sell-products {
+  position: relative;
+}
+
+.sell-products__deco {
+  top: -20px;
+  left: 5%;
+  transform: rotate(-8deg);
+}
+
+@media screen and (min-width: 750px) {
+  .sell-products__deco {
+    top: -40px;
+    left: 10%;
+  }
+}
+
+/* Process sticker - right side */
+.sell-process {
+  position: relative;
+}
+
+.sell-process__deco {
+  top: 50%;
+  right: 2%;
+  transform: translateY(-50%) rotate(12deg);
+}
+
+@media screen and (min-width: 750px) {
+  .sell-process__deco {
+    right: 5%;
+  }
+}
+
+/* CTA sticker - left side */
+.sell-cta {
+  position: relative;
+}
+
+.sell-cta__deco {
+  top: 50%;
+  left: 2%;
+  transform: translateY(-50%) rotate(-10deg);
+}
+
+@media screen and (min-width: 750px) {
+  .sell-cta__deco {
+    left: 5%;
+  }
+}
+
+/* Form sticker - top right */
+.sell-form-section {
+  position: relative;
+}
+
+.sell-form__deco {
+  top: -20px;
+  right: 5%;
+  transform: rotate(15deg);
+}
+
+@media screen and (min-width: 750px) {
+  .sell-form__deco {
+    top: -40px;
+    right: 10%;
+  }
 }
 
 /* ============================================
