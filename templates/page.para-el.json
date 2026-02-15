@@ -15,56 +15,49 @@
           "type": "occasion",
           "settings": {
             "tag_value": "cumpleanos",
-            "label": "Cumpleaños",
-            "icon": "gift"
+            "label": "Cumpleaños"
           }
         },
         "occasion_valentin": {
           "type": "occasion",
           "settings": {
             "tag_value": "san-valentin",
-            "label": "San Valentín",
-            "icon": "heart"
+            "label": "San Valentín"
           }
         },
         "occasion_papa": {
           "type": "occasion",
           "settings": {
             "tag_value": "dia-del-padre",
-            "label": "Día del Padre",
-            "icon": "star"
+            "label": "Día del Padre"
           }
         },
         "occasion_aniversario": {
           "type": "occasion",
           "settings": {
             "tag_value": "aniversario",
-            "label": "Aniversario",
-            "icon": "heart"
+            "label": "Aniversario"
           }
         },
         "occasion_navidad": {
           "type": "occasion",
           "settings": {
             "tag_value": "navidad",
-            "label": "Navidad",
-            "icon": "gift"
+            "label": "Navidad"
           }
         },
         "occasion_graduacion": {
           "type": "occasion",
           "settings": {
             "tag_value": "graduacion",
-            "label": "Graduación",
-            "icon": "sparkle"
+            "label": "Graduación"
           }
         },
         "occasion_porque_si": {
           "type": "occasion",
           "settings": {
             "tag_value": "porque-si",
-            "label": "Porque sí",
-            "icon": "sparkle"
+            "label": "Porque sí"
           }
         }
       },

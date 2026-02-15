@@ -58,10 +58,58 @@
   margin: 0 auto;
 }
 
+/* Hero with Image Layout */
+.recipient-hero__wrapper {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: var(--spacing-lg);
+}
+
+.recipient-hero--has-image .recipient-hero__content {
+  text-align: center;
+}
+
+.recipient-hero__image {
+  width: 280px;
+  max-width: 100%;
+  border-radius: var(--radius-md);
+  overflow: hidden;
+  box-shadow: var(--shadow-collage);
+  transform: rotate(2deg);
+}
+
+.recipient-hero__image img {
+  width: 100%;
+  height: auto;
+  display: block;
+}
+
+@media screen and (min-width: 750px) {
+  .recipient-hero--has-image .recipient-hero__wrapper {
+    flex-direction: row;
+    justify-content: center;
+    align-items: center;
+    gap: var(--spacing-xl);
+  }
+
+  .recipient-hero--has-image .recipient-hero__content {
+    text-align: left;
+    flex: 1;
+    max-width: 500px;
+  }
+
+  .recipient-hero__image {
+    width: 350px;
+    flex-shrink: 0;
+  }
+}
+
 /* Occasions Section */
 .recipient-occasions {
   padding: var(--spacing-xl) 0;
   background-color: var(--color-background);
+  position: relative;
 }
 
 .recipient-occasions__title {
@@ -165,6 +213,12 @@
   height: 28px;
 }
 
+.occasion-card__icon img {
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+}
+
 .occasion-card:hover .occasion-card__icon {
   background: var(--color-primary);
   color: var(--color-white);
@@ -211,6 +265,7 @@
     var(--color-background) 0%,
     rgba(var(--color-accent-rgb), 0.08) 100%
   );
+  position: relative;
 }
 
 .recipient-see-all__text {
@@ -236,7 +291,41 @@
   transform: translateX(4px);
 }
 
-/* Decorative Elements */
+/* Configurable Stickers */
+.recipient-sticker {
+  position: absolute;
+  pointer-events: none;
+  z-index: 2;
+}
+
+.recipient-sticker img {
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+}
+
+.recipient-sticker--hero {
+  width: 120px;
+  height: 120px;
+  top: 10%;
+  right: 5%;
+}
+
+.recipient-sticker--occasions {
+  width: 100px;
+  height: 100px;
+  bottom: 10%;
+  left: 5%;
+}
+
+.recipient-sticker--cta {
+  width: 90px;
+  height: 90px;
+  top: 20%;
+  right: 8%;
+}
+
+/* Decorative Elements (legacy) */
 .recipient-deco {
   position: absolute;
   pointer-events: none;
@@ -324,7 +413,8 @@
     transform: translateY(-2px);
   }
 
-  .recipient-deco {
+  .recipient-deco,
+  .recipient-sticker {
     display: none;
   }
 }

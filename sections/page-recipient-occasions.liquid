@@ -9,94 +9,98 @@
 {%- assign recipient_type = section.settings.recipient_type | default: 'para-ella' -%}
 {%- assign catalog_url = '/collections/catalogo' -%}
 
-<section class="recipient-page collage-section" data-section-id="{{ section.id }}">
+<section class="recipient-page collage-section" data-section-id="{{ section.id }}" data-animate="stagger">
 
   <!-- Hero Section -->
-  <div class="recipient-hero">
+  <div class="recipient-hero{% if section.settings.hero_image != blank %} recipient-hero--has-image{% endif %}">
     <div class="container">
-      <div class="recipient-hero__content">
-        <div class="recipient-hero__tag collage-sticker collage-sticker--handwritten">
-          {%- if recipient_type == 'para-ella' -%}
-            {% render 'icon-heart' %}
-          {%- else -%}
-            {% render 'icon-star' %}
-          {%- endif -%}
-          <span>{{ section.settings.tag_text | default: 'Regalos especiales' }}</span>
+      <div class="recipient-hero__wrapper">
+        <div class="recipient-hero__content">
+          <div class="recipient-hero__tag sticker-badge animate-item" style="--i:0">
+            {%- if recipient_type == 'para-ella' -%}
+              {% render 'icon-heart' %}
+            {%- else -%}
+              {% render 'icon-star' %}
+            {%- endif -%}
+            <span>{{ section.settings.tag_text | default: 'Regalos especiales' }}</span>
+          </div>
+          <h1 class="recipient-hero__title animate-item" style="--i:1">
+            {{ section.settings.headline | default: 'Regalos para ella' }}
+          </h1>
+          <p class="recipient-hero__subtitle animate-item" style="--i:2">
+            {{ section.settings.subtitle | default: '¿Cuál es la ocasión especial?' }}
+          </p>
         </div>
-        <h1 class="recipient-hero__title">
-          {{ section.settings.headline | default: 'Regalos para ella' }}
-        </h1>
-        <p class="recipient-hero__subtitle">
-          {{ section.settings.subtitle | default: '¿Cuál es la ocasión especial?' }}
-        </p>
+
+        {%- if section.settings.hero_image != blank -%}
+          <div class="recipient-hero__image animate-item" style="--i:1">
+            <img
+              src="{{ section.settings.hero_image | image_url: width: 600 }}"
+              srcset="{{ section.settings.hero_image | image_url: width: 400 }} 400w,
+                      {{ section.settings.hero_image | image_url: width: 600 }} 600w,
+                      {{ section.settings.hero_image | image_url: width: 800 }} 800w"
+              sizes="(max-width: 749px) 280px, 400px"
+              alt="{{ section.settings.headline | default: 'Regalos' }}"
+              loading="eager"
+              width="{{ section.settings.hero_image.width }}"
+              height="{{ section.settings.hero_image.height }}"
+            >
+          </div>
+        {%- endif -%}
       </div>
     </div>
 
-    <!-- Decorative Elements -->
-    <div class="recipient-deco recipient-deco--1 recipient-deco--heart">
-      {% render 'icon-heart' %}
-    </div>
-    <div class="recipient-deco recipient-deco--2 recipient-deco--star">
-      {% render 'icon-sparkle' %}
-    </div>
-    <div class="recipient-deco recipient-deco--3 recipient-deco--star">
-      {% render 'icon-star' %}
-    </div>
-    <div class="recipient-deco recipient-deco--4 recipient-deco--heart">
-      {% render 'icon-gift' %}
-    </div>
+    {%- if section.settings.sticker_hero != blank -%}
+      <div class="recipient-sticker recipient-sticker--hero">
+        <img src="{{ section.settings.sticker_hero | image_url: width: 150 }}" alt="" loading="lazy">
+      </div>
+    {%- endif -%}
   </div>
 
   <!-- Occasions Grid -->
   <div class="recipient-occasions">
     <div class="container">
-      <h2 class="recipient-occasions__title">
+      <h2 class="recipient-occasions__title animate-item" style="--i:3">
         {{ section.settings.occasions_title | default: 'Elige la ocasión' }}
       </h2>
 
       <div class="occasion-grid">
+        {%- assign card_index = 4 -%}
         {%- for block in section.blocks -%}
           {%- if block.type == 'occasion' -%}
             {%- assign filter_url = catalog_url | append: '?filter.v.tag=recipient:' | append: recipient_type | append: '&filter.v.tag=occasion:' | append: block.settings.tag_value -%}
 
-            <a href="{{ filter_url }}" class="occasion-card" {{ block.shopify_attributes }}>
+            <a href="{{ filter_url }}" class="occasion-card animate-item" style="--i:{{ card_index }}" {{ block.shopify_attributes }}>
               <span class="occasion-card__icon">
-                {%- case block.settings.icon -%}
-                  {%- when 'heart' -%}
-                    {% render 'icon-heart' %}
-                  {%- when 'star' -%}
-                    {% render 'icon-star' %}
-                  {%- when 'gift' -%}
-                    {% render 'icon-gift' %}
-                  {%- when 'sparkle' -%}
-                    {% render 'icon-sparkle' %}
-                  {%- when 'cake' -%}
-                    {% render 'icon-cake' %}
-                  {%- when 'tree' -%}
-                    {% render 'icon-tree' %}
-                  {%- when 'baby' -%}
-                    {% render 'icon-baby' %}
-                  {%- when 'graduation' -%}
-                    {% render 'icon-graduation' %}
-                  {%- else -%}
-                    {% render 'icon-gift' %}
-                {%- endcase -%}
+                {%- if block.settings.icon_image != blank -%}
+                  <img src="{{ block.settings.icon_image | image_url: width: 80 }}" alt="{{ block.settings.label }}" loading="lazy">
+                {%- else -%}
+                  {% render 'icon-gift' %}
+                {%- endif -%}
               </span>
               <span class="occasion-card__label">{{ block.settings.label }}</span>
             </a>
+            {%- assign card_index = card_index | plus: 1 -%}
           {%- endif -%}
         {%- endfor -%}
       </div>
     </div>
+
+    {%- if section.settings.sticker_occasions != blank -%}
+      <div class="recipient-sticker recipient-sticker--occasions">
+        <img src="{{ section.settings.sticker_occasions | image_url: width: 140 }}" alt="" loading="lazy">
+      </div>
+    {%- endif -%}
   </div>
 
   <!-- See All Link -->
   <div class="recipient-see-all">
     <div class="container">
-      <p class="recipient-see-all__text">
+      {%- assign final_index = card_index -%}
+      <p class="recipient-see-all__text animate-item" style="--i:{{ final_index }}">
         {{ section.settings.see_all_text | default: '¿No encuentras la ocasión? No te preocupes.' }}
       </p>
-      <a href="{{ catalog_url }}?filter.v.tag=recipient:{{ recipient_type }}" class="btn btn--primary recipient-see-all__link">
+      <a href="{{ catalog_url }}?filter.v.tag=recipient:{{ recipient_type }}" class="btn btn--primary recipient-see-all__link animate-item" style="--i:{{ final_index | plus: 1 }}">
         {%- if recipient_type == 'para-ella' -%}
           Ver todos los regalos para ella
         {%- else -%}
@@ -105,6 +109,12 @@
         {% render 'icon-arrow-right' %}
       </a>
     </div>
+
+    {%- if section.settings.sticker_cta != blank -%}
+      <div class="recipient-sticker recipient-sticker--cta">
+        <img src="{{ section.settings.sticker_cta | image_url: width: 120 }}" alt="" loading="lazy">
+      </div>
+    {%- endif -%}
   </div>
 
 </section>
@@ -132,6 +142,11 @@
     {
       "type": "header",
       "content": "Hero"
+    },
+    {
+      "type": "image_picker",
+      "id": "hero_image",
+      "label": "Imagen del hero"
     },
     {
       "type": "text",
@@ -170,6 +185,25 @@
       "id": "see_all_text",
       "label": "Texto sobre el botón",
       "default": "¿No encuentras la ocasión? No te preocupes."
+    },
+    {
+      "type": "header",
+      "content": "Stickers decorativos"
+    },
+    {
+      "type": "image_picker",
+      "id": "sticker_hero",
+      "label": "Sticker Hero"
+    },
+    {
+      "type": "image_picker",
+      "id": "sticker_occasions",
+      "label": "Sticker Ocasiones"
+    },
+    {
+      "type": "image_picker",
+      "id": "sticker_cta",
+      "label": "Sticker CTA"
     }
   ],
   "blocks": [
@@ -190,20 +224,9 @@
           "default": "Cumpleaños"
         },
         {
-          "type": "select",
-          "id": "icon",
-          "label": "Icono",
-          "options": [
-            { "value": "heart", "label": "Corazón" },
-            { "value": "star", "label": "Estrella" },
-            { "value": "gift", "label": "Regalo" },
-            { "value": "sparkle", "label": "Destello" },
-            { "value": "cake", "label": "Pastel" },
-            { "value": "tree", "label": "Árbol (Navidad)" },
-            { "value": "baby", "label": "Bebé" },
-            { "value": "graduation", "label": "Graduación" }
-          ],
-          "default": "gift"
+          "type": "image_picker",
+          "id": "icon_image",
+          "label": "Icono (imagen)"
         }
       ]
     }
@@ -217,14 +240,14 @@
         "subtitle": "¿Cuál es la ocasión especial?"
       },
       "blocks": [
-        { "type": "occasion", "settings": { "tag_value": "cumpleanos", "label": "Cumpleaños", "icon": "gift" } },
-        { "type": "occasion", "settings": { "tag_value": "san-valentin", "label": "San Valentín", "icon": "heart" } },
-        { "type": "occasion", "settings": { "tag_value": "dia-de-las-madres", "label": "Día de las Madres", "icon": "heart" } },
-        { "type": "occasion", "settings": { "tag_value": "aniversario", "label": "Aniversario", "icon": "heart" } },
-        { "type": "occasion", "settings": { "tag_value": "navidad", "label": "Navidad", "icon": "gift" } },
-        { "type": "occasion", "settings": { "tag_value": "graduacion", "label": "Graduación", "icon": "sparkle" } },
-        { "type": "occasion", "settings": { "tag_value": "baby-shower", "label": "Baby Shower", "icon": "gift" } },
-        { "type": "occasion", "settings": { "tag_value": "porque-si", "label": "Porque sí", "icon": "sparkle" } }
+        { "type": "occasion", "settings": { "tag_value": "cumpleanos", "label": "Cumpleaños" } },
+        { "type": "occasion", "settings": { "tag_value": "san-valentin", "label": "San Valentín" } },
+        { "type": "occasion", "settings": { "tag_value": "dia-de-las-madres", "label": "Día de las Madres" } },
+        { "type": "occasion", "settings": { "tag_value": "aniversario", "label": "Aniversario" } },
+        { "type": "occasion", "settings": { "tag_value": "navidad", "label": "Navidad" } },
+        { "type": "occasion", "settings": { "tag_value": "graduacion", "label": "Graduación" } },
+        { "type": "occasion", "settings": { "tag_value": "baby-shower", "label": "Baby Shower" } },
+        { "type": "occasion", "settings": { "tag_value": "porque-si", "label": "Porque sí" } }
       ]
     }
   ]
