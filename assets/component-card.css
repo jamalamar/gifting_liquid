@@ -5701,6 +5701,12 @@ section.sell-page {
   box-shadow: 0 0 0 3px rgba(30, 41, 59, 0.1);
 }
 
+.sell-form__input::placeholder,
+.sell-form__textarea::placeholder {
+  color: var(--color-navy);
+  opacity: 0.6;
+}
+
 .sell-form__textarea {
   resize: vertical;
   min-height: 100px;
