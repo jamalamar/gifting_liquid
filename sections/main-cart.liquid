@@ -10,7 +10,12 @@
           <form action="{{ routes.cart_url }}" method="post" class="cart-page__form" id="cart-form" data-cart-form>
             <div class="cart-page__items">
               {%- for item in cart.items -%}
-                <div class="cart-page__item" data-cart-item data-key="{{ item.key }}">
+                {%- assign is_gift_box = false -%}
+                {%- if item.product.tags contains 'is-gift-box' -%}
+                  {%- assign is_gift_box = true -%}
+                {%- endif -%}
+
+                <div class="cart-page__item{% if is_gift_box %} cart-page__item--box-product{% endif %}" data-cart-item data-key="{{ item.key }}"{% if is_gift_box %} data-is-box-product{% endif %}>
                   <div class="cart-page__item-image">
                     {%- if item.image -%}
                       <a href="{{ item.url }}">
@@ -39,39 +44,48 @@
                     {%- if item.vendor -%}
                       <p class="cart-page__item-vendor">{{ item.vendor }}</p>
                     {%- endif -%}
+
+                    {%- unless is_gift_box -%}
+                      {%- comment -%} Box Assignment Dropdown {%- endcomment -%}
+                      <div class="cart-page__item-box-assign">
+                        {% render 'cart-item-box-dropdown', item: item %}
+                      </div>
+                    {%- endunless -%}
                   </div>
 
-                  <div class="cart-page__item-quantity">
-                    <div class="cart-page__qty-group">
-                      <button type="button" class="cart-page__qty-btn" data-quantity-minus data-key="{{ item.key }}" aria-label="Disminuir cantidad">
-                        <span>−</span>
-                      </button>
-                      <input
-                        type="number"
-                        name="updates[]"
-                        value="{{ item.quantity }}"
-                        min="0"
-                        class="cart-page__qty-input"
-                        data-quantity-input
-                        data-key="{{ item.key }}"
-                        aria-label="Cantidad"
-                      >
-                      <button type="button" class="cart-page__qty-btn" data-quantity-plus data-key="{{ item.key }}" aria-label="Aumentar cantidad">
-                        <span>+</span>
-                      </button>
+                  {%- unless is_gift_box -%}
+                    <div class="cart-page__item-quantity">
+                      <div class="cart-page__qty-group">
+                        <button type="button" class="cart-page__qty-btn" data-quantity-minus data-key="{{ item.key }}" aria-label="Disminuir cantidad">
+                          <span>−</span>
+                        </button>
+                        <input
+                          type="number"
+                          name="updates[]"
+                          value="{{ item.quantity }}"
+                          min="0"
+                          class="cart-page__qty-input"
+                          data-quantity-input
+                          data-key="{{ item.key }}"
+                          aria-label="Cantidad"
+                        >
+                        <button type="button" class="cart-page__qty-btn" data-quantity-plus data-key="{{ item.key }}" aria-label="Aumentar cantidad">
+                          <span>+</span>
+                        </button>
+                      </div>
                     </div>
-                  </div>
 
-                  <div class="cart-page__item-price">
-                    {%- if item.original_line_price != item.final_line_price -%}
-                      <span class="cart-page__item-price-compare">{{ item.original_line_price | money }}</span>
-                    {%- endif -%}
-                    <span class="cart-page__item-price-current">{{ item.final_line_price | money }}</span>
-                  </div>
+                    <div class="cart-page__item-price">
+                      {%- if item.original_line_price != item.final_line_price -%}
+                        <span class="cart-page__item-price-compare">{{ item.original_line_price | money }}</span>
+                      {%- endif -%}
+                      <span class="cart-page__item-price-current">{{ item.final_line_price | money }}</span>
+                    </div>
 
-                  <button type="button" class="cart-page__item-remove" data-remove-item data-key="{{ item.key }}" aria-label="Eliminar {{ item.product.title }}">
-                    {% render 'icon-close' %}
-                  </button>
+                    <button type="button" class="cart-page__item-remove" data-remove-item data-key="{{ item.key }}" aria-label="Eliminar {{ item.product.title }}">
+                      {% render 'icon-close' %}
+                    </button>
+                  {%- endunless -%}
                 </div>
               {%- endfor -%}
             </div>
@@ -80,6 +94,9 @@
 
         <!-- Sidebar -->
         <div class="cart-page__sidebar">
+          {%- comment -%} Gift Box Selector {%- endcomment -%}
+          {% render 'cart-box-selector' %}
+
           <!-- Summary -->
           <div class="cart-page__summary">
             <h2 class="cart-page__summary-title">Resumen</h2>

@@ -440,13 +440,50 @@ class Cart {
           </a>
         </div>
       `;
+      // Notify gift box manager of empty cart
+      if (window.giftBoxManager) {
+        window.giftBoxManager.renderAfterCartUpdate(cart);
+      }
       return;
     }
+
+    // Check if item is a gift box product
+    const isGiftBoxProduct = (item) => {
+      return item.properties && item.properties._is_gift_box === 'true';
+    };
 
     // Build items HTML
     const itemsHtml = cart.items.map(item => {
       const hasVariant = item.variant_title && item.variant_title !== 'Default Title';
       const imageUrl = item.image ? this.getSizedImageUrl(item.image, '150x') : null;
+      const isGiftBox = isGiftBoxProduct(item);
+
+      // Gift box products don't show quantity controls or box assignment
+      if (isGiftBox) {
+        return `
+          <div class="cart-drawer__item cart-drawer__item--box-product" data-cart-drawer-item data-key="${item.key}" data-is-box-product>
+            <div class="cart-drawer__item-image">
+              ${imageUrl ? `
+                <a href="${item.url}">
+                  <img src="${imageUrl}" alt="${item.title}" width="70" height="70" loading="lazy">
+                </a>
+              ` : `
+                <div class="cart-drawer__item-placeholder">
+                  <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+                    <path d="M12 8v13m0-13V6a4 4 0 00-4-4H6a4 4 0 00-4 4v2h10zm0 0V6a4 4 0 014-4h2a4 4 0 014 4v2H12z"/>
+                  </svg>
+                </div>
+              `}
+            </div>
+            <div class="cart-drawer__item-info">
+              <h3 class="cart-drawer__item-title">
+                <a href="${item.url}">${item.product_title}</a>
+              </h3>
+              ${hasVariant ? `<p class="cart-drawer__item-variant">${item.variant_title}</p>` : ''}
+            </div>
+          </div>
+        `;
+      }
 
       return `
         <div class="cart-drawer__item" data-cart-drawer-item data-key="${item.key}">
@@ -477,6 +514,13 @@ class Cart {
                 <span>+</span>
               </button>
             </div>
+            <div class="cart-drawer__item-box-assign">
+              <div class="cart-item-box-dropdown" data-box-dropdown-container data-item-key="${item.key}">
+                <select class="cart-item-box-dropdown__select collage-select" data-box-select data-item-key="${item.key}">
+                  <option value="">Seleccionar caja...</option>
+                </select>
+              </div>
+            </div>
           </div>
           <div class="cart-drawer__item-price">
             ${item.original_line_price !== item.final_line_price ? `
@@ -493,11 +537,55 @@ class Cart {
       `;
     }).join('');
 
-    drawerBody.innerHTML = `<div class="cart-drawer__items">${itemsHtml}</div>`;
+    // Build gift box selector HTML
+    const giftBoxSelectorHtml = this.buildGiftBoxSelector(cart);
+
+    drawerBody.innerHTML = `
+      ${giftBoxSelectorHtml}
+      <div class="cart-drawer__items">${itemsHtml}</div>
+    `;
 
     // Build and append footer
     const footerHtml = this.buildCartDrawerFooter(cart);
     drawerPanel.insertAdjacentHTML('beforeend', footerHtml);
+
+    // Notify gift box manager of cart update
+    if (window.giftBoxManager) {
+      window.giftBoxManager.renderAfterCartUpdate(cart);
+    }
+  }
+
+  buildGiftBoxSelector(cart) {
+    // Check if we have box products data
+    const boxProductsData = document.querySelector('[data-box-products]');
+    if (!boxProductsData) return '';
+
+    // Count regular items (not gift boxes)
+    const regularItemCount = cart.items
+      .filter(item => !(item.properties && item.properties._is_gift_box === 'true'))
+      .reduce((sum, item) => sum + item.quantity, 0);
+
+    if (regularItemCount === 0) return '';
+
+    return `
+      <div class="gift-box-selector" data-gift-box-selector>
+        <div class="gift-box-selector__header">
+          <svg class="gift-box-selector__icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+            <path d="M12 8v13m0-13V6a4 4 0 00-4-4H6a4 4 0 00-4 4v2h10zm0 0V6a4 4 0 014-4h2a4 4 0 014 4v2H12z"/>
+            <rect x="2" y="8" width="20" height="13" rx="2"/>
+          </svg>
+          <h3 class="gift-box-selector__title">Selecciona tus cajas de regalo</h3>
+          <p class="gift-box-selector__subtitle">Cada caja puede contener hasta 6 productos - incluida gratis</p>
+        </div>
+
+        <div class="gift-box-selector__boxes" data-box-selectors-container>
+        </div>
+
+        <div class="gift-box-selector__validation" data-box-validation hidden>
+          <p class="gift-box-selector__error" data-box-error></p>
+        </div>
+      </div>
+    `;
   }
 
   buildCartDrawerFooter(cart) {
