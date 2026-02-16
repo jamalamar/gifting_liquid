@@ -40,8 +40,8 @@
         "view_all_text": "Ver todas las categorías"
       },
       "blocks": {
-        "cat-1": { "type": "category", "settings": { "name": "Para ella", "tagline": "Encuentra el regalo perfecto para las mujeres especiales en tu vida", "link": "/collections/para-ella" } },
-        "cat-2": { "type": "category", "settings": { "name": "Para él", "tagline": "Detalles únicos para los hombres que más quieres", "link": "/collections/para-el" } }
+        "cat-1": { "type": "category", "settings": { "name": "Para ella", "tagline": "Encuentra el regalo perfecto para las mujeres especiales en tu vida", "link": "/collections/catalogo?filter.p.m.custom.recipient=Para+Ella" } },
+        "cat-2": { "type": "category", "settings": { "name": "Para él", "tagline": "Detalles únicos para los hombres que más quieres", "link": "/collections/catalogo?filter.p.m.custom.recipient=Para+El" } }
       },
       "block_order": ["cat-1", "cat-2"]
     },

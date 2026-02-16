@@ -6,13 +6,23 @@
   {%- assign hero_image = section.settings.background_image | default: collection.image -%}
   <div class="collection-hero{% if hero_image %} collection-hero--has-bg{% endif %}">
     {%- if hero_image -%}
-      <div class="collection-hero__bg">
+      <div class="collection-hero__bg" data-hero-carousel>
         <img
           src="{{ hero_image | image_url: width: 1920 }}"
           alt="{{ collection.title }}"
           loading="eager"
           class="collection-hero__bg-image"
+          data-hero-slide="1"
         >
+        {%- if section.settings.background_image_2 -%}
+          <img
+            src="{{ section.settings.background_image_2 | image_url: width: 1920 }}"
+            alt="{{ collection.title }}"
+            loading="lazy"
+            class="collection-hero__bg-image collection-hero__bg-image--hidden"
+            data-hero-slide="2"
+          >
+        {%- endif -%}
         <div class="collection-hero__overlay"></div>
       </div>
     {%- endif -%}
@@ -243,6 +253,28 @@
 
 </section>
 
+<script>
+  // Hero Carousel - cycles between 2 background images
+  (function() {
+    const carousel = document.querySelector('[data-hero-carousel]');
+    if (!carousel) return;
+
+    const slides = carousel.querySelectorAll('[data-hero-slide]');
+    if (slides.length < 2) return;
+
+    let currentSlide = 0;
+    const interval = 5000; // 5 seconds
+
+    function nextSlide() {
+      slides[currentSlide].classList.add('collection-hero__bg-image--hidden');
+      currentSlide = (currentSlide + 1) % slides.length;
+      slides[currentSlide].classList.remove('collection-hero__bg-image--hidden');
+    }
+
+    setInterval(nextSlide, interval);
+  })();
+</script>
+
 {% schema %}
 {
   "name": "Catálogo con filtros",
@@ -252,8 +284,14 @@
     {
       "type": "image_picker",
       "id": "background_image",
-      "label": "Imagen de fondo del hero",
+      "label": "Imagen de fondo del hero (primera)",
       "info": "Si no se selecciona, se usará la imagen de la colección"
+    },
+    {
+      "type": "image_picker",
+      "id": "background_image_2",
+      "label": "Imagen de fondo del hero (segunda)",
+      "info": "Se alternará con la primera imagen cada 5 segundos"
     },
     {
       "type": "range",

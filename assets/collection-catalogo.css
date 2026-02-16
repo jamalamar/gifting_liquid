@@ -2,6 +2,20 @@
    Collection Catalogo - Sidebar Layout
    ============================================ */
 
+/* Hero Carousel - Dual image crossfade */
+.collection-hero__bg-image {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  transition: opacity 1s ease-in-out;
+}
+
+.collection-hero__bg-image--hidden {
+  opacity: 0;
+}
+
 /* Catalog-specific overrides and enhancements */
 
 /* Filter toggle button in toolbar */

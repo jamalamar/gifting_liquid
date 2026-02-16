@@ -442,7 +442,7 @@ class Cart {
           </div>
           <p class="cart-drawer__empty-title">Tu carrito esta vacio</p>
           <p class="cart-drawer__empty-text">Explora nuestros productos y encuentra el regalo perfecto.</p>
-          <a href="/collections/all" class="btn btn--secondary cart-drawer__empty-btn" data-cart-drawer-close>
+          <a href="/collections/catalogo" class="btn btn--secondary cart-drawer__empty-btn" data-cart-drawer-close>
             Ver productos
           </a>
         </div>
