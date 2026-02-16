@@ -228,6 +228,37 @@ class Cart {
         this.addToCart(formData.get('id'), formData.get('quantity') || 1, submitBtn, form);
       });
     });
+
+    // Cart note textarea - save on blur with debounce
+    const cartNoteTextarea = document.querySelector('.cart-page__gift-textarea');
+    if (cartNoteTextarea) {
+      let noteTimeout;
+      cartNoteTextarea.addEventListener('input', () => {
+        clearTimeout(noteTimeout);
+        noteTimeout = setTimeout(() => {
+          this.saveCartNote(cartNoteTextarea.value);
+        }, 500);
+      });
+      cartNoteTextarea.addEventListener('blur', () => {
+        clearTimeout(noteTimeout);
+        this.saveCartNote(cartNoteTextarea.value);
+      });
+    }
+  }
+
+  async saveCartNote(note) {
+    try {
+      await fetch('/cart/update.js', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'Accept': 'application/json'
+        },
+        body: JSON.stringify({ note })
+      });
+    } catch (error) {
+      console.error('Error saving cart note:', error);
+    }
   }
 
   async addToCart(id, quantity = 1, submitBtn = null, form = null) {
