@@ -634,7 +634,6 @@ class Cart {
       }
     }
 
-    const checkoutUrl = window.routes?.checkout_url || '/checkout';
     const cartUrl = window.routes?.cart_url || '/cart';
 
     return `
@@ -644,14 +643,11 @@ class Cart {
           <span>Subtotal</span>
           <span data-drawer-subtotal>${this.formatMoney(cart.total_price)}</span>
         </div>
-        <a href="${checkoutUrl}" class="btn btn--primary cart-drawer__checkout">
-          Continuar al checkout
+        <a href="${cartUrl}" class="btn btn--primary cart-drawer__continue-to-cart">
+          Continuar al carrito
           <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="16" height="16">
             <path d="M14 5l7 7m0 0l-7 7m7-7H3"/>
           </svg>
-        </a>
-        <a href="${cartUrl}" class="cart-drawer__view-cart">
-          Ver carrito completo
         </a>
       </div>
     `;

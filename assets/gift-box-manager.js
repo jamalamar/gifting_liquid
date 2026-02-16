@@ -81,15 +81,19 @@ class GiftBoxManager {
   // ============= EVENT BINDING =============
 
   bindEvents() {
-    // Box product selection changes
-    document.addEventListener('change', (e) => {
-      if (e.target.matches('[data-box-product-select]')) {
-        const boxNumber = e.target.dataset.boxNumber;
-        const variantId = e.target.value;
+    // Box product selection via image cards
+    document.addEventListener('click', (e) => {
+      const boxOption = e.target.closest('[data-box-option]');
+      if (boxOption) {
+        const boxNumber = boxOption.dataset.boxNumber;
+        const variantId = boxOption.dataset.variantId;
         this.setBoxProduct(boxNumber, variantId);
+        this.updateBoxOptionSelection(boxNumber, variantId);
       }
+    });
 
-      // Item assignment changes
+    // Item assignment changes (dropdown)
+    document.addEventListener('change', (e) => {
       if (e.target.matches('[data-box-select]')) {
         const itemKey = e.target.dataset.itemKey;
         const boxNumber = e.target.value;
@@ -177,6 +181,25 @@ class GiftBoxManager {
     }
     this.saveState();
     this.updateValidationUI();
+  }
+
+  updateBoxOptionSelection(boxNumber, variantId) {
+    // Remove selected state from all options in this box
+    const boxSlot = document.querySelector(`[data-box-slot="${boxNumber}"]`);
+    if (!boxSlot) return;
+
+    boxSlot.querySelectorAll('[data-box-option]').forEach(option => {
+      const isSelected = option.dataset.variantId === variantId;
+      option.classList.toggle('gift-box-option--selected', isSelected);
+
+      // Update checkmark
+      const existingCheck = option.querySelector('.gift-box-option__check');
+      if (isSelected && !existingCheck) {
+        option.insertAdjacentHTML('beforeend', '<span class="gift-box-option__check">✓</span>');
+      } else if (!isSelected && existingCheck) {
+        existingCheck.remove();
+      }
+    });
   }
 
   getBoxProduct(boxNumber) {
@@ -444,21 +467,28 @@ class GiftBoxManager {
 
       html += `
         <div class="gift-box-slot" data-box-slot="${i}">
-          <span class="gift-box-slot__number">Caja ${i}</span>
-          <select class="gift-box-slot__select collage-select"
-                  data-box-product-select
-                  data-box-number="${i}">
-            <option value="">Seleccionar estilo...</option>
+          <div class="gift-box-slot__header">
+            <span class="gift-box-slot__number">Caja ${i}</span>
+            <span class="gift-box-slot__count ${isOverCapacity ? 'gift-box-slot__count--warning' : ''} ${isValid ? 'gift-box-slot__count--valid' : ''}"
+                  data-box-count="${i}">
+              ${itemCount}/${this.maxItemsPerBox} productos
+            </span>
+          </div>
+          <div class="gift-box-slot__options">
             ${this.boxProducts.map(p => `
-              <option value="${p.variantId}" ${selectedProduct == p.variantId ? 'selected' : ''}>
-                ${p.title}
-              </option>
+              <button type="button"
+                      class="gift-box-option ${selectedProduct == p.variantId ? 'gift-box-option--selected' : ''}"
+                      data-box-option
+                      data-box-number="${i}"
+                      data-variant-id="${p.variantId}">
+                <div class="gift-box-option__image">
+                  <img src="${p.image}" alt="${p.title}" loading="lazy">
+                </div>
+                <span class="gift-box-option__name">${p.title}</span>
+                ${selectedProduct == p.variantId ? '<span class="gift-box-option__check">✓</span>' : ''}
+              </button>
             `).join('')}
-          </select>
-          <span class="gift-box-slot__count ${isOverCapacity ? 'gift-box-slot__count--warning' : ''} ${isValid ? 'gift-box-slot__count--valid' : ''}"
-                data-box-count="${i}">
-            ${itemCount}/${this.maxItemsPerBox}
-          </span>
+          </div>
         </div>
       `;
     }

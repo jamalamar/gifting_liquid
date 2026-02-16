@@ -1,4 +1,4 @@
-<section class="cart-page" data-section-id="{{ section.id }}">
+<section class="cart-page collage-section" data-section-id="{{ section.id }}">
   <div class="container">
     <h1 class="cart-page__title">Tu Carrito</h1>
 
@@ -149,17 +149,22 @@
             <p class="cart-page__summary-note">Impuestos incluidos. Envio calculado en checkout.</p>
           </div>
 
-          <!-- Gift Message -->
+          <!-- Gift Message - Redesigned -->
           <div class="cart-page__gift-note">
-            <h3 class="cart-page__gift-title">
-              {% render 'icon-gift' %}
-              <span>Mensaje personalizado</span>
-            </h3>
-            <p class="cart-page__gift-desc">Lo incluiremos en una tarjeta con tu pedido</p>
+            <div class="cart-page__gift-header">
+              <h3 class="cart-page__gift-title">
+                {% render 'icon-heart' %}
+                <span>Deja un mensaje para tus cajas</span>
+              </h3>
+              <span class="sticker-badge sticker-badge--small sticker-badge--secondary">Opcional</span>
+            </div>
+            <p class="cart-page__gift-desc">
+              Si quieres, puedes incluir un mensaje personalizado que agregaremos en una tarjeta dentro de tu caja de regalo.
+            </p>
             <textarea
               name="note"
               class="cart-page__gift-textarea"
-              placeholder="Escribe tu mensaje aqui..."
+              placeholder="Ej: Feliz cumpleaños Maria! Espero que te encante este regalo..."
               form="cart-form"
             >{{ cart.note }}</textarea>
           </div>
@@ -170,7 +175,7 @@
             {% render 'icon-arrow-right' %}
           </a>
 
-          <a href="{{ routes.all_products_collection_url }}" class="cart-page__continue">
+          <a href="/collections/catalogo" class="cart-page__continue">
             {% render 'icon-arrow-left' %}
             <span>Seguir comprando</span>
           </a>

@@ -156,13 +156,9 @@
           <span data-drawer-subtotal>{{ cart.total_price | money }}</span>
         </div>
 
-        <a href="{{ routes.checkout_url }}" class="btn btn--primary cart-drawer__checkout">
-          Continuar al checkout
+        <a href="{{ routes.cart_url }}" class="btn btn--primary cart-drawer__continue-to-cart">
+          Continuar al carrito
           {% render 'icon-arrow-right' %}
-        </a>
-
-        <a href="{{ routes.cart_url }}" class="cart-drawer__view-cart">
-          Ver carrito completo
         </a>
       </div>
     {%- endif -%}
