@@ -33,64 +33,17 @@
     </div>
   </div>
 
-  <!-- Guided Filters Section -->
-  <div class="catalog-guided-filters" data-guided-filters>
-    <div class="catalog-guided-filters__inner">
-
-      {%- if section.settings.show_recipient_filter -%}
-        <div class="guided-filter-group" data-filter-group="recipient">
-          <h3 class="guided-filter-group__title">
-            {{ section.settings.recipient_title }}
-          </h3>
-          <div class="guided-filter-group__chips">
-            {% render 'guided-filter-chips',
-               type: 'recipient',
-               blocks: section.blocks,
-               collection: collection %}
-          </div>
-        </div>
-      {%- endif -%}
-
-      {%- if section.settings.show_occasion_filter -%}
-        <div class="guided-filter-group" data-filter-group="occasion">
-          <h3 class="guided-filter-group__title">
-            {{ section.settings.occasion_title }}
-          </h3>
-          <div class="guided-filter-group__chips">
-            {% render 'guided-filter-chips',
-               type: 'occasion',
-               blocks: section.blocks,
-               collection: collection %}
-          </div>
-        </div>
-      {%- endif -%}
-
-      <!-- Clear Filters Button -->
-      {%- assign has_active_guided_filters = false -%}
-      {%- for filter in collection.filters -%}
-        {%- if filter.param_name contains 'filter.v.tag' and filter.active_values.size > 0 -%}
-          {%- assign has_active_guided_filters = true -%}
-          {%- break -%}
-        {%- endif -%}
-      {%- endfor -%}
-
-      <button
-        type="button"
-        class="guided-filters__clear"
-        data-clear-guided-filters
-        {% unless has_active_guided_filters %}hidden{% endunless %}
-      >
-        {% render 'icon-close' %}
-        <span>Limpiar filtros</span>
-      </button>
-
-    </div>
-  </div>
-
-  <!-- Toolbar with Search -->
+  <!-- Toolbar with Search and Filter Toggle -->
   <div class="collection-toolbar" data-collection-search>
     <div class="container">
       <div class="collection-toolbar__inner">
+        <!-- Mobile Filter Toggle -->
+        <button type="button" class="collection-toolbar__filter-toggle" data-filter-toggle aria-controls="collection-filters">
+          {% render 'icon-filter' %}
+          <span>Filtros</span>
+          <span class="collection-toolbar__filter-count collage-badge" data-filter-count hidden>0</span>
+        </button>
+
         <div class="collection-toolbar__search-wrapper">
           <form class="collection-toolbar__search" action="{{ routes.search_url }}" method="get" data-predictive-search-form>
             <input type="hidden" name="type" value="product">
@@ -140,43 +93,39 @@
     </div>
   </div>
 
-  <!-- Active Filter Chips (for non-guided filters like price) -->
+  <!-- Active Filter Chips -->
   {%- assign has_active_filters = false -%}
   {%- for filter in collection.filters -%}
-    {%- unless filter.param_name contains 'filter.v.tag' -%}
-      {%- if filter.active_values.size > 0 or filter.min_value.value != nil or filter.max_value.value != nil -%}
-        {%- assign has_active_filters = true -%}
-        {%- break -%}
-      {%- endif -%}
-    {%- endunless -%}
+    {%- if filter.active_values.size > 0 or filter.min_value.value != nil or filter.max_value.value != nil -%}
+      {%- assign has_active_filters = true -%}
+      {%- break -%}
+    {%- endif -%}
   {%- endfor -%}
 
   <div class="collection-active-filters{% unless has_active_filters %} is-hidden{% endunless %}" data-active-filters>
     <div class="container">
       <div class="active-filters-list" data-active-filters-list>
         {%- for filter in collection.filters -%}
-          {%- unless filter.param_name contains 'filter.v.tag' -%}
-            {%- for value in filter.active_values -%}
-              <button class="active-filter-chip collage-sticker collage-sticker--small"
-                type="button"
-                data-filter-chip
-                data-filter-param="{{ value.param_name }}"
-                data-filter-value="{{ value.value }}">
-                <span>{{ value.label }}</span>
-                {% render 'icon-close' %}
-              </button>
-            {%- endfor -%}
-            {%- if filter.min_value.value != nil or filter.max_value.value != nil -%}
-              <button class="active-filter-chip collage-sticker collage-sticker--small"
-                type="button"
-                data-filter-chip
-                data-filter-param="filter.v.price"
-                data-filter-value="price">
-                <span>{{ filter.min_value.value | default: 0 | money }} - {{ filter.max_value.value | default: filter.range_max | money }}</span>
-                {% render 'icon-close' %}
-              </button>
-            {%- endif -%}
-          {%- endunless -%}
+          {%- for value in filter.active_values -%}
+            <button class="active-filter-chip collage-sticker collage-sticker--small"
+              type="button"
+              data-filter-chip
+              data-filter-param="{{ value.param_name }}"
+              data-filter-value="{{ value.value }}">
+              <span>{{ value.label }}</span>
+              {% render 'icon-close' %}
+            </button>
+          {%- endfor -%}
+          {%- if filter.min_value.value != nil or filter.max_value.value != nil -%}
+            <button class="active-filter-chip collage-sticker collage-sticker--small"
+              type="button"
+              data-filter-chip
+              data-filter-param="filter.v.price"
+              data-filter-value="price">
+              <span>{{ filter.min_value.value | default: 0 | money }} - {{ filter.max_value.value | default: filter.range_max | money }}</span>
+              {% render 'icon-close' %}
+            </button>
+          {%- endif -%}
         {%- endfor -%}
 
         {%- if has_active_filters -%}
@@ -191,7 +140,34 @@
   <!-- Main Content -->
   <div class="collection-main">
     <div class="container">
-      <div class="collection-layout collection-layout--full-width">
+      <div class="collection-layout">
+
+        <!-- Filter Sidebar / Drawer -->
+        <aside class="collection-filters" id="collection-filters" data-filter-sidebar aria-hidden="true">
+          <div class="collection-filters__overlay" data-filter-close></div>
+          <div class="collection-filters__panel">
+            <div class="collection-filters__header">
+              <h2 class="collection-filters__title">
+                Filtros
+                <span class="collection-filters__badge collage-badge" data-filter-count hidden>0</span>
+              </h2>
+              <button class="collection-filters__close" data-filter-close aria-label="Cerrar filtros">
+                {% render 'icon-close' %}
+              </button>
+            </div>
+            <div class="collection-filters__body">
+              {% render 'collection-filters', collection: collection %}
+            </div>
+            <div class="collection-filters__footer" data-filter-footer>
+              <button class="collection-filters__clear-btn" type="button" data-clear-all-filters>
+                Limpiar
+              </button>
+              <button class="btn btn--primary collection-filters__apply-btn" type="button" data-apply-filters>
+                Ver {{ collection.products_count }} productos
+              </button>
+            </div>
+          </div>
+        </aside>
 
         <!-- Product Grid -->
         <div class="collection-products-wrapper" data-product-grid>
@@ -269,7 +245,7 @@
 
 {% schema %}
 {
-  "name": "Catálogo guiado",
+  "name": "Catálogo con filtros",
   "tag": "section",
   "class": "section-collection-catalogo",
   "settings": [
@@ -287,118 +263,11 @@
       "max": 24,
       "step": 4,
       "default": 12
-    },
-    {
-      "type": "header",
-      "content": "Filtro de destinatario"
-    },
-    {
-      "type": "checkbox",
-      "id": "show_recipient_filter",
-      "label": "Mostrar filtro de destinatario",
-      "default": true
-    },
-    {
-      "type": "text",
-      "id": "recipient_title",
-      "label": "Título del filtro",
-      "default": "¿Para quién es el gifting?"
-    },
-    {
-      "type": "header",
-      "content": "Filtro de ocasión"
-    },
-    {
-      "type": "checkbox",
-      "id": "show_occasion_filter",
-      "label": "Mostrar filtro de ocasión",
-      "default": true
-    },
-    {
-      "type": "text",
-      "id": "occasion_title",
-      "label": "Título del filtro",
-      "default": "¿Para qué ocasión es tu giftbox?"
-    }
-  ],
-  "blocks": [
-    {
-      "type": "recipient",
-      "name": "Destinatario",
-      "settings": [
-        {
-          "type": "text",
-          "id": "tag_value",
-          "label": "Valor del tag",
-          "info": "Sin el prefijo. Ej: para-ella"
-        },
-        {
-          "type": "text",
-          "id": "label",
-          "label": "Etiqueta visible",
-          "default": "Para ella"
-        },
-        {
-          "type": "select",
-          "id": "icon",
-          "label": "Icono",
-          "options": [
-            { "value": "heart", "label": "Corazón" },
-            { "value": "star", "label": "Estrella" },
-            { "value": "gift", "label": "Regalo" },
-            { "value": "sparkle", "label": "Destello" }
-          ],
-          "default": "heart"
-        }
-      ]
-    },
-    {
-      "type": "occasion",
-      "name": "Ocasión",
-      "settings": [
-        {
-          "type": "text",
-          "id": "tag_value",
-          "label": "Valor del tag",
-          "info": "Sin el prefijo. Ej: cumpleanos"
-        },
-        {
-          "type": "text",
-          "id": "label",
-          "label": "Etiqueta visible",
-          "default": "Cumpleaños"
-        },
-        {
-          "type": "select",
-          "id": "icon",
-          "label": "Icono",
-          "options": [
-            { "value": "heart", "label": "Corazón" },
-            { "value": "star", "label": "Estrella" },
-            { "value": "gift", "label": "Regalo" },
-            { "value": "sparkle", "label": "Destello" }
-          ],
-          "default": "gift"
-        }
-      ]
     }
   ],
   "presets": [
     {
-      "name": "Catálogo guiado",
-      "blocks": [
-        { "type": "recipient", "settings": { "tag_value": "para-ella", "label": "Para ella", "icon": "heart" } },
-        { "type": "recipient", "settings": { "tag_value": "para-el", "label": "Para él", "icon": "star" } },
-        { "type": "occasion", "settings": { "tag_value": "cumpleanos", "label": "Cumpleaños", "icon": "gift" } },
-        { "type": "occasion", "settings": { "tag_value": "san-valentin", "label": "San Valentín", "icon": "heart" } },
-        { "type": "occasion", "settings": { "tag_value": "dia-de-las-madres", "label": "Día de las Madres", "icon": "heart" } },
-        { "type": "occasion", "settings": { "tag_value": "dia-del-padre", "label": "Día del Padre", "icon": "gift" } },
-        { "type": "occasion", "settings": { "tag_value": "aniversario", "label": "Aniversario", "icon": "heart" } },
-        { "type": "occasion", "settings": { "tag_value": "navidad", "label": "Navidad", "icon": "gift" } },
-        { "type": "occasion", "settings": { "tag_value": "graduacion", "label": "Graduación", "icon": "sparkle" } },
-        { "type": "occasion", "settings": { "tag_value": "baby-shower", "label": "Baby Shower", "icon": "gift" } },
-        { "type": "occasion", "settings": { "tag_value": "porque-si", "label": "Porque sí", "icon": "sparkle" } }
-      ]
+      "name": "Catálogo con filtros"
     }
   ]
 }

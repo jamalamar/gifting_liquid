@@ -238,6 +238,10 @@ class Cart {
     }
 
     try {
+      // Add unique instance ID so same product can be added as separate line items
+      // This allows assigning the same product to different gift boxes
+      const instanceId = `${Date.now()}-${Math.random().toString(36).substr(2, 9)}`;
+
       const response = await fetch(window.routes.cart_add_url, {
         method: 'POST',
         headers: {
@@ -246,7 +250,10 @@ class Cart {
         },
         body: JSON.stringify({
           id: parseInt(id),
-          quantity: parseInt(quantity)
+          quantity: parseInt(quantity),
+          properties: {
+            _instance_id: instanceId
+          }
         })
       });
 

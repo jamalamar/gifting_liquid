@@ -281,15 +281,29 @@ class GiftBoxManager {
 
   // ============= CART SYNC =============
 
+  getBoxStyleName(boxNumber) {
+    const variantId = this.state.selectedProducts[boxNumber];
+    if (!variantId) return null;
+    const boxProduct = this.boxProducts.find(p => String(p.variantId) === String(variantId));
+    return boxProduct ? boxProduct.title : null;
+  }
+
   async syncToCart() {
     const regularItems = this.getRegularItems(this.cart);
 
     for (const item of regularItems) {
       const boxNumber = this.state.itemAssignments[item.key];
       if (boxNumber) {
+        const boxStyle = this.getBoxStyleName(boxNumber);
+        // Remove old underscore properties and add readable ones
+        const cleanProperties = { ...item.properties };
+        delete cleanProperties._box_number;
+        delete cleanProperties._box_style;
+
         await this.updateItemProperties(item.key, item.quantity, {
-          ...item.properties,
-          _box_number: boxNumber
+          ...cleanProperties,
+          'Caja': boxNumber,
+          'Estilo de Caja': boxStyle || 'Sin estilo seleccionado'
         });
       }
     }
@@ -318,12 +332,14 @@ class GiftBoxManager {
     for (let i = 1; i <= requiredBoxes; i++) {
       const variantId = this.state.selectedProducts[i];
       if (variantId) {
+        const boxStyle = this.getBoxStyleName(i);
         itemsToAdd.push({
           id: parseInt(variantId),
           quantity: 1,
           properties: {
             _is_gift_box: 'true',
-            _box_number: String(i)
+            'Caja': String(i),
+            'Estilo': boxStyle || 'Sin estilo'
           }
         });
       }
