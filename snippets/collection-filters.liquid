@@ -1,5 +1,5 @@
 {%- comment -%}
-  Collection filters sidebar - AJAX enabled
+  Collection filters sidebar - Visual pill buttons with icons
   Usage: {% render 'collection-filters', collection: collection %}
 {%- endcomment -%}
 
@@ -35,27 +35,75 @@
         <div class="filter-group__content" data-filter-content>
           {%- case filter.type -%}
             {%- when 'list' -%}
-              <ul class="filter-group__list" role="list">
+              <div class="filter-pills" role="list">
                 {%- for value in filter.values -%}
-                  <li class="filter-option">
-                    <label class="filter-option__label-wrap">
-                      <input
-                        type="checkbox"
-                        name="{{ value.param_name }}"
-                        value="{{ value.value }}"
-                        {% if value.active %}checked{% endif %}
-                        {% if value.count == 0 and value.active == false %}disabled{% endif %}
-                        data-filter-checkbox
-                        aria-describedby="filter-count-{{ filter.label | handleize }}-{{ value.value | handleize }}"
-                      >
-                      <span class="filter-option__label">{{ value.label }}</span>
-                      <span class="filter-option__count" id="filter-count-{{ filter.label | handleize }}-{{ value.value | handleize }}">
-                        ({{ value.count }})
-                      </span>
-                    </label>
-                  </li>
+                  {%- assign label_lower = value.label | downcase -%}
+                  {%- assign icon_name = 'gift' -%}
+
+                  {%- comment -%} Map keywords to icons {%- endcomment -%}
+                  {%- if label_lower contains 'ella' or label_lower contains 'novia' or label_lower contains 'madre' or label_lower contains 'mamá' or label_lower contains 'mama' -%}
+                    {%- assign icon_name = 'heart' -%}
+                  {%- elsif label_lower contains 'él' or label_lower contains 'el ' or label_lower contains 'papá' or label_lower contains 'papa' or label_lower contains 'padre' or label_lower contains 'hermano' or label_lower contains 'amigo' -%}
+                    {%- assign icon_name = 'star' -%}
+                  {%- elsif label_lower contains 'cumple' or label_lower contains 'birthday' -%}
+                    {%- assign icon_name = 'gift-box' -%}
+                  {%- elsif label_lower contains 'valentin' or label_lower contains 'amor' or label_lower contains 'aniversario' -%}
+                    {%- assign icon_name = 'heart' -%}
+                  {%- elsif label_lower contains 'navidad' or label_lower contains 'christmas' -%}
+                    {%- assign icon_name = 'sparkle' -%}
+                  {%- elsif label_lower contains 'boda' or label_lower contains 'wedding' -%}
+                    {%- assign icon_name = 'bow' -%}
+                  {%- elsif label_lower contains 'baby' or label_lower contains 'bebé' or label_lower contains 'bebe' -%}
+                    {%- assign icon_name = 'heart' -%}
+                  {%- elsif label_lower contains 'gradua' -%}
+                    {%- assign icon_name = 'star' -%}
+                  {%- elsif label_lower contains 'porque' or label_lower contains 'just because' -%}
+                    {%- assign icon_name = 'sparkle' -%}
+                  {%- elsif label_lower contains 'todos' or label_lower contains 'unisex' -%}
+                    {%- assign icon_name = 'users' -%}
+                  {%- elsif label_lower contains 'comida' or label_lower contains 'gourmet' or label_lower contains 'food' or label_lower contains 'chocolate' -%}
+                    {%- assign icon_name = 'gift' -%}
+                  {%- elsif label_lower contains 'relax' or label_lower contains 'spa' or label_lower contains 'bienestar' or label_lower contains 'wellness' -%}
+                    {%- assign icon_name = 'sparkle' -%}
+                  {%- elsif label_lower contains 'corporat' or label_lower contains 'empresa' or label_lower contains 'oficina' -%}
+                    {%- assign icon_name = 'package' -%}
+                  {%- elsif label_lower contains 'mascota' or label_lower contains 'pet' -%}
+                    {%- assign icon_name = 'heart' -%}
+                  {%- endif -%}
+
+                  <label
+                    class="filter-pill{% if value.active %} is-active{% endif %}{% if value.count == 0 and value.active == false %} is-disabled{% endif %}"
+                    role="listitem"
+                  >
+                    <input
+                      type="checkbox"
+                      name="{{ value.param_name }}"
+                      value="{{ value.value }}"
+                      {% if value.active %}checked{% endif %}
+                      {% if value.count == 0 and value.active == false %}disabled{% endif %}
+                      data-filter-checkbox
+                      class="filter-pill__input visually-hidden"
+                      aria-describedby="filter-count-{{ filter.label | handleize }}-{{ value.value | handleize }}"
+                    >
+                    <span class="filter-pill__icon">
+                      {%- case icon_name -%}
+                        {%- when 'heart' -%}{% render 'icon-heart' %}
+                        {%- when 'star' -%}{% render 'icon-star' %}
+                        {%- when 'gift-box' -%}{% render 'icon-gift-box' %}
+                        {%- when 'sparkle' -%}{% render 'icon-sparkle' %}
+                        {%- when 'bow' -%}{% render 'icon-bow' %}
+                        {%- when 'users' -%}{% render 'icon-users' %}
+                        {%- when 'package' -%}{% render 'icon-package' %}
+                        {%- else -%}{% render 'icon-gift' %}
+                      {%- endcase -%}
+                    </span>
+                    <span class="filter-pill__label">{{ value.label }}</span>
+                    <span class="filter-pill__count" id="filter-count-{{ filter.label | handleize }}-{{ value.value | handleize }}">
+                      {{ value.count }}
+                    </span>
+                  </label>
                 {%- endfor -%}
-              </ul>
+              </div>
 
             {%- when 'price_range' -%}
               <div class="filter-price">
@@ -73,7 +121,7 @@
                       aria-label="Precio minimo"
                     >
                   </div>
-                  <span class="filter-price__separator">-</span>
+                  <span class="filter-price__separator">—</span>
                   <div class="filter-price__field">
                     <span class="filter-price__currency">{{ cart.currency.symbol }}</span>
                     <input
@@ -90,7 +138,7 @@
                 </div>
                 {%- if filter.min_value.value != nil or filter.max_value.value != nil -%}
                   <p class="filter-price__active">
-                    {{ filter.min_value.value | default: 0 | money }} - {{ filter.max_value.value | default: filter.range_max | money }}
+                    {{ filter.min_value.value | default: 0 | money }} — {{ filter.max_value.value | default: filter.range_max | money }}
                   </p>
                 {%- endif -%}
               </div>
