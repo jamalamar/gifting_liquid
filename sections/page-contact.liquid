@@ -202,7 +202,64 @@
     </div>
   </div>
 
+  <!-- FAQ Section -->
+  {%- assign faq_blocks = section.blocks | where: "type", "faq" -%}
+  {%- if faq_blocks.size > 0 -%}
+    <div class="faqs-content contact-faqs">
+      <h2 class="contact-faqs__title animate-item" style="--i:0">Preguntas Frecuentes</h2>
+      <div class="faqs-list">
+        {%- for block in faq_blocks -%}
+          <div class="faqs-item collage-paper animate-item" style="--i:{{ forloop.index }}" data-faq-item {{ block.shopify_attributes }}>
+            <button class="faqs-item__header" data-faq-toggle aria-expanded="false">
+              <span class="faqs-item__number">{{ forloop.index | prepend: '0' | slice: -2, 2 }}</span>
+              <span class="faqs-item__question">{{ block.settings.question }}</span>
+              <span class="faqs-item__icon">
+                {% render 'icon-plus' %}
+              </span>
+            </button>
+            <div class="faqs-item__body" data-faq-answer>
+              <div class="faqs-item__answer">
+                {{ block.settings.answer }}
+              </div>
+            </div>
+          </div>
+        {%- endfor -%}
+      </div>
+    </div>
+  {%- endif -%}
+
 </section>
+
+<script>
+  document.addEventListener('DOMContentLoaded', function() {
+    const faqItems = document.querySelectorAll('[data-faq-item]');
+
+    faqItems.forEach(item => {
+      const toggle = item.querySelector('[data-faq-toggle]');
+      const answer = item.querySelector('[data-faq-answer]');
+
+      toggle.addEventListener('click', function() {
+        const isExpanded = toggle.getAttribute('aria-expanded') === 'true';
+
+        // Close all other items
+        faqItems.forEach(otherItem => {
+          const otherToggle = otherItem.querySelector('[data-faq-toggle]');
+          const otherAnswer = otherItem.querySelector('[data-faq-answer]');
+          otherToggle.setAttribute('aria-expanded', 'false');
+          otherAnswer.style.maxHeight = null;
+          otherItem.classList.remove('is-open');
+        });
+
+        // Toggle current item
+        if (!isExpanded) {
+          toggle.setAttribute('aria-expanded', 'true');
+          answer.style.maxHeight = answer.scrollHeight + 'px';
+          item.classList.add('is-open');
+        }
+      });
+    });
+  });
+</script>
 
 {% schema %}
 {
@@ -356,6 +413,26 @@
       "type": "image_picker",
       "id": "sticker_4",
       "label": "Sticker 4 (Formulario derecha)"
+    }
+  ],
+  "blocks": [
+    {
+      "type": "faq",
+      "name": "Pregunta frecuente",
+      "settings": [
+        {
+          "type": "text",
+          "id": "question",
+          "label": "Pregunta",
+          "default": "¿Cuánto tarda en llegar mi pedido?"
+        },
+        {
+          "type": "richtext",
+          "id": "answer",
+          "label": "Respuesta",
+          "default": "<p>Respuesta aquí.</p>"
+        }
+      ]
     }
   ],
   "presets": [
