@@ -392,54 +392,56 @@
 
 /* === DEPTH LAYERS === */
 
-/* Far - small, faint, slow float */
+/* Far - background, faint, slow float */
 .global-deco--far {
-  --deco-size: 70px;
+  --deco-size: 100px;
   z-index: -3;
   filter: blur(0.5px);
-  animation: float-slow 12s ease-in-out infinite;
+  animation: float-slow 14s ease-in-out infinite;
 }
 .global-deco--far.is-visible {
-  opacity: 0.25;
+  opacity: 0.2;
 }
 
 /* Mid - medium size and visibility */
 .global-deco--mid {
-  --deco-size: 110px;
+  --deco-size: 160px;
   z-index: -2;
-  animation: float 8s ease-in-out infinite;
+  animation: float-mid 9s ease-in-out infinite;
 }
 .global-deco--mid.is-visible {
-  opacity: 0.45;
+  opacity: 0.35;
 }
 
 /* Near - larger, more visible, faster */
 .global-deco--near {
-  --deco-size: 150px;
+  --deco-size: 220px;
   z-index: -1;
-  animation: float-fast 5s ease-in-out infinite;
+  animation: float-fast 6s ease-in-out infinite;
 }
 .global-deco--near.is-visible {
-  opacity: 0.65;
+  opacity: 0.5;
 }
-
-/* === SLOT POSITIONS (distributed across screen) === */
-.global-deco--slot-1 { top: 8%; left: 3%; }
-.global-deco--slot-2 { bottom: 12%; right: 4%; }
-.global-deco--slot-3 { top: 22%; right: 6%; }
-.global-deco--slot-4 { bottom: 28%; left: 5%; }
-.global-deco--slot-5 { top: 50%; right: 3%; }
-.global-deco--slot-6 { bottom: 45%; left: 4%; }
 
 /* === ANIMATIONS === */
 @keyframes float-slow {
-  0%, 100% { transform: translateY(0) rotate(0deg); }
-  50% { transform: translateY(-6px) rotate(2deg); }
+  0%, 100% { transform: translateY(0) rotate(var(--deco-rotation, 0deg)); }
+  33% { transform: translateY(-8px) rotate(calc(var(--deco-rotation, 0deg) + 3deg)); }
+  66% { transform: translateX(5px) rotate(calc(var(--deco-rotation, 0deg) - 2deg)); }
+}
+
+@keyframes float-mid {
+  0%, 100% { transform: translateY(0) rotate(var(--deco-rotation, 0deg)); }
+  25% { transform: translate(6px, -10px) rotate(calc(var(--deco-rotation, 0deg) + 4deg)); }
+  50% { transform: translate(-4px, -14px) rotate(calc(var(--deco-rotation, 0deg) - 3deg)); }
+  75% { transform: translate(3px, -5px) rotate(calc(var(--deco-rotation, 0deg) + 2deg)); }
 }
 
 @keyframes float-fast {
-  0%, 100% { transform: translateY(0) rotate(0deg); }
-  50% { transform: translateY(-18px) rotate(3deg); }
+  0%, 100% { transform: translateY(0) rotate(var(--deco-rotation, 0deg)); }
+  25% { transform: translate(-8px, -16px) rotate(calc(var(--deco-rotation, 0deg) - 5deg)); }
+  50% { transform: translate(6px, -22px) rotate(calc(var(--deco-rotation, 0deg) + 4deg)); }
+  75% { transform: translate(-3px, -10px) rotate(calc(var(--deco-rotation, 0deg) - 2deg)); }
 }
 
 /* Hide on mobile */

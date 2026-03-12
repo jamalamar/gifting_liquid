@@ -279,6 +279,36 @@
         "type": "image_picker",
         "id": "deco_image_12",
         "label": "Imagen 12"
+      },
+      {
+        "type": "image_picker",
+        "id": "deco_image_13",
+        "label": "Imagen 13"
+      },
+      {
+        "type": "image_picker",
+        "id": "deco_image_14",
+        "label": "Imagen 14"
+      },
+      {
+        "type": "image_picker",
+        "id": "deco_image_15",
+        "label": "Imagen 15"
+      },
+      {
+        "type": "image_picker",
+        "id": "deco_image_16",
+        "label": "Imagen 16"
+      },
+      {
+        "type": "image_picker",
+        "id": "deco_image_17",
+        "label": "Imagen 17"
+      },
+      {
+        "type": "image_picker",
+        "id": "deco_image_18",
+        "label": "Imagen 18"
       }
     ]
   }

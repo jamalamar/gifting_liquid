@@ -1,7 +1,7 @@
 {%- comment -%}
-  Random decorations with depth effect
-  - Collects up to 12 images from settings
-  - Shows 6 random ones with varying depths (far/mid/near)
+  Chaotic background decorations with depth effect
+  - Collects up to 18 images from settings
+  - Shows all configured icons with random positions/rotations and varying depths
 {%- endcomment -%}
 
 {%- liquid
@@ -55,6 +55,30 @@
     assign img_url = settings.deco_image_12 | image_url: width: 200
     assign all_decos = all_decos | append: img_url | append: '|||'
   endif
+  if settings.deco_image_13 != blank
+    assign img_url = settings.deco_image_13 | image_url: width: 200
+    assign all_decos = all_decos | append: img_url | append: '|||'
+  endif
+  if settings.deco_image_14 != blank
+    assign img_url = settings.deco_image_14 | image_url: width: 200
+    assign all_decos = all_decos | append: img_url | append: '|||'
+  endif
+  if settings.deco_image_15 != blank
+    assign img_url = settings.deco_image_15 | image_url: width: 200
+    assign all_decos = all_decos | append: img_url | append: '|||'
+  endif
+  if settings.deco_image_16 != blank
+    assign img_url = settings.deco_image_16 | image_url: width: 200
+    assign all_decos = all_decos | append: img_url | append: '|||'
+  endif
+  if settings.deco_image_17 != blank
+    assign img_url = settings.deco_image_17 | image_url: width: 200
+    assign all_decos = all_decos | append: img_url | append: '|||'
+  endif
+  if settings.deco_image_18 != blank
+    assign img_url = settings.deco_image_18 | image_url: width: 200
+    assign all_decos = all_decos | append: img_url | append: '|||'
+  endif
 
   assign deco_array = all_decos | split: '|||'
   assign deco_count = deco_array.size
@@ -62,7 +86,6 @@
 
 {%- if deco_count > 0 -%}
 <div class="collage-decorations" aria-hidden="true">
-  {%- comment -%} Output all images as hidden, JS will randomize and show 6 {%- endcomment -%}
   {%- for deco in deco_array -%}
     {%- if deco != blank -%}
       <div class="global-deco" data-deco-item>
@@ -80,31 +103,24 @@
     const items = [...container.querySelectorAll('[data-deco-item]')];
     if (items.length === 0) return;
 
-    // Shuffle array (Fisher-Yates)
-    for (let i = items.length - 1; i > 0; i--) {
-      const j = Math.floor(Math.random() * (i + 1));
-      [items[i], items[j]] = [items[j], items[i]];
-    }
+    // Depth cycle — distributes items across far/mid/near
+    const depthCycle = ['far', 'mid', 'near'];
 
-    // Slot configurations: [depth, position-class]
-    const slots = [
-      ['far', 'slot-1'],
-      ['far', 'slot-2'],
-      ['mid', 'slot-3'],
-      ['mid', 'slot-4'],
-      ['near', 'slot-5'],
-      ['near', 'slot-6']
-    ];
-
-    // Show first 6 (or less) with assigned slots
     items.forEach((item, i) => {
-      if (i < 6 && i < slots.length) {
-        item.classList.add('global-deco--' + slots[i][0]);
-        item.classList.add('global-deco--' + slots[i][1]);
-        item.classList.add('is-visible');
-      } else {
-        item.remove();
-      }
+      // Random position across the full viewport
+      item.style.top = (Math.random() * 90) + '%';
+      item.style.left = (Math.random() * 90) + '%';
+
+      // Random rotation for chaos
+      const rotation = Math.floor(Math.random() * 60) - 30;
+      item.style.setProperty('--deco-rotation', rotation + 'deg');
+
+      // Random animation delay so they don't all sync up
+      item.style.animationDelay = (Math.random() * 6).toFixed(1) + 's';
+
+      // Assign depth layer cycling through far → mid → near
+      item.classList.add('global-deco--' + depthCycle[i % 3]);
+      item.classList.add('is-visible');
     });
   })();
 </script>
