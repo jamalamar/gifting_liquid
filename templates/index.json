@@ -6,7 +6,7 @@
         "tag": "Elige, personaliza y regala",
         "headline": "El regalo perfecto sí existe. Y está aquí.",
         "subheadline": "Arma cajas de regalo únicas con productos de emprendedores locales. Tú eliges, nosotros lo hacemos realidad.",
-        "cta_text": "Empezar a armar mi regalo",
+        "cta_text": "Crear mi Giftbox",
         "autoplay_speed": 4
       },
       "blocks": {
@@ -36,12 +36,11 @@
       "settings": {
         "title": "¿Para quién es este gifting?",
         "subtitle": "Dinos quién se merece ese detalle y te ayudamos a encontrar el regalo ideal.",
-        "show_view_all": true,
-        "view_all_text": "Ver todas las categorías"
+        "show_view_all": false
       },
       "blocks": {
-        "cat-1": { "type": "category", "settings": { "name": "Para ella", "tagline": "Encuentra el regalo perfecto para las mujeres especiales en tu vida", "link": "/collections/catalogo?filter.p.m.custom.recipient=Para+Ella" } },
-        "cat-2": { "type": "category", "settings": { "name": "Para él", "tagline": "Detalles únicos para los hombres que más quieres", "link": "/collections/catalogo?filter.p.m.custom.recipient=Para+El" } }
+        "cat-1": { "type": "category", "settings": { "name": "Para Ella", "tagline": "Mamá, novia, suegra o mejor amiga. Regalos que celebran su lugar en tu vida.", "link": "/collections/catalogo?filter.p.m.custom.recipient=Para+Ella" } },
+        "cat-2": { "type": "category", "settings": { "name": "Para El", "tagline": "Pareja, papá, amigo o hermano. Detalles con intención para alguien especial.", "link": "/collections/catalogo?filter.p.m.custom.recipient=Para+El" } }
       },
       "block_order": ["cat-1", "cat-2"]
     },

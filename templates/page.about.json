@@ -16,7 +16,7 @@
         "team_title": "El Equipo",
         "team_text": "<p>Somos un equipo pequeño pero matón, basado en CDMX. Nos mueve la idea de que regalar puede ser una experiencia chida, no un estrés.</p><p>Detrás de cada caja que armamos hay risas, café y muchas ganas de que tu regalo sea exactamente lo que imaginaste.</p>",
         "cta_title": "¿Listo para armar algo especial?",
-        "cta_text": "Ver productos"
+        "cta_text": "Crear mi Giftbox"
       },
       "blocks": {
         "value-1": { "type": "value", "settings": { "name": "Creatividad", "description": "Aquí lo diferente es lo que manda. Buscamos productos que sorprendan." } },
