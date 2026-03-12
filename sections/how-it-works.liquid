@@ -38,8 +38,8 @@
     </div>
 
     <div class="how-it-works__cta animate-item" style="--i:{{ section.blocks.size | plus: 1 }}">
-      <a href="{{ section.settings.cta_link | default: '#categories' }}" class="btn btn--primary btn--large">
-        {{ section.settings.cta_text | default: 'Listo para armar mi giftbox' }}
+      <a href="{{ section.settings.cta_link | default: '/collections/catalogo' }}" class="btn btn--primary btn--large">
+        {{ section.settings.cta_text | default: 'Crear mi Giftbox' }}
         {% render 'icon-arrow-right' %}
       </a>
     </div>

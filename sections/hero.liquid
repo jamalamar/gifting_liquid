@@ -10,8 +10,8 @@
           {{ section.settings.subheadline | default: 'Arma cajas de regalo únicas con productos de emprendedores locales. Tú eliges, nosotros lo hacemos realidad.' }}
         </p>
         <div class="hero__cta animate-item" style="--i:3">
-          <a href="{{ section.settings.cta_link | default: routes.all_products_collection_url }}" class="btn btn--primary btn--large">
-            {{ section.settings.cta_text | default: 'Empezar a armar mi regalo' }}
+          <a href="{{ section.settings.cta_link | default: '/collections/catalogo' }}" class="btn btn--primary btn--large">
+            {{ section.settings.cta_text | default: 'Crear mi Giftbox' }}
             {% render 'icon-arrow-right' %}
           </a>
         </div>
@@ -114,7 +114,7 @@
       "type": "text",
       "id": "cta_text",
       "label": "Texto del botón",
-      "default": "Empezar a armar mi regalo"
+      "default": "Crear mi Giftbox"
     },
     {
       "type": "url",
