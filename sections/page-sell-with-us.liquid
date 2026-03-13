@@ -110,25 +110,34 @@
       </div>
     {%- endif -%}
     <div class="container">
-      <h2 class="sell-process__title">{{ section.settings.process_title | default: '¿Cómo funciona?' }}</h2>
-      <div class="sell-process__timeline">
-        {%- assign step_count = 0 -%}
-        {%- for block in section.blocks -%}
-          {%- if block.type == 'step' -%}
-            {%- assign step_count = step_count | plus: 1 -%}
-          {%- endif -%}
-        {%- endfor -%}
+      <div class="sell-process__header">
+        <h2 class="sell-process__title">{{ section.settings.process_title | default: '¿Cómo funciona?' }}</h2>
+        {%- if section.settings.process_subtitle != blank -%}
+          <p class="sell-process__subtitle">{{ section.settings.process_subtitle }}</p>
+        {%- endif -%}
+      </div>
+      <div class="sell-process__grid">
         {%- assign step_index = 0 -%}
         {%- for block in section.blocks -%}
           {%- if block.type == 'step' -%}
             {%- assign step_index = step_index | plus: 1 -%}
             <div class="sell-step animate-item" style="--i:{{ step_index }}" {{ block.shopify_attributes }}>
-              <div class="sell-step__number collage-sticker collage-sticker--accent">{{ block.settings.number }}</div>
+              <div class="sell-step__number">{{ block.settings.number }}</div>
+              <div class="sell-step__icon">
+                {%- case block.settings.icon -%}
+                  {%- when 'user' -%}{% render 'icon-user' %}
+                  {%- when 'search' -%}{% render 'icon-search' %}
+                  {%- when 'box' -%}{% render 'icon-gift-box' %}
+                  {%- when 'truck' -%}{% render 'icon-truck' %}
+                  {%- when 'gift' -%}{% render 'icon-gift' %}
+                  {%- when 'heart' -%}{% render 'icon-heart' %}
+                  {%- when 'star' -%}{% render 'icon-star' %}
+                  {%- when 'sparkle' -%}{% render 'icon-sparkle' %}
+                  {%- else -%}{% render 'icon-star' %}
+                {%- endcase -%}
+              </div>
               <h3 class="sell-step__title">{{ block.settings.title }}</h3>
               <p class="sell-step__description">{{ block.settings.description }}</p>
-              {%- if step_index < step_count -%}
-                <div class="sell-step__connector" aria-hidden="true"></div>
-              {%- endif -%}
             </div>
           {%- endif -%}
         {%- endfor -%}
@@ -296,6 +305,11 @@
       "default": "¿Cómo funciona?"
     },
     {
+      "type": "textarea",
+      "id": "process_subtitle",
+      "label": "Subtitulo del proceso"
+    },
+    {
       "type": "header",
       "content": "CTA"
     },
@@ -397,10 +411,26 @@
       "name": "Paso del proceso",
       "settings": [
         {
-          "type": "number",
+          "type": "text",
           "id": "number",
           "label": "Numero",
-          "default": 1
+          "default": "01"
+        },
+        {
+          "type": "select",
+          "id": "icon",
+          "label": "Icono",
+          "default": "star",
+          "options": [
+            { "value": "gift", "label": "Regalo" },
+            { "value": "search", "label": "Buscar" },
+            { "value": "box", "label": "Caja" },
+            { "value": "truck", "label": "Envío" },
+            { "value": "heart", "label": "Corazón" },
+            { "value": "star", "label": "Estrella" },
+            { "value": "sparkle", "label": "Brillo" },
+            { "value": "user", "label": "Persona" }
+          ]
         },
         {
           "type": "text",
