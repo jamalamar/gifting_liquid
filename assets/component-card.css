@@ -1369,11 +1369,11 @@
 }
 
 .step__card {
-  background: var(--color-white);
+  background: none;
   border-radius: 24px;
   padding: 2rem 1.5rem;
   text-align: center;
-  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.06);
+  box-shadow: none;
   transition: transform 0.4s cubic-bezier(0.16, 1, 0.3, 1), box-shadow 0.4s ease;
   height: 100%;
   display: flex;
@@ -1383,7 +1383,6 @@
 
 .step__card:hover {
   transform: translateY(-6px);
-  box-shadow: 0 16px 40px rgba(0, 0, 0, 0.1);
 }
 
 .step__icon {
@@ -4562,8 +4561,8 @@
 
 .faqs-item__number {
   flex-shrink: 0;
-  width: 40px;
-  height: 40px;
+  width: 44px;
+  height: 44px;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -4572,13 +4571,14 @@
   font-weight: 700;
   color: var(--color-accent);
   background: rgba(var(--color-accent-rgb), 0.15);
-  border-radius: var(--radius-sm);
-  transition: all var(--transition-fast);
+  border-radius: var(--radius-lg);
+  transition: all var(--transition-base);
 }
 
 .faqs-item.is-open .faqs-item__number {
-  background: var(--color-primary);
+  background: linear-gradient(135deg, var(--color-primary), var(--color-accent));
   color: var(--color-white);
+  transform: scale(1.05);
 }
 
 .faqs-item__question {
@@ -4597,13 +4597,15 @@
 
 .faqs-item__icon {
   flex-shrink: 0;
-  width: 24px;
-  height: 24px;
+  width: 32px;
+  height: 32px;
   display: flex;
   align-items: center;
   justify-content: center;
   color: var(--color-text-light);
-  transition: transform var(--transition-fast);
+  background: rgba(var(--color-navy-rgb), 0.06);
+  border-radius: 50%;
+  transition: transform var(--transition-base), background var(--transition-base), color var(--transition-base);
 }
 
 .faqs-item__icon .icon {
@@ -4613,18 +4615,19 @@
 
 .faqs-item.is-open .faqs-item__icon {
   transform: rotate(45deg);
-  color: var(--color-primary);
+  background: var(--color-primary);
+  color: var(--color-white);
 }
 
 .faqs-item__body {
   max-height: 0;
   overflow: hidden;
-  transition: max-height var(--transition-base);
+  transition: max-height var(--transition-base) ease-in-out;
 }
 
 .faqs-item__answer {
   padding: 0 0 var(--spacing-lg);
-  padding-left: calc(40px + var(--spacing-md));
+  padding-left: calc(44px + var(--spacing-md));
   font-size: 1rem;
   color: var(--color-text-light);
   line-height: 1.7;
@@ -4742,27 +4745,89 @@
   }
 }
 
+.contact-faqs__title {
+  text-align: center;
+}
+
 /* Updated FAQ item for collage style */
 .faqs-item.collage-paper {
   border: none;
   background: var(--color-white);
-  border-radius: var(--radius-md);
+  border-radius: var(--radius-lg);
   padding: 0;
   margin-bottom: var(--spacing-md);
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+  box-shadow: 0 1px 4px rgba(0, 0, 0, 0.06);
+  border-left: 4px solid transparent;
+  transition: box-shadow var(--transition-base), border-color var(--transition-base), transform var(--transition-base);
 }
 
 .faqs-item.collage-paper:first-child {
   border-top: none;
 }
 
+.faqs-item.collage-paper:hover {
+  box-shadow: 0 4px 16px rgba(var(--color-primary-rgb, 0, 0, 0), 0.12);
+  transform: translateY(-1px);
+}
+
+.faqs-item.collage-paper.is-open {
+  border-left-color: var(--color-primary);
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+}
+
 .faqs-item.collage-paper .faqs-item__header {
   padding: var(--spacing-md) var(--spacing-lg);
 }
 
+/* Remove opacity hover — card-level hover handles feedback */
+.faqs-item.collage-paper .faqs-item__header:hover {
+  opacity: 1;
+}
+
 .faqs-item.collage-paper .faqs-item__answer {
   padding: 0 var(--spacing-lg) var(--spacing-lg);
-  padding-left: calc(40px + var(--spacing-md) + var(--spacing-lg));
+  padding-left: calc(44px + var(--spacing-md) + var(--spacing-lg));
+  border-top: 1px solid rgba(var(--color-navy-rgb), 0.08);
+  margin-left: var(--spacing-lg);
+  margin-right: var(--spacing-lg);
+  padding-top: var(--spacing-md);
+}
+
+/* FAQ Mobile Refinements */
+@media screen and (max-width: 749px) {
+  .faqs-item__number {
+    width: 36px;
+    height: 36px;
+    font-size: 0.875rem;
+  }
+
+  .faqs-item__icon {
+    width: 28px;
+    height: 28px;
+  }
+
+  .faqs-item__icon .icon {
+    width: 0.875rem;
+    height: 0.875rem;
+  }
+
+  .faqs-item.collage-paper {
+    border-radius: var(--radius-md);
+    margin-bottom: var(--spacing-sm);
+    border-left-width: 3px;
+  }
+
+  .faqs-item.collage-paper .faqs-item__header {
+    padding: var(--spacing-sm) var(--spacing-md);
+    gap: var(--spacing-sm);
+  }
+
+  .faqs-item.collage-paper .faqs-item__answer {
+    padding-left: calc(36px + var(--spacing-sm) + var(--spacing-md));
+    margin-left: var(--spacing-md);
+    margin-right: var(--spacing-md);
+  }
+
 }
 
 /* FAQ Hero with Background Image */

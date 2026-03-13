@@ -218,7 +218,7 @@
     "settings": [
       {
         "type": "paragraph",
-        "content": "Sube hasta 12 imagenes/iconos. En cada carga de pagina, 6 apareceran aleatoriamente con diferentes profundidades (algunos mas lejos, otros mas cerca)."
+        "content": "Sube hasta 18 imagenes/iconos. En cada carga de pagina apareceran aleatoriamente con diferentes profundidades (algunos mas lejos, otros mas cerca)."
       },
       {
         "type": "image_picker",

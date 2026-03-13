@@ -103,6 +103,14 @@
     </div>
   </div>
 
+  <!-- DEBUG: Available filters -->
+  {%- for filter in collection.filters -%}
+    <!-- FILTER: label="{{ filter.label }}" type="{{ filter.type }}" -->
+    {%- for value in filter.values -%}
+      <!-- VALUE: param_name="{{ value.param_name }}" value="{{ value.value }}" label="{{ value.label }}" count="{{ value.count }}" -->
+    {%- endfor -%}
+  {%- endfor -%}
+
   <!-- Active Filter Chips -->
   {%- assign has_active_filters = false -%}
   {%- for filter in collection.filters -%}
