@@ -2896,20 +2896,36 @@
    ================================================ */
 
 /* Hero Section */
-/* Sticker images (shared) */
+/* ===== About Page — Collage Style ===== */
+
+/* Shared */
 .about-sticker img {
   width: 100%;
   height: 100%;
   object-fit: contain;
 }
 
-/* Block 1: Introducción */
+/* Block 1: Introducción — Hero-style 2-column */
 .about-intro {
-  padding: var(--spacing-3xl) var(--container-padding);
-  max-width: 800px;
-  margin: 0 auto;
-  text-align: center;
-  position: relative;
+  padding: var(--spacing-2xl) 0;
+}
+
+.about-intro__grid {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: var(--spacing-xl);
+  align-items: center;
+}
+
+@media screen and (min-width: 750px) {
+  .about-intro__grid {
+    grid-template-columns: 1.2fr 0.8fr;
+    gap: var(--spacing-2xl);
+  }
+}
+
+.about-intro__text-col {
+  text-align: left;
 }
 
 .about-intro__title {
@@ -2932,31 +2948,47 @@
   margin-bottom: var(--spacing-md);
 }
 
-.about-intro__deco {
-  position: absolute;
-  bottom: var(--spacing-lg);
-  right: 0;
-  width: 80px;
-  height: 80px;
-  transform: rotate(-15deg);
+.about-intro__visual {
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
 
-@media screen and (min-width: 750px) {
-  .about-intro__deco {
-    right: -40px;
-    width: 120px;
-    height: 120px;
+.about-intro__deco-frame {
+  transform: rotate(2deg);
+  transition: transform 0.3s ease;
+}
+
+.about-intro__deco-frame:hover {
+  transform: rotate(0deg) scale(1.03);
+}
+
+.about-intro__deco-frame img {
+  max-width: 280px;
+  width: 100%;
+  height: auto;
+  display: block;
+}
+
+@media screen and (max-width: 749px) {
+  .about-intro__text-col {
+    text-align: center;
+  }
+  .about-intro__deco-frame img {
+    max-width: 200px;
   }
 }
 
-/* Block 2: Qué es Gifting */
+/* Block 2: Qué es Gifting — Accent paper card */
 .about-what {
-  padding: var(--spacing-2xl) var(--container-padding);
-  max-width: 800px;
+  padding: var(--spacing-2xl) 0;
+}
+
+.about-what__card {
+  max-width: 900px;
   margin: 0 auto;
   text-align: center;
   position: relative;
-  border-top: 1px solid rgba(var(--color-navy-rgb), 0.08);
 }
 
 .about-what__title {
@@ -2980,28 +3012,31 @@
 
 .about-what__deco {
   position: absolute;
-  top: var(--spacing-xl);
-  left: 0;
+  top: var(--spacing-md);
+  right: calc(-1 * var(--spacing-md));
   width: 70px;
   height: 70px;
+  transform: rotate(10deg);
 }
 
 @media screen and (min-width: 750px) {
   .about-what__deco {
-    left: -30px;
+    right: calc(-1 * var(--spacing-xl));
     width: 100px;
     height: 100px;
   }
 }
 
-/* Block 3: Mural de marcas */
+/* Block 3: Mural de marcas — Alt background */
 .about-brands {
-  padding: var(--spacing-2xl) var(--container-padding);
+  padding: var(--spacing-2xl) 0;
+}
+
+.about-brands__inner {
   max-width: 800px;
   margin: 0 auto;
   text-align: center;
   position: relative;
-  border-top: 1px solid rgba(var(--color-navy-rgb), 0.08);
 }
 
 .about-brands__title {
@@ -3039,27 +3074,16 @@
 
 @media screen and (min-width: 750px) {
   .about-brands__deco {
-    right: -20px;
+    right: -40px;
     width: 100px;
     height: 100px;
   }
 }
 
-/* Block 4: Por qué Gifting */
+/* Block 4: Por qué Gifting — Step cards with icon boxes */
 .about-why {
-  padding: var(--spacing-2xl) var(--container-padding);
-  max-width: var(--container-max);
-  margin: 0 auto;
+  padding: var(--spacing-2xl) 0;
   text-align: center;
-}
-
-.about-why__title {
-  font-family: var(--font-heading);
-  font-size: clamp(1.5rem, 4vw, 2rem);
-  font-weight: 700;
-  color: var(--color-navy);
-  line-height: 1.2;
-  margin-bottom: var(--spacing-xl);
 }
 
 .about-why__grid {
@@ -3076,61 +3100,72 @@
 }
 
 .about-why__card {
-  background: var(--color-white);
-  border-radius: var(--radius-lg);
-  padding: var(--spacing-lg);
-  box-shadow: 0 4px 20px rgba(var(--color-navy-rgb), 0.08);
-  border: 1px solid rgba(var(--color-navy-rgb), 0.06);
-  text-align: left;
-  transition: transform 0.3s ease, box-shadow 0.3s ease;
+  padding: 2rem 1.5rem;
+  text-align: center;
+  transition: transform 0.3s ease;
 }
 
 .about-why__card:hover {
   transform: translateY(-4px);
-  box-shadow: 0 8px 30px rgba(var(--color-navy-rgb), 0.12);
+}
+
+.about-why__icon {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin: 0 auto var(--spacing-md);
+  transition: transform 0.3s ease;
+}
+
+.about-why__icon svg,
+.about-why__icon .icon {
+  width: 28px;
+  height: 28px;
+  color: var(--color-primary);
+}
+
+.about-why__card:hover .about-why__icon {
+  transform: scale(1.08) rotate(-3deg);
 }
 
 .about-why__card-title {
   font-family: var(--font-heading);
-  font-size: 1.25rem;
+  font-size: 1.125rem;
   font-weight: 700;
   color: var(--color-navy);
   margin-bottom: var(--spacing-sm);
-  display: flex;
-  align-items: center;
-  gap: var(--spacing-xs);
-}
-
-.about-why__card-title svg,
-.about-why__card-title .icon {
-  width: 20px;
-  height: 20px;
-  flex-shrink: 0;
-  color: var(--color-accent);
 }
 
 .about-why__card-text {
   color: var(--color-text-light);
+  font-size: 0.9375rem;
   line-height: 1.7;
   margin: 0;
 }
 
-/* Block 5: Fundadoras */
+/* Block 5: Fundadoras — Polaroid + content */
 .about-founders {
-  padding: var(--spacing-2xl) var(--container-padding);
-  max-width: var(--container-max);
-  margin: 0 auto;
+  padding: var(--spacing-2xl) 0;
+}
+
+.about-founders__grid {
   display: grid;
+  grid-template-columns: 1fr;
   gap: var(--spacing-xl);
   align-items: center;
   position: relative;
 }
 
 @media screen and (min-width: 750px) {
-  .about-founders {
+  .about-founders__grid {
     grid-template-columns: 1fr 1fr;
-    padding: var(--spacing-3xl) var(--container-padding);
+    gap: var(--spacing-2xl);
   }
+}
+
+.about-founders__image {
+  max-width: 450px;
+  margin: 0 auto;
 }
 
 .about-founders__image img {
@@ -3138,7 +3173,10 @@
   height: auto;
   aspect-ratio: 4/3;
   object-fit: cover;
-  border-radius: var(--radius-lg);
+}
+
+.about-founders__badge {
+  margin-bottom: var(--spacing-md);
 }
 
 .about-founders__title {
@@ -3162,7 +3200,7 @@
 .about-founders__deco {
   position: absolute;
   bottom: var(--spacing-lg);
-  right: var(--container-padding);
+  right: 0;
   width: 80px;
   height: 80px;
   transform: rotate(12deg);
@@ -3175,20 +3213,29 @@
   }
 }
 
-/* Block 6: Frase final */
+/* Block 6: Frase final — Accent background */
 .about-closing {
-  padding: var(--spacing-3xl) var(--container-padding);
+  padding: var(--spacing-3xl) 0;
+}
+
+.about-closing__inner {
   max-width: 800px;
   margin: 0 auto;
   text-align: center;
 }
 
-.about-closing svg,
-.about-closing .icon {
-  width: 32px;
-  height: 32px;
-  color: var(--color-accent);
-  margin-bottom: var(--spacing-md);
+.about-closing__icon {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin: 0 auto var(--spacing-lg);
+}
+
+.about-closing__icon svg,
+.about-closing__icon .icon {
+  width: 28px;
+  height: 28px;
+  color: var(--color-primary);
 }
 
 .about-closing__text {
