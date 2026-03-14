@@ -84,7 +84,7 @@
           {%- if block.type == 'bullet' -%}
             <div class="about-why__card animate-item" style="--i:{{ forloop.index }}" {{ block.shopify_attributes }}>
               <div class="about-why__icon">
-                {% render 'icon-sparkle' %}
+                {% render block.settings.bullet_icon %}
               </div>
               <h3 class="about-why__card-title">
                 {{ block.settings.bullet_title }}
@@ -132,7 +132,7 @@
     <div class="container">
       <div class="about-closing__inner animate-item" style="--i:0">
         <div class="about-closing__icon">
-          {% render 'icon-sparkle' %}
+          {% render section.settings.closing_icon %}
         </div>
         <p class="about-closing__text">
           {{ section.settings.closing_text }}
@@ -240,6 +240,29 @@
       "content": "Frase final"
     },
     {
+      "type": "select",
+      "id": "closing_icon",
+      "label": "Ícono frase final",
+      "default": "icon-sparkle",
+      "options": [
+        { "value": "icon-sparkle", "label": "Sparkle" },
+        { "value": "icon-star", "label": "Estrella" },
+        { "value": "icon-heart", "label": "Corazón" },
+        { "value": "icon-gift", "label": "Regalo" },
+        { "value": "icon-gift-box", "label": "Caja de regalo" },
+        { "value": "icon-bow", "label": "Moño" },
+        { "value": "icon-package", "label": "Paquete" },
+        { "value": "icon-check", "label": "Check" },
+        { "value": "icon-paper-airplane", "label": "Avión de papel" },
+        { "value": "icon-palette", "label": "Paleta" },
+        { "value": "icon-megaphone", "label": "Megáfono" },
+        { "value": "icon-eye", "label": "Ojo" },
+        { "value": "icon-truck", "label": "Camión" },
+        { "value": "icon-clock", "label": "Reloj" },
+        { "value": "icon-users", "label": "Personas" }
+      ]
+    },
+    {
       "type": "text",
       "id": "closing_text",
       "label": "Frase de cierre",
@@ -275,6 +298,29 @@
       "type": "bullet",
       "name": "Punto destacado",
       "settings": [
+        {
+          "type": "select",
+          "id": "bullet_icon",
+          "label": "Ícono",
+          "default": "icon-sparkle",
+          "options": [
+            { "value": "icon-sparkle", "label": "Sparkle" },
+            { "value": "icon-star", "label": "Estrella" },
+            { "value": "icon-heart", "label": "Corazón" },
+            { "value": "icon-gift", "label": "Regalo" },
+            { "value": "icon-gift-box", "label": "Caja de regalo" },
+            { "value": "icon-bow", "label": "Moño" },
+            { "value": "icon-package", "label": "Paquete" },
+            { "value": "icon-check", "label": "Check" },
+            { "value": "icon-paper-airplane", "label": "Avión de papel" },
+            { "value": "icon-palette", "label": "Paleta" },
+            { "value": "icon-megaphone", "label": "Megáfono" },
+            { "value": "icon-eye", "label": "Ojo" },
+            { "value": "icon-truck", "label": "Camión" },
+            { "value": "icon-clock", "label": "Reloj" },
+            { "value": "icon-users", "label": "Personas" }
+          ]
+        },
         {
           "type": "text",
           "id": "bullet_title",
