@@ -122,7 +122,7 @@
           {%- if block.type == 'step' -%}
             {%- assign step_index = step_index | plus: 1 -%}
             <div class="sell-step animate-item" style="--i:{{ step_index }}" {{ block.shopify_attributes }}>
-              <div class="sell-step__number">{{ block.settings.number }}</div>
+              <div class="sell-step__number">{% if block.settings.number < 10 %}0{% endif %}{{ block.settings.number }}</div>
               <div class="sell-step__icon">
                 {%- case block.settings.icon -%}
                   {%- when 'user' -%}{% render 'icon-user' %}
@@ -411,10 +411,10 @@
       "name": "Paso del proceso",
       "settings": [
         {
-          "type": "text",
+          "type": "number",
           "id": "number",
           "label": "Numero",
-          "default": "01"
+          "default": 1
         },
         {
           "type": "select",
@@ -460,9 +460,10 @@
         { "type": "product_category", "settings": { "category": "Skincare y cuidado" } },
         { "type": "product_category", "settings": { "category": "Decoracion hogar" } },
         { "type": "product_category", "settings": { "category": "Y mucho mas..." } },
-        { "type": "step", "settings": { "number": 1, "title": "Aplica", "description": "Llena el formulario" } },
-        { "type": "step", "settings": { "number": 2, "title": "Platicamos", "description": "Te contactamos para conocerte" } },
-        { "type": "step", "settings": { "number": 3, "title": "A vender", "description": "Tu producto sale al mundo" } }
+        { "type": "step", "settings": { "number": 1, "icon": "user", "title": "Elige para quién es", "description": "Empezamos por la persona y su momento." } },
+        { "type": "step", "settings": { "number": 2, "icon": "search", "title": "Descubre y selecciona", "description": "Te mostramos productos que realmente funcionan como regalo." } },
+        { "type": "step", "settings": { "number": 3, "icon": "box", "title": "Personaliza tu caja", "description": "Elige el diseño de tu giftbox y escribe tu mensaje." } },
+        { "type": "step", "settings": { "number": 4, "icon": "truck", "title": "Nosotros lo entregamos", "description": "Lo llevamos hasta su puerta." } }
       ]
     }
   ]

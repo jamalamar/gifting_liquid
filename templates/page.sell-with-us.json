@@ -23,10 +23,10 @@
         "cat-4": { "type": "product_category", "settings": { "category": "Skincare y cuidado" } },
         "cat-5": { "type": "product_category", "settings": { "category": "Decoracion hogar" } },
         "cat-6": { "type": "product_category", "settings": { "category": "Y mucho mas..." } },
-        "step-1": { "type": "step", "settings": { "number": "01", "icon": "user", "title": "Elige para quién es", "description": "¿Es para tu mamá, tu pareja, tu mejor amigo o alguien especial? Empezamos por la persona y su momento." } },
-        "step-2": { "type": "step", "settings": { "number": "02", "icon": "search", "title": "Descubre y selecciona", "description": "Explora por ocasión y vibra. Te mostramos productos que realmente funcionan como regalo. Solo agrega a tu giftbox lo que más te guste." } },
-        "step-3": { "type": "step", "settings": { "number": "03", "icon": "box", "title": "Personaliza tu caja", "description": "Elige el diseño de tu giftbox y escribe tu mensaje. Nosotros lo armamos aesthetic y listo para sorprender." } },
-        "step-4": { "type": "step", "settings": { "number": "04", "icon": "truck", "title": "Nosotros lo entregamos", "description": "Tú dinos cuándo y dónde. Nosotras hacemos la magia y lo llevamos hasta su puerta." } }
+        "step-1": { "type": "step", "settings": { "number": 1, "icon": "user", "title": "Elige para quién es", "description": "¿Es para tu mamá, tu pareja, tu mejor amigo o alguien especial? Empezamos por la persona y su momento." } },
+        "step-2": { "type": "step", "settings": { "number": 2, "icon": "search", "title": "Descubre y selecciona", "description": "Explora por ocasión y vibra. Te mostramos productos que realmente funcionan como regalo. Solo agrega a tu giftbox lo que más te guste." } },
+        "step-3": { "type": "step", "settings": { "number": 3, "icon": "box", "title": "Personaliza tu caja", "description": "Elige el diseño de tu giftbox y escribe tu mensaje. Nosotros lo armamos aesthetic y listo para sorprender." } },
+        "step-4": { "type": "step", "settings": { "number": 4, "icon": "truck", "title": "Nosotros lo entregamos", "description": "Tú dinos cuándo y dónde. Nosotras hacemos la magia y lo llevamos hasta su puerta." } }
       },
       "block_order": ["benefit-1", "benefit-3", "cat-1", "cat-2", "cat-3", "cat-4", "cat-5", "cat-6", "step-1", "step-2", "step-3", "step-4"]
     }
