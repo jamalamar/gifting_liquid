@@ -731,6 +731,7 @@ class ProductForm {
   constructor(container) {
     this.container = container;
     this.productJson = JSON.parse(container.querySelector('[data-product-json]')?.textContent || '{}');
+    this.inventoryData = JSON.parse(container.querySelector('[data-variant-inventory]')?.textContent || '{}');
     this.variantInput = container.querySelector('[data-variant-id]');
     this.optionSelectors = container.querySelectorAll('[data-option-selector]');
     this.mainImage = container.querySelector('[data-main-image]');
@@ -873,12 +874,17 @@ class ProductForm {
       }
     }
 
+    // Look up inventory from Liquid-generated data (not available in product JSON)
+    const inventory = this.inventoryData[variant.id] || {};
+    const invQty = inventory.inventory_quantity || 0;
+    const invManaged = inventory.inventory_management === 'shopify';
+
     // Update stock display
     if (this.stockDisplay) {
-      if (variant.inventory_management === 'shopify') {
+      if (invManaged) {
         this.stockDisplay.style.display = '';
-        if (variant.inventory_quantity > 0) {
-          this.stockDisplay.textContent = `${variant.inventory_quantity} en stock`;
+        if (invQty > 0) {
+          this.stockDisplay.textContent = `${invQty} en stock`;
           this.stockDisplay.classList.remove('product-page__stock--out');
         } else {
           this.stockDisplay.textContent = 'Agotado';
@@ -891,10 +897,10 @@ class ProductForm {
 
     // Update quantity max
     if (this.quantityInput) {
-      if (variant.inventory_management === 'shopify' && variant.inventory_quantity > 0) {
-        this.quantityInput.max = variant.inventory_quantity;
-        if (parseInt(this.quantityInput.value) > variant.inventory_quantity) {
-          this.quantityInput.value = variant.inventory_quantity;
+      if (invManaged && invQty > 0) {
+        this.quantityInput.max = invQty;
+        if (parseInt(this.quantityInput.value) > invQty) {
+          this.quantityInput.value = invQty;
         }
       } else {
         this.quantityInput.removeAttribute('max');
