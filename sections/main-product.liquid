@@ -18,11 +18,12 @@
             </div>
           {%- endif -%}
 
-          {%- if product.available == false -%}
-            <span class="product-page__badge product-page__badge--soldout collage-sticker">Agotado</span>
-          {%- elsif product.compare_at_price > product.price -%}
+          <span class="product-page__badge product-page__badge--soldout collage-sticker" {% if product.available %}style="display:none"{% endif %}>Agotado</span>
+          {%- if product.compare_at_price > product.price -%}
             {%- assign discount = product.compare_at_price | minus: product.price | times: 100.0 | divided_by: product.compare_at_price | round -%}
             <span class="product-page__badge product-page__badge--sale collage-sticker">-{{ discount }}%</span>
+          {%- else -%}
+            <span class="product-page__badge product-page__badge--sale collage-sticker" style="display:none"></span>
           {%- endif -%}
         </div>
 
@@ -58,10 +59,19 @@
 
         <h1 class="product-page__title">{{ product.title }}</h1>
 
+        {%- if product.description != blank -%}
+          <div class="product-page__description">
+            <h2 class="product-page__description-title">Descripcion</h2>
+            <div class="product-page__description-content rte">
+              {{ product.description }}
+            </div>
+          </div>
+        {%- endif -%}
+
         <div class="product-page__price">
-          {%- if product.compare_at_price > product.price -%}
-            <span class="product-page__price-compare">{{ product.compare_at_price | money }}</span>
-          {%- endif -%}
+          <span class="product-page__price-compare" {% unless product.compare_at_price > product.price %}style="display:none"{% endunless %}>
+            {%- if product.compare_at_price > product.price -%}{{ product.compare_at_price | money }}{%- endif -%}
+          </span>
           <span class="product-page__price-current">{{ product.price | money }}</span>
         </div>
 
@@ -103,6 +113,7 @@
             </div>
           {%- endunless -%}
 
+          {%- assign current_variant = product.selected_or_first_available_variant -%}
           <div class="product-page__quantity">
             <label class="product-page__option-label">Cantidad</label>
             <div class="product-page__qty-group">
@@ -114,6 +125,7 @@
                 name="quantity"
                 value="1"
                 min="1"
+                {% if current_variant.inventory_management == 'shopify' and current_variant.inventory_quantity > 0 %}max="{{ current_variant.inventory_quantity }}"{% endif %}
                 class="product-page__qty-input"
                 data-quantity-input
                 aria-label="Cantidad"
@@ -123,6 +135,16 @@
               </button>
             </div>
           </div>
+
+          {%- if current_variant.inventory_management == 'shopify' -%}
+            {%- if current_variant.inventory_quantity > 0 -%}
+              <p class="product-page__stock" data-stock-display>{{ current_variant.inventory_quantity }} en stock</p>
+            {%- else -%}
+              <p class="product-page__stock product-page__stock--out" data-stock-display>Agotado</p>
+            {%- endif -%}
+          {%- else -%}
+            <p class="product-page__stock" data-stock-display style="display:none"></p>
+          {%- endif -%}
 
           <button
             type="submit"
@@ -155,15 +177,6 @@
           </div>
         {%- endif -%}
 
-        {%- if product.description != blank -%}
-          <div class="product-page__description">
-            <h2 class="product-page__description-title">Descripcion</h2>
-            <div class="product-page__description-content rte">
-              {{ product.description }}
-            </div>
-          </div>
-        {%- endif -%}
-
         {%- if product.tags.size > 0 -%}
           <div class="product-page__tags">
             {%- for tag in product.tags -%}
@@ -177,11 +190,11 @@
 
     </div>
   </div>
-</section>
 
-<script type="application/json" data-product-json>
-  {{ product | json }}
-</script>
+  <script type="application/json" data-product-json>
+    {{ product | json }}
+  </script>
+</section>
 
 {% schema %}
 {

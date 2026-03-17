@@ -183,8 +183,12 @@ class Cart {
       if (e.target.closest('[data-quantity-plus]')) {
         const input = e.target.closest('[data-quantity-plus]').parentElement.querySelector('input');
         if (input) {
-          input.value = parseInt(input.value) + 1;
-          this.updateQuantity(input);
+          const newVal = parseInt(input.value) + 1;
+          const max = input.hasAttribute('max') ? parseInt(input.max) : Infinity;
+          if (newVal <= max) {
+            input.value = newVal;
+            this.updateQuantity(input);
+          }
         }
       }
 
@@ -731,6 +735,13 @@ class ProductForm {
     this.optionSelectors = container.querySelectorAll('[data-option-selector]');
     this.mainImage = container.querySelector('[data-main-image]');
     this.thumbnails = container.querySelectorAll('[data-thumbnail]');
+    this.priceCurrent = container.querySelector('.product-page__price-current');
+    this.priceCompare = container.querySelector('.product-page__price-compare');
+    this.addToCartBtn = container.querySelector('[data-add-to-cart]');
+    this.soldoutBadge = container.querySelector('.product-page__badge--soldout');
+    this.saleBadge = container.querySelector('.product-page__badge--sale');
+    this.stockDisplay = container.querySelector('[data-stock-display]');
+    this.quantityInput = container.querySelector('[data-quantity-input]');
     this.selectedOptions = {};
 
     this.init();
@@ -804,14 +815,97 @@ class ProductForm {
       return JSON.stringify(v.options) === JSON.stringify(selectedOptionsArray);
     });
 
-    if (variant && this.variantInput) {
-      this.variantInput.value = variant.id;
+    if (!variant) return;
 
-      // Update variant image if available
-      if (variant.featured_image && this.mainImage) {
-        this.mainImage.src = variant.featured_image.src;
+    if (this.variantInput) {
+      this.variantInput.value = variant.id;
+    }
+
+    // Update variant image
+    if (variant.featured_image && this.mainImage) {
+      this.mainImage.src = variant.featured_image.src;
+      // Sync active thumbnail
+      this.thumbnails.forEach(t => {
+        t.classList.toggle('is-active', t.dataset.src === variant.featured_image.src);
+      });
+    }
+
+    // Update price
+    if (this.priceCurrent) {
+      this.priceCurrent.textContent = this.formatMoney(variant.price);
+    }
+    if (this.priceCompare) {
+      if (variant.compare_at_price && variant.compare_at_price > variant.price) {
+        this.priceCompare.textContent = this.formatMoney(variant.compare_at_price);
+        this.priceCompare.style.display = '';
+      } else {
+        this.priceCompare.textContent = '';
+        this.priceCompare.style.display = 'none';
       }
     }
+
+    // Update sale badge
+    if (this.saleBadge) {
+      if (variant.compare_at_price && variant.compare_at_price > variant.price) {
+        const discount = Math.round((variant.compare_at_price - variant.price) / variant.compare_at_price * 100);
+        this.saleBadge.textContent = `-${discount}%`;
+        this.saleBadge.style.display = '';
+      } else {
+        this.saleBadge.style.display = 'none';
+      }
+    }
+
+    // Update add-to-cart button and soldout badge
+    if (this.addToCartBtn) {
+      const btnText = this.addToCartBtn.querySelector('.product-page__add-btn-text');
+      if (variant.available) {
+        this.addToCartBtn.disabled = false;
+        if (btnText) {
+          btnText.innerHTML = `<svg class="icon icon-cart" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="9" cy="21" r="1"/><circle cx="20" cy="21" r="1"/><path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"/></svg> <span>Agregar a Carrito</span>`;
+        }
+        if (this.soldoutBadge) this.soldoutBadge.style.display = 'none';
+      } else {
+        this.addToCartBtn.disabled = true;
+        if (btnText) {
+          btnText.innerHTML = '<span>Agotado</span>';
+        }
+        if (this.soldoutBadge) this.soldoutBadge.style.display = '';
+      }
+    }
+
+    // Update stock display
+    if (this.stockDisplay) {
+      if (variant.inventory_management === 'shopify') {
+        this.stockDisplay.style.display = '';
+        if (variant.inventory_quantity > 0) {
+          this.stockDisplay.textContent = `${variant.inventory_quantity} en stock`;
+          this.stockDisplay.classList.remove('product-page__stock--out');
+        } else {
+          this.stockDisplay.textContent = 'Agotado';
+          this.stockDisplay.classList.add('product-page__stock--out');
+        }
+      } else {
+        this.stockDisplay.style.display = 'none';
+      }
+    }
+
+    // Update quantity max
+    if (this.quantityInput) {
+      if (variant.inventory_management === 'shopify' && variant.inventory_quantity > 0) {
+        this.quantityInput.max = variant.inventory_quantity;
+        if (parseInt(this.quantityInput.value) > variant.inventory_quantity) {
+          this.quantityInput.value = variant.inventory_quantity;
+        }
+      } else {
+        this.quantityInput.removeAttribute('max');
+      }
+      // Reset to 1 on variant change
+      this.quantityInput.value = 1;
+    }
+  }
+
+  formatMoney(cents) {
+    return '$' + (cents / 100).toFixed(2).replace(/\B(?=(\d{3})+(?!\d))/g, ',') + ' MXN';
   }
 }
 
