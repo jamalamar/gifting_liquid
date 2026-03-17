@@ -17,6 +17,13 @@
         {%- assign is_open = true -%}
       {%- endif -%}
 
+      {%- assign filter_display_label = filter.label -%}
+      {%- assign is_vendor_filter = false -%}
+      {%- if filter.param_name == 'filter.p.vendor' -%}
+        {%- assign filter_display_label = 'Marcas Gifting' -%}
+        {%- assign is_vendor_filter = true -%}
+      {%- endif -%}
+
       <div class="filter-group{% if is_open %} is-open{% endif %}" data-filter-group>
         <button
           type="button"
@@ -24,7 +31,7 @@
           data-filter-toggle-group
           aria-expanded="{% if is_open %}true{% else %}false{% endif %}">
           <span class="filter-group__label">
-            {{ filter.label }}
+            {{ filter_display_label }}
             {%- if active_count > 0 -%}
               <span class="filter-group__active-count collage-badge">{{ active_count }}</span>
             {%- endif -%}
@@ -40,8 +47,9 @@
                   {%- assign label_lower = value.label | downcase -%}
                   {%- assign icon_name = 'gift' -%}
 
-                  {%- comment -%} Map keywords to icons {%- endcomment -%}
-                  {%- if label_lower contains 'ella' or label_lower contains 'novia' or label_lower contains 'madre' or label_lower contains 'mamá' or label_lower contains 'mama' -%}
+                  {%- if is_vendor_filter -%}
+                    {%- assign icon_name = 'package' -%}
+                  {%- elsif label_lower contains 'ella' or label_lower contains 'novia' or label_lower contains 'madre' or label_lower contains 'mamá' or label_lower contains 'mama' -%}
                     {%- assign icon_name = 'heart' -%}
                   {%- elsif label_lower contains 'él' or label_lower contains 'el ' or label_lower contains 'papá' or label_lower contains 'papa' or label_lower contains 'padre' or label_lower contains 'hermano' or label_lower contains 'amigo' -%}
                     {%- assign icon_name = 'star' -%}
