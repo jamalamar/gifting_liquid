@@ -82,6 +82,7 @@
                   <label
                     class="filter-pill{% if value.active %} is-active{% endif %}{% if value.count == 0 and value.active == false %} is-disabled{% endif %}"
                     role="listitem"
+                    data-label="{{ value.label | escape }}"
                   >
                     <input
                       type="checkbox"
