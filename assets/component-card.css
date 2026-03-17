@@ -7693,7 +7693,7 @@ section.sell-page {
 
 /* Creators Hero */
 .creators-hero {
-  padding: var(--spacing-2xl) 0 var(--spacing-xl);
+  padding: var(--spacing-lg) 0 var(--spacing-md);
   text-align: center;
 }
 
@@ -7740,24 +7740,29 @@ section.sell-page {
 .creator-card {
   display: block;
   background: var(--color-white);
-  border-radius: 24px;
-  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
-  overflow: hidden;
+  padding: 10px 10px 0;
+  box-shadow: var(--shadow-sticker);
   text-decoration: none;
   color: inherit;
   transition: transform 0.3s ease, box-shadow 0.3s ease;
 }
 
+/* Alternating slight rotations */
+.creator-card:nth-child(3n+1) { transform: rotate(-1.5deg); }
+.creator-card:nth-child(3n+2) { transform: rotate(1deg); }
+.creator-card:nth-child(3n+3) { transform: rotate(-0.5deg); }
+
 .creator-card:hover {
-  transform: translateY(-5px);
-  box-shadow: 0 12px 32px rgba(0, 0, 0, 0.12);
+  transform: scale(1.03) rotate(1.5deg);
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.15);
 }
 
 .creator-card__image-wrapper {
   position: relative;
   width: 100%;
-  aspect-ratio: 1;
+  aspect-ratio: 4 / 5;
   overflow: hidden;
+  border-radius: 0;
   background: linear-gradient(135deg, var(--color-bg-alt) 0%, var(--color-border) 100%);
 }
 
@@ -7789,7 +7794,7 @@ section.sell-page {
 
 .creator-card__content {
   text-align: center;
-  padding: var(--spacing-md) var(--spacing-md) var(--spacing-lg);
+  padding: var(--spacing-sm) var(--spacing-sm) var(--spacing-md);
 }
 
 .creator-card__name {
@@ -7837,9 +7842,9 @@ section.sell-page {
   margin: 0 auto;
   padding: var(--spacing-xl);
   text-align: center;
-  background: var(--color-white);
-  border-radius: 24px;
-  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
+  background: transparent;
+  border-radius: 0;
+  box-shadow: none;
 }
 
 .creators-cta__badge {
@@ -7887,7 +7892,7 @@ section.sell-page {
 
 @media screen and (max-width: 768px) {
   .creators-hero {
-    padding: var(--spacing-xl) 0 var(--spacing-md);
+    padding: var(--spacing-md) 0 var(--spacing-sm);
   }
 
   .creators-cta__card {
