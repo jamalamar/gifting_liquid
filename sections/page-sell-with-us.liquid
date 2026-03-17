@@ -124,17 +124,21 @@
             <div class="sell-step animate-item" style="--i:{{ step_index }}" {{ block.shopify_attributes }}>
               <div class="sell-step__number">{% if block.settings.number < 10 %}0{% endif %}{{ block.settings.number }}</div>
               <div class="sell-step__icon">
-                {%- case block.settings.icon -%}
-                  {%- when 'user' -%}{% render 'icon-user' %}
-                  {%- when 'search' -%}{% render 'icon-search' %}
-                  {%- when 'box' -%}{% render 'icon-gift-box' %}
-                  {%- when 'truck' -%}{% render 'icon-truck' %}
-                  {%- when 'gift' -%}{% render 'icon-gift' %}
-                  {%- when 'heart' -%}{% render 'icon-heart' %}
-                  {%- when 'star' -%}{% render 'icon-star' %}
-                  {%- when 'sparkle' -%}{% render 'icon-sparkle' %}
-                  {%- else -%}{% render 'icon-star' %}
-                {%- endcase -%}
+                {%- if block.settings.icon_image != blank -%}
+                  <img src="{{ block.settings.icon_image | image_url: width: 120 }}" alt="{{ block.settings.title }}" width="60" height="60" loading="lazy">
+                {%- else -%}
+                  {%- case block.settings.icon -%}
+                    {%- when 'user' -%}{% render 'icon-user' %}
+                    {%- when 'search' -%}{% render 'icon-search' %}
+                    {%- when 'box' -%}{% render 'icon-gift-box' %}
+                    {%- when 'truck' -%}{% render 'icon-truck' %}
+                    {%- when 'gift' -%}{% render 'icon-gift' %}
+                    {%- when 'heart' -%}{% render 'icon-heart' %}
+                    {%- when 'star' -%}{% render 'icon-star' %}
+                    {%- when 'sparkle' -%}{% render 'icon-sparkle' %}
+                    {%- else -%}{% render 'icon-star' %}
+                  {%- endcase -%}
+                {%- endif -%}
               </div>
               <h3 class="sell-step__title">{{ block.settings.title }}</h3>
               <p class="sell-step__description">{{ block.settings.description }}</p>
@@ -417,9 +421,15 @@
           "default": 1
         },
         {
+          "type": "image_picker",
+          "id": "icon_image",
+          "label": "Icono personalizado (imagen)",
+          "info": "Si se sube una imagen, se usa en lugar del icono por defecto"
+        },
+        {
           "type": "select",
           "id": "icon",
-          "label": "Icono",
+          "label": "Icono por defecto",
           "default": "star",
           "options": [
             { "value": "gift", "label": "Regalo" },

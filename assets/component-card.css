@@ -5420,7 +5420,7 @@ section.sell-page {
 .sell-hero {
   padding: var(--spacing-xl) 0;
   text-align: center;
-  background: var(--color-background);
+  background: transparent;
   position: relative;
 }
 
@@ -5600,7 +5600,7 @@ section.sell-page {
 /* Sell Products */
 .sell-products {
   padding: var(--spacing-xl) 0;
-  background: var(--color-background-alt);
+  background: transparent;
 }
 
 .sell-products__title {
@@ -5638,9 +5638,9 @@ section.sell-page {
   align-items: center;
   gap: 0.75rem;
   padding: var(--spacing-sm) var(--spacing-md);
-  background: var(--color-white);
+  background: transparent;
   border-radius: var(--radius-md);
-  border: 1px solid var(--color-background-alt);
+  border: none;
   transition: transform 0.2s ease, box-shadow 0.2s ease;
 }
 
@@ -5719,9 +5719,9 @@ section.sell-page {
 }
 
 .sell-step {
-  background: #fff;
+  background: transparent;
   border-radius: 24px;
-  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
+  box-shadow: none;
   padding: var(--spacing-lg);
   text-align: center;
   transition: transform 0.3s ease, box-shadow 0.3s ease;
@@ -5729,7 +5729,7 @@ section.sell-page {
 
 .sell-step:hover {
   transform: translateY(-5px);
-  box-shadow: 0 8px 30px rgba(0, 0, 0, 0.14);
+  box-shadow: none;
 }
 
 .sell-step__number {
@@ -5749,7 +5749,7 @@ section.sell-page {
   display: flex;
   align-items: center;
   justify-content: center;
-  background: var(--color-accent, #fef3c7);
+  background: transparent;
   border-radius: 50%;
 }
 
@@ -5841,7 +5841,7 @@ section.sell-page {
 
 /* Sell CTA */
 .sell-cta {
-  background: var(--color-accent, #fef3c7);
+  background: transparent;
   padding: var(--spacing-lg) 0;
 }
 
