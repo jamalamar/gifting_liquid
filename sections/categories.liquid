@@ -10,7 +10,7 @@
         {%- assign card_link = block.settings.link | default: '#' -%}
         {%- if block.settings.filter_value != blank -%}
           {%- assign encoded_filter = block.settings.filter_value | url_param_escape -%}
-          {%- assign card_link = card_link | append: '?filter.p.m.custom.recipient=' | append: encoded_filter -%}
+          {%- assign card_link = card_link | append: '?filter.p.m.custom.para_quien=' | append: encoded_filter -%}
         {%- endif -%}
         <a href="{{ card_link }}" class="category-card animate-item" style="--i:{{ forloop.index }}" {{ block.shopify_attributes }}>
           <div class="category-card__inner">
@@ -127,8 +127,8 @@
         {
           "type": "text",
           "id": "filter_value",
-          "label": "Filtro destinatario (valor exacto del metafield)",
-          "info": "Ej: Para Ella, Para El. Se añade como filtro en la URL."
+          "label": "Filtro para quién (valor exacto del metafield)",
+          "info": "Ej: Para Ella, Para El. Se añade como filtro para_quien en la URL."
         }
       ]
     }

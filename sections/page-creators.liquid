@@ -22,7 +22,7 @@
       <div class="creators-grid__wrapper">
         {%- for block in section.blocks -%}
           <a
-            href="/collections/catalogo?filter.p.vendor={{ block.settings.vendor_handle | default: block.settings.name | handleize | url_encode }}"
+            href="/collections/catalogo?filter.p.vendor={{ block.settings.vendor_handle | default: block.settings.name | url_param_escape }}"
             class="creator-card animate-item"
             style="--i:{{ forloop.index }}"
             {{ block.shopify_attributes }}
