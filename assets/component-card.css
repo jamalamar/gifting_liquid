@@ -7829,6 +7829,21 @@ section.sell-page {
 .creator-card__content {
   text-align: center;
   padding: var(--spacing-sm) var(--spacing-sm) var(--spacing-md);
+  height: 120px;
+  overflow: hidden;
+}
+
+.creator-card:hover .creator-card__content {
+  overflow-y: auto;
+}
+
+.creator-card__content::-webkit-scrollbar {
+  width: 4px;
+}
+
+.creator-card__content::-webkit-scrollbar-thumb {
+  background: rgba(0, 0, 0, 0.15);
+  border-radius: 2px;
 }
 
 .creator-card__name {
