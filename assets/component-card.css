@@ -8367,3 +8367,269 @@ section.sell-page {
     font-size: 0.65rem;
   }
 }
+
+/* ============================================
+   GIFTINGS PAGE — Pre-made gift packages
+   ============================================ */
+
+.giftings-page {
+  padding-bottom: var(--spacing-xl);
+}
+
+/* Hero */
+.giftings-hero {
+  padding: var(--spacing-xl) 0 var(--spacing-lg);
+  text-align: center;
+}
+
+.giftings-hero__badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  background: var(--color-accent);
+  color: var(--color-primary);
+  padding: 6px 16px;
+  border-radius: 20px;
+  font-family: var(--font-accent);
+  font-size: 0.95rem;
+  margin-bottom: var(--spacing-sm);
+}
+
+.giftings-hero__badge svg {
+  width: 18px;
+  height: 18px;
+}
+
+.giftings-hero__count {
+  font-family: var(--font-accent);
+  color: var(--color-text-light);
+  font-size: 0.95rem;
+  margin-top: var(--spacing-xs);
+}
+
+/* Package Grid */
+.giftings-grid {
+  padding: var(--spacing-md) 0;
+}
+
+.giftings-grid__wrapper {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: var(--spacing-lg);
+}
+
+.giftings-grid__empty {
+  text-align: center;
+  padding: var(--spacing-xl) 0;
+  color: var(--color-text-light);
+  font-family: var(--font-accent);
+  font-size: 1.1rem;
+}
+
+/* Package Card */
+.giftings-card {
+  background: var(--color-white);
+  border-radius: var(--radius-md);
+  box-shadow: var(--shadow-sticker);
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+  transition: transform 0.4s ease, box-shadow 0.4s ease;
+}
+
+.giftings-card:hover {
+  transform: translateY(-5px) rotate(0deg) !important;
+  box-shadow: 0 12px 30px rgba(0, 0, 0, 0.12);
+}
+
+/* Card Image */
+.giftings-card__image {
+  position: relative;
+  overflow: hidden;
+  aspect-ratio: 3 / 2;
+}
+
+.giftings-card__image img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  transition: transform 0.5s ease;
+}
+
+.giftings-card:hover .giftings-card__image img {
+  transform: scale(1.05);
+}
+
+.giftings-card__placeholder {
+  width: 100%;
+  height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: var(--color-background-alt);
+}
+
+.giftings-card__placeholder svg {
+  width: 60px;
+  height: 60px;
+  opacity: 0.3;
+}
+
+/* Card Content */
+.giftings-card__content {
+  padding: var(--spacing-md);
+  display: flex;
+  flex-direction: column;
+  flex: 1;
+}
+
+.giftings-card__name {
+  font-family: var(--font-heading);
+  font-size: 1.3rem;
+  color: var(--color-primary);
+  margin: 0 0 var(--spacing-xs);
+}
+
+.giftings-card__desc {
+  color: var(--color-text-light);
+  font-size: 0.9rem;
+  line-height: 1.5;
+  margin: 0 0 var(--spacing-sm);
+}
+
+/* Product Thumbnails */
+.giftings-card__products {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  flex-wrap: wrap;
+  margin-bottom: var(--spacing-sm);
+}
+
+.giftings-card__product-thumb {
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  overflow: hidden;
+  border: 2px solid var(--color-border);
+  flex-shrink: 0;
+}
+
+.giftings-card__product-thumb img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.giftings-card__product-thumb svg {
+  width: 100%;
+  height: 100%;
+  padding: 6px;
+  opacity: 0.4;
+}
+
+.giftings-card__product-count {
+  font-family: var(--font-accent);
+  font-size: 0.8rem;
+  color: var(--color-text-light);
+}
+
+/* Card Footer */
+.giftings-card__footer {
+  margin-top: auto;
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-xs);
+}
+
+.giftings-card__price {
+  font-family: var(--font-heading);
+  font-size: 1.4rem;
+  color: var(--color-primary);
+  font-weight: 700;
+}
+
+.giftings-card__add {
+  width: 100%;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+}
+
+.giftings-card__add.is-loading {
+  position: relative;
+  color: transparent;
+}
+
+.giftings-card__add.is-loading::after {
+  content: "";
+  position: absolute;
+  width: 16px;
+  height: 16px;
+  top: 50%;
+  left: 50%;
+  margin-left: -8px;
+  margin-top: -8px;
+  border: 2px solid var(--color-white);
+  border-radius: 50%;
+  border-top-color: transparent;
+  animation: spin 0.8s linear infinite;
+}
+
+/* CTA Section */
+.giftings-cta {
+  padding: var(--spacing-xl) 0 0;
+}
+
+.giftings-cta__card {
+  background: var(--color-accent);
+  border-radius: var(--radius-md);
+  padding: var(--spacing-xl) var(--spacing-lg);
+  text-align: center;
+  max-width: 600px;
+  margin: 0 auto;
+}
+
+.giftings-cta__badge {
+  margin-bottom: var(--spacing-sm);
+}
+
+.giftings-cta__badge svg {
+  width: 32px;
+  height: 32px;
+  color: var(--color-primary);
+}
+
+.giftings-cta__badge img {
+  display: inline-block;
+}
+
+.giftings-cta__title {
+  font-family: var(--font-heading);
+  font-size: 1.5rem;
+  color: var(--color-primary);
+  margin: 0 0 var(--spacing-xs);
+}
+
+.giftings-cta__text {
+  color: var(--color-text-light);
+  margin: 0 0 var(--spacing-md);
+  line-height: 1.6;
+}
+
+/* Responsive */
+@media screen and (max-width: 749px) {
+  .giftings-grid__wrapper {
+    grid-template-columns: 1fr;
+    gap: var(--spacing-md);
+  }
+
+  .giftings-card__name {
+    font-size: 1.15rem;
+  }
+
+  .giftings-cta__card {
+    padding: var(--spacing-lg) var(--spacing-md);
+  }
+}
