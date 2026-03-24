@@ -17,10 +17,10 @@
           </div>
         </div>
         <div class="about-intro__visual animate-item" style="--i:3">
-          {%- if section.settings.sticker_1 != blank -%}
+          {%- if section.settings.intro_polaroid != blank -%}
             <div class="about-polaroid about-polaroid--right">
               <div class="about-polaroid__frame">
-                <img src="{{ section.settings.sticker_1 | image_url: width: 500 }}" alt="" loading="lazy">
+                <img src="{{ section.settings.intro_polaroid | image_url: width: 500 }}" alt="" loading="lazy">
                 {%- if section.settings.intro_caption != blank -%}
                   <span class="about-polaroid__caption">{{ section.settings.intro_caption }}</span>
                 {%- endif -%}
@@ -231,6 +231,11 @@
       "type": "richtext",
       "id": "intro_text",
       "label": "Texto introducción"
+    },
+    {
+      "type": "image_picker",
+      "id": "intro_polaroid",
+      "label": "Polaroid intro"
     },
     {
       "type": "text",
