@@ -2954,34 +2954,47 @@
   justify-content: center;
 }
 
-.about-intro__deco-frame {
-  transform: rotate(2deg);
-  transition: transform 0.3s ease;
-}
-
-.about-intro__deco-frame:hover {
-  transform: rotate(0deg) scale(1.03);
-}
-
-.about-intro__deco-frame img {
-  max-width: 280px;
-  width: 100%;
-  height: auto;
-  display: block;
+.about-intro__visual .about-polaroid__frame {
+  max-width: 320px;
 }
 
 @media screen and (max-width: 749px) {
   .about-intro__text-col {
     text-align: center;
   }
-  .about-intro__deco-frame img {
-    max-width: 200px;
+  .about-intro__visual .about-polaroid__frame {
+    max-width: 240px;
   }
 }
 
 /* Block 2: Qué es Gifting — Accent paper card */
 .about-what {
   padding: var(--spacing-2xl) 0;
+}
+
+.about-what__layout {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: var(--spacing-xl);
+  align-items: center;
+  max-width: 1000px;
+  margin: 0 auto;
+}
+
+@media screen and (min-width: 750px) {
+  .about-what__layout {
+    grid-template-columns: 1fr auto;
+    gap: var(--spacing-2xl);
+  }
+}
+
+.about-what__polaroid {
+  display: flex;
+  justify-content: center;
+}
+
+.about-what__polaroid .about-polaroid__frame {
+  max-width: 280px;
 }
 
 .about-what__card {
@@ -3030,6 +3043,31 @@
 /* Block 3: Mural de marcas — Alt background */
 .about-brands {
   padding: var(--spacing-2xl) 0;
+}
+
+.about-brands__layout {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: var(--spacing-xl);
+  align-items: center;
+  max-width: 1000px;
+  margin: 0 auto;
+}
+
+@media screen and (min-width: 750px) {
+  .about-brands__layout {
+    grid-template-columns: auto 1fr;
+    gap: var(--spacing-2xl);
+  }
+}
+
+.about-brands__polaroid {
+  display: flex;
+  justify-content: center;
+}
+
+.about-brands__polaroid .about-polaroid__frame {
+  max-width: 280px;
 }
 
 .about-brands__inner {
@@ -3168,11 +3206,12 @@
   margin: 0 auto;
 }
 
-.about-founders__image img {
+.about-founders__image .about-polaroid__frame {
   width: 100%;
-  height: auto;
+}
+
+.about-founders__image .about-polaroid__frame img {
   aspect-ratio: 4/3;
-  object-fit: cover;
 }
 
 .about-founders__badge {
@@ -3245,6 +3284,71 @@
   color: var(--color-navy);
   line-height: 1.3;
   margin: 0;
+}
+
+/* About page — Why section polaroid */
+.about-why__polaroid {
+  display: flex;
+  justify-content: center;
+  margin-bottom: var(--spacing-xl);
+}
+
+.about-why__polaroid .about-polaroid__frame {
+  max-width: 300px;
+}
+
+/* About page — Closing section polaroid */
+.about-closing__polaroid {
+  display: flex;
+  justify-content: center;
+  margin-bottom: var(--spacing-lg);
+}
+
+.about-closing__polaroid .about-polaroid__frame {
+  max-width: 220px;
+}
+
+/* ===== Polaroid Shared Styles ===== */
+.about-polaroid__frame {
+  background: #fff;
+  padding: 10px 10px 40px;
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1), 0 1px 3px rgba(0, 0, 0, 0.08);
+  display: inline-block;
+  transition: transform 0.4s ease;
+}
+
+.about-polaroid__frame img {
+  width: 100%;
+  height: auto;
+  display: block;
+  aspect-ratio: 4/3;
+  object-fit: cover;
+}
+
+.about-polaroid__caption {
+  display: block;
+  text-align: center;
+  font-family: var(--font-heading);
+  font-size: 0.85rem;
+  color: var(--color-text-light);
+  margin-top: 8px;
+  font-style: italic;
+}
+
+.about-polaroid--left .about-polaroid__frame {
+  transform: rotate(-3deg);
+}
+
+.about-polaroid--right .about-polaroid__frame {
+  transform: rotate(3deg);
+}
+
+.about-polaroid--center .about-polaroid__frame {
+  transform: rotate(2deg);
+}
+
+.about-polaroid__frame:hover {
+  transform: rotate(0deg) scale(1.03);
 }
 
 /* ===== Collection Page - Editorial Style ===== */
