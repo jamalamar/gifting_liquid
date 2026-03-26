@@ -156,22 +156,17 @@
       var card = btn.closest('.giftings-card');
       if (!card) return;
 
-      var rawIds = card.getAttribute('data-variant-ids');
-      console.log('Giftings: raw variant IDs attr:', rawIds);
-
       var variantIds;
       try {
-        variantIds = JSON.parse(rawIds);
+        variantIds = JSON.parse(card.getAttribute('data-variant-ids'));
       } catch(err) {
-        console.error('Giftings: JSON parse error:', err);
         return;
       }
 
-      console.log('Giftings: parsed variant IDs:', variantIds);
-      if (!variantIds || !variantIds.length) {
-        console.warn('Giftings: No variant IDs found on card');
-        return;
-      }
+      if (!variantIds || !variantIds.length) return;
+
+      // Save original button HTML before modifying
+      var originalHTML = btn.innerHTML;
 
       // Loading state
       btn.classList.add('is-loading');
@@ -198,29 +193,9 @@
         return response.json();
       })
       .then(function() {
-        // Update cart count and totals
-        return fetch('/cart.js');
-      })
-      .then(function(response) { return response.json(); })
-      .then(function(cart) {
-        // Update cart count badges
-        document.querySelectorAll('[data-cart-count], [data-drawer-cart-count]').forEach(function(el) {
-          el.textContent = cart.item_count;
-        });
-
-        // Refresh cart drawer via section rendering API
-        return fetch('/?sections=cart-drawer');
-      })
-      .then(function(response) { return response.json(); })
-      .then(function(sections) {
-        var drawerEl = document.querySelector('[data-cart-drawer]');
-        if (drawerEl && sections['cart-drawer']) {
-          var temp = document.createElement('div');
-          temp.innerHTML = sections['cart-drawer'];
-          var newDrawer = temp.querySelector('[data-cart-drawer]');
-          if (newDrawer) {
-            drawerEl.innerHTML = newDrawer.innerHTML;
-          }
+        // Use the Cart instance to refresh drawer content
+        if (window.cart) {
+          window.cart.updateCartUI();
         }
 
         // Open cart drawer
@@ -230,18 +205,13 @@
           document.body.style.overflow = 'hidden';
         }
 
-        // Show success feedback
-        btn.textContent = '¡Agregado!';
-        setTimeout(function() {
-          btn.innerHTML = 'Agregar al carrito {% render "icon-arrow-right" %}';
-        }, 2000);
+        btn.textContent = '\u00a1Agregado!';
+        setTimeout(function() { btn.innerHTML = originalHTML; }, 2000);
       })
       .catch(function(error) {
         console.error('Package add error:', error);
         btn.textContent = 'Error - Intenta de nuevo';
-        setTimeout(function() {
-          btn.innerHTML = 'Agregar al carrito {% render "icon-arrow-right" %}';
-        }, 3000);
+        setTimeout(function() { btn.innerHTML = originalHTML; }, 3000);
       })
       .finally(function() {
         btn.classList.remove('is-loading');

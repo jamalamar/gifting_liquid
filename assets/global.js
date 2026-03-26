@@ -1590,7 +1590,7 @@ class CollectionFilters {
 // Initialize
 document.addEventListener('DOMContentLoaded', () => {
   new Header();
-  new Cart();
+  window.cart = new Cart();
   new NewsletterPopup();
   new CollectionFilters();
 
