@@ -4098,6 +4098,16 @@
   display: grid;
   grid-template-columns: repeat(2, 1fr);
   gap: var(--spacing-md);
+  grid-auto-rows: 1fr;
+}
+
+/* Uniform cards — remove collage rotations in the product grid */
+.collection-products .collage-photo {
+  transform: none;
+}
+
+.collection-products .collage-photo:hover {
+  transform: translateY(-4px);
 }
 
 @media screen and (min-width: 750px) {
