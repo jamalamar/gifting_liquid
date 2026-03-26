@@ -1,6 +1,7 @@
 <section class="giftings-page" data-section-id="{{ section.id }}" data-animate="stagger">
   <!-- Hero -->
-  <div class="giftings-hero">
+  <div class="giftings-hero"{% if section.settings.hero_image != blank %} style="background-image: url('{{ section.settings.hero_image | image_url: width: 1920 }}')"{% endif %}>
+    <div class="giftings-hero__overlay"></div>
     <div class="container">
       <div class="section-header animate-item" style="--i:0">
         <div class="giftings-hero__badge">
@@ -241,6 +242,11 @@
     {
       "type": "header",
       "content": "Hero"
+    },
+    {
+      "type": "image_picker",
+      "id": "hero_image",
+      "label": "Imagen de fondo del hero"
     },
     {
       "type": "text",

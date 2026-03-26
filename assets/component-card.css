@@ -8378,8 +8378,42 @@ section.sell-page {
 
 /* Hero */
 .giftings-hero {
+  position: relative;
   padding: var(--spacing-xl) 0 var(--spacing-lg);
   text-align: center;
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+}
+
+.giftings-hero[style*="background-image"] {
+  padding: calc(var(--spacing-xl) * 2) 0 calc(var(--spacing-lg) * 2);
+  min-height: 340px;
+  display: flex;
+  align-items: center;
+}
+
+.giftings-hero[style*="background-image"] .section-title,
+.giftings-hero[style*="background-image"] .section-subtitle,
+.giftings-hero[style*="background-image"] .giftings-hero__count {
+  color: var(--color-white);
+}
+
+.giftings-hero__overlay {
+  position: absolute;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.4);
+  pointer-events: none;
+  display: none;
+}
+
+.giftings-hero[style*="background-image"] .giftings-hero__overlay {
+  display: block;
+}
+
+.giftings-hero .container {
+  position: relative;
+  z-index: 1;
 }
 
 .giftings-hero__badge {
