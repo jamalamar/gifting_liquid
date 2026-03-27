@@ -782,6 +782,51 @@
   color: var(--color-primary);
 }
 
+/* Mobile product card adjustments */
+@media screen and (max-width: 749px) {
+  .product-card__content {
+    padding: 0.5rem 0.25rem;
+  }
+
+  .product-card__vendor {
+    font-size: 0.675rem;
+    margin-bottom: 0.125rem;
+  }
+
+  .product-card__title {
+    font-size: 0.8125rem;
+    margin-bottom: 0.25rem;
+  }
+
+  .product-card__price-current {
+    font-size: 0.8125rem;
+  }
+
+  .product-card__price-compare {
+    font-size: 0.75rem;
+  }
+
+  .product-card__quick-add {
+    opacity: 1;
+    transform: translateY(0);
+    width: 32px;
+    height: 32px;
+    bottom: 6px;
+    right: 6px;
+  }
+
+  .product-card__badge {
+    font-size: 0.625rem;
+    padding: 0.125rem 0.375rem;
+  }
+
+  .product-card__badges {
+    top: 6px;
+    left: 6px;
+    gap: 0.25rem;
+  }
+}
+
 /* .product-card__tape removed from design */
 
 .product-card__placeholder {
@@ -4099,7 +4144,7 @@
 .collection-products {
   display: grid;
   grid-template-columns: repeat(2, 1fr);
-  gap: var(--spacing-md);
+  gap: 0.75rem;
   grid-auto-rows: 1fr;
 }
 
