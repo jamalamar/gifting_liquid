@@ -91,11 +91,6 @@
 
 /* Responsive adjustments */
 @media screen and (max-width: 749px) {
-  .collection-page--catalogo .collection-main {
-    padding-top: var(--spacing-sm);
-    padding-bottom: var(--spacing-lg);
-  }
-
   .collection-toolbar__inner {
     flex-wrap: wrap;
     gap: 0.75rem;
@@ -115,9 +110,5 @@
     flex: 1 1 100%;
     order: 2;
     justify-content: space-between;
-  }
-
-  .collection-products-wrapper {
-    min-height: 200px;
   }
 }
