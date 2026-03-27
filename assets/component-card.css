@@ -3819,13 +3819,14 @@
 
 @media screen and (min-width: 990px) {
   .collection-filters__panel {
-    position: static;
+    position: sticky;
+    top: 1rem;
     width: auto;
     max-width: none;
-    height: auto;
+    max-height: calc(100vh - 2rem);
     transform: none;
     background: transparent;
-    overflow: visible;
+    overflow-y: auto;
   }
 }
 
@@ -3925,7 +3926,8 @@
 }
 
 .filter-group.is-open .filter-group__content {
-  max-height: 500px;
+  max-height: 300px;
+  overflow-y: auto;
 }
 
 /* Legacy list fallback */
