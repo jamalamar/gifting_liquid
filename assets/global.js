@@ -1129,11 +1129,9 @@ class CollectionFilters {
       }
     });
 
-    // Update "See all" link with query
+    // Always prevent form submit — keep results in dropdown only
     this.searchForm?.addEventListener('submit', (e) => {
-      if (!this.searchQuery) {
-        e.preventDefault();
-      }
+      e.preventDefault();
     });
   }
 
