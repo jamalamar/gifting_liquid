@@ -1179,13 +1179,13 @@
 
 .category-card__image-wrapper {
   position: relative;
-  aspect-ratio: 4/5;
+  aspect-ratio: 3/4;
   overflow: hidden;
 }
 
 @media screen and (min-width: 750px) {
   .category-card__image-wrapper {
-    aspect-ratio: 3/4;
+    aspect-ratio: 1/1;
   }
 }
 
@@ -1390,8 +1390,8 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  width: 80px;
-  height: 80px;
+  width: 120px;
+  height: 120px;
   background: none;
   color: var(--color-primary);
   margin-bottom: 1.5rem;
@@ -1410,8 +1410,8 @@
 }
 
 .step__icon .icon {
-  width: 3.5rem;
-  height: 3.5rem;
+  width: 5rem;
+  height: 5rem;
 }
 
 .step__title {
@@ -3892,6 +3892,15 @@
 
 .filter-group:last-child {
   border-bottom: none;
+}
+
+.filters-hint {
+  font-size: 0.8rem;
+  color: var(--color-text);
+  text-align: center;
+  padding: 0.75rem 0;
+  margin: 0;
+  font-weight: 500;
 }
 
 .filter-group__toggle {
@@ -7906,20 +7915,27 @@ section.sell-page {
 .creator-card__image-wrapper {
   position: relative;
   width: 100%;
-  aspect-ratio: 4 / 5;
+  aspect-ratio: 1 / 1;
   overflow: hidden;
   border-radius: 0;
   background: linear-gradient(135deg, var(--color-bg-alt) 0%, var(--color-border) 100%);
 }
 
 .creator-card__image {
+  position: absolute;
+  inset: 0;
   width: 100%;
   height: 100%;
   object-fit: cover;
-  transition: transform 0.4s ease;
+  opacity: 0;
+  transition: opacity 0.8s ease;
 }
 
-.creator-card:hover .creator-card__image {
+.creator-card__image.is-active {
+  opacity: 1;
+}
+
+.creator-card:hover .creator-card__image.is-active {
   transform: scale(1.05);
 }
 

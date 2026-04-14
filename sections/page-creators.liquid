@@ -27,21 +27,54 @@
             style="--i:{{ forloop.index }}"
             {{ block.shopify_attributes }}
           >
-            <div class="creator-card__image-wrapper">
+            <div class="creator-card__image-wrapper" data-image-cycle>
+              {%- assign has_images = false -%}
               {%- if block.settings.image != blank -%}
+                {%- assign has_images = true -%}
                 <img
                   src="{{ block.settings.image | image_url: width: 600 }}"
                   alt="{{ block.settings.name }}"
                   width="600"
                   height="600"
                   loading="lazy"
+                  class="creator-card__image is-active"
+                >
+              {%- endif -%}
+              {%- if block.settings.image_hover != blank -%}
+                <img
+                  src="{{ block.settings.image_hover | image_url: width: 600 }}"
+                  alt="{{ block.settings.name }}"
+                  width="600"
+                  height="600"
+                  loading="lazy"
                   class="creator-card__image"
                 >
-              {%- else -%}
+              {%- endif -%}
+              {%- if block.settings.image_alt_1 != blank -%}
+                <img
+                  src="{{ block.settings.image_alt_1 | image_url: width: 600 }}"
+                  alt="{{ block.settings.name }}"
+                  width="600"
+                  height="600"
+                  loading="lazy"
+                  class="creator-card__image"
+                >
+              {%- endif -%}
+              {%- if block.settings.image_alt_2 != blank -%}
+                <img
+                  src="{{ block.settings.image_alt_2 | image_url: width: 600 }}"
+                  alt="{{ block.settings.name }}"
+                  width="600"
+                  height="600"
+                  loading="lazy"
+                  class="creator-card__image"
+                >
+              {%- endif -%}
+              {%- unless has_images -%}
                 <div class="creator-card__placeholder">
                   {% render 'icon-user' %}
                 </div>
-              {%- endif -%}
+              {%- endunless -%}
             </div>
 
             <div class="creator-card__content">
@@ -87,6 +120,25 @@
     </div>
   </div>
 </section>
+
+<script>
+  (function() {
+    var wrappers = document.querySelectorAll('[data-image-cycle]');
+    wrappers.forEach(function(wrapper) {
+      var images = wrapper.querySelectorAll('.creator-card__image');
+      if (images.length < 2) return;
+
+      var current = 0;
+      var delay = 2500 + Math.random() * 1500;
+
+      setInterval(function() {
+        images[current].classList.remove('is-active');
+        current = (current + 1) % images.length;
+        images[current].classList.add('is-active');
+      }, delay);
+    });
+  })();
+</script>
 
 {% schema %}
 {
@@ -157,7 +209,22 @@
         {
           "type": "image_picker",
           "id": "image",
-          "label": "Logo o foto"
+          "label": "Imagen principal"
+        },
+        {
+          "type": "image_picker",
+          "id": "image_hover",
+          "label": "Imagen al pasar el cursor"
+        },
+        {
+          "type": "image_picker",
+          "id": "image_alt_1",
+          "label": "Imagen adicional 1"
+        },
+        {
+          "type": "image_picker",
+          "id": "image_alt_2",
+          "label": "Imagen adicional 2"
         },
         {
           "type": "text",
