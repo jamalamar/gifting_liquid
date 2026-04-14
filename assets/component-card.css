@@ -2954,7 +2954,7 @@
 }
 
 .about-intro__visual .about-polaroid__frame {
-  max-width: 320px;
+  max-width: 420px;
 }
 
 @media screen and (max-width: 749px) {
@@ -2962,7 +2962,7 @@
     text-align: center;
   }
   .about-intro__visual .about-polaroid__frame {
-    max-width: 240px;
+    max-width: 320px;
   }
 }
 
@@ -2993,7 +2993,7 @@
 }
 
 .about-what__polaroid .about-polaroid__frame {
-  max-width: 280px;
+  max-width: 380px;
 }
 
 .about-what__card {
@@ -3066,7 +3066,7 @@
 }
 
 .about-brands__polaroid .about-polaroid__frame {
-  max-width: 280px;
+  max-width: 380px;
 }
 
 .about-brands__inner {
@@ -3293,7 +3293,7 @@
 }
 
 .about-why__polaroid .about-polaroid__frame {
-  max-width: 300px;
+  max-width: 400px;
 }
 
 /* About page — Closing section polaroid */
@@ -3304,7 +3304,7 @@
 }
 
 .about-closing__polaroid .about-polaroid__frame {
-  max-width: 220px;
+  max-width: 320px;
 }
 
 /* ===== Polaroid Shared Styles ===== */
