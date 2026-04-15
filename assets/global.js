@@ -1343,10 +1343,10 @@ class CollectionFilters {
     const minPrice = this.section.querySelector('[data-filter-price-min]');
     const maxPrice = this.section.querySelector('[data-filter-price-max]');
     if (minPrice?.value) {
-      url.searchParams.set(minPrice.name, Math.round(parseFloat(minPrice.value) * 100));
+      url.searchParams.set(minPrice.name, parseFloat(minPrice.value));
     }
     if (maxPrice?.value) {
-      url.searchParams.set(maxPrice.name, Math.round(parseFloat(maxPrice.value) * 100));
+      url.searchParams.set(maxPrice.name, parseFloat(maxPrice.value));
     }
 
     return url;
@@ -1414,10 +1414,10 @@ class CollectionFilters {
     const minPrice = this.section.querySelector('[data-filter-price-min]');
     const maxPrice = this.section.querySelector('[data-filter-price-max]');
     if (minPrice?.value) {
-      url.searchParams.set(minPrice.name, Math.round(parseFloat(minPrice.value) * 100));
+      url.searchParams.set(minPrice.name, parseFloat(minPrice.value));
     }
     if (maxPrice?.value) {
-      url.searchParams.set(maxPrice.name, Math.round(parseFloat(maxPrice.value) * 100));
+      url.searchParams.set(maxPrice.name, parseFloat(maxPrice.value));
     }
 
     // Add sort
