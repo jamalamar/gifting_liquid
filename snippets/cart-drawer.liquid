@@ -101,11 +101,11 @@
                   {%- endif -%}
                   <span class="cart-drawer__item-price-current">{{ item.final_line_price | money }}</span>
                 </div>
-
-                <button type="button" class="cart-drawer__item-remove" data-drawer-remove-item data-key="{{ item.key }}" aria-label="Eliminar {{ item.product.title }}">
-                  {% render 'icon-close' %}
-                </button>
               {%- endunless -%}
+
+              <button type="button" class="cart-drawer__item-remove" data-drawer-remove-item data-key="{{ item.key }}" aria-label="Eliminar {{ item.product.title }}">
+                {% render 'icon-close' %}
+              </button>
             </div>
           {%- endfor -%}
         </div>
@@ -154,6 +154,20 @@
         <div class="cart-drawer__subtotal">
           <span>Subtotal</span>
           <span data-drawer-subtotal>{{ cart.total_price | money }}</span>
+        </div>
+
+        <div class="cart-drawer__delivery-date">
+          <label class="cart-drawer__delivery-label" for="drawer-delivery-date">
+            {% render 'icon-truck' %}
+            <span>Fecha de entrega</span>
+          </label>
+          <input
+            type="date"
+            id="drawer-delivery-date"
+            class="cart-drawer__date-input"
+            value="{{ cart.attributes['Fecha de Entrega'] }}"
+            data-drawer-delivery-date
+          >
         </div>
 
         <a href="{{ routes.cart_url }}" class="btn btn--primary cart-drawer__continue-to-cart">

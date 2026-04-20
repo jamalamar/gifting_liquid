@@ -169,6 +169,28 @@
             >{{ cart.note }}</textarea>
           </div>
 
+          <!-- Delivery Date -->
+          <div class="cart-page__delivery-date">
+            <div class="cart-page__gift-header">
+              <h3 class="cart-page__gift-title">
+                {% render 'icon-truck' %}
+                <span>Fecha de entrega deseada</span>
+              </h3>
+              <span class="sticker-badge sticker-badge--small sticker-badge--secondary">Opcional</span>
+            </div>
+            <p class="cart-page__gift-desc">
+              Selecciona la fecha en que te gustaría recibir tu pedido (mínimo 3 días hábiles).
+            </p>
+            <input
+              type="date"
+              name="attributes[Fecha de Entrega]"
+              class="cart-page__date-input"
+              form="cart-form"
+              value="{{ cart.attributes['Fecha de Entrega'] }}"
+              data-delivery-date
+            >
+          </div>
+
           <!-- Checkout -->
           <a href="{{ routes.checkout_url }}" class="btn btn--primary cart-page__checkout">
             Continuar al checkout

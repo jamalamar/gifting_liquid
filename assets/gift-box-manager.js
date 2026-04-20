@@ -125,6 +125,15 @@ class GiftBoxManager {
     try {
       const response = await fetch('/cart.js');
       this.cart = await response.json();
+
+      // Remove stale box products left from incomplete checkouts
+      const staleBoxItems = this.cart.items.filter(item => this.isGiftBoxProduct(item));
+      if (staleBoxItems.length > 0) {
+        await this.removeBoxProductsFromCart();
+        const refreshed = await fetch('/cart.js');
+        this.cart = await refreshed.json();
+      }
+
       this.renderAfterCartUpdate(this.cart);
     } catch (e) {
       console.error('Failed to fetch cart:', e);

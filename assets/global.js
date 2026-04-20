@@ -248,6 +248,20 @@ class Cart {
         this.saveCartNote(cartNoteTextarea.value);
       });
     }
+
+    // Delivery date inputs - delegated for both cart page and drawer
+    document.addEventListener('change', (e) => {
+      if (e.target.matches('[data-delivery-date], [data-drawer-delivery-date]')) {
+        this.saveDeliveryDate(e.target.value);
+        // Sync both inputs
+        document.querySelectorAll('[data-delivery-date], [data-drawer-delivery-date]').forEach(input => {
+          input.value = e.target.value;
+        });
+      }
+    });
+
+    // Set min date on all delivery date inputs
+    this.setMinDeliveryDate();
   }
 
   async saveCartNote(note) {
@@ -263,6 +277,30 @@ class Cart {
     } catch (error) {
       console.error('Error saving cart note:', error);
     }
+  }
+
+  async saveDeliveryDate(date) {
+    try {
+      await fetch('/cart/update.js', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'Accept': 'application/json'
+        },
+        body: JSON.stringify({ attributes: { 'Fecha de Entrega': date } })
+      });
+    } catch (error) {
+      console.error('Error saving delivery date:', error);
+    }
+  }
+
+  setMinDeliveryDate() {
+    const minDate = new Date();
+    minDate.setDate(minDate.getDate() + 3);
+    const minDateStr = minDate.toISOString().split('T')[0];
+    document.querySelectorAll('[data-delivery-date], [data-drawer-delivery-date]').forEach(input => {
+      input.setAttribute('min', minDateStr);
+    });
   }
 
   async addToCart(id, quantity = 1, submitBtn = null, form = null) {
@@ -591,6 +629,9 @@ class Cart {
     const footerHtml = this.buildCartDrawerFooter(cart);
     drawerPanel.insertAdjacentHTML('beforeend', footerHtml);
 
+    // Set min delivery date on new footer inputs
+    this.setMinDeliveryDate();
+
     // Notify gift box manager of cart update
     if (window.giftBoxManager) {
       window.giftBoxManager.renderAfterCartUpdate(cart);
@@ -670,6 +711,7 @@ class Cart {
     }
 
     const cartUrl = window.routes?.cart_url || '/cart';
+    const deliveryDate = cart.attributes?.['Fecha de Entrega'] || '';
 
     return `
       <div class="cart-drawer__footer">
@@ -677,6 +719,21 @@ class Cart {
         <div class="cart-drawer__subtotal">
           <span>Subtotal</span>
           <span data-drawer-subtotal>${this.formatMoney(cart.total_price)}</span>
+        </div>
+        <div class="cart-drawer__delivery-date">
+          <label class="cart-drawer__delivery-label" for="drawer-delivery-date">
+            <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" width="16" height="16">
+              <path d="M13 16V6a1 1 0 00-1-1H4a1 1 0 00-1 1v10a1 1 0 001 1h1m8-1a1 1 0 01-1 1H9m4-1V8a1 1 0 011-1h2.586a1 1 0 01.707.293l3.414 3.414a1 1 0 01.293.707V16a1 1 0 01-1 1h-1m-6-1a1 1 0 001 1h1M5 17a2 2 0 104 0m-4 0a2 2 0 114 0m6 0a2 2 0 104 0m-4 0a2 2 0 114 0"/>
+            </svg>
+            <span>Fecha de entrega</span>
+          </label>
+          <input
+            type="date"
+            id="drawer-delivery-date"
+            class="cart-drawer__date-input"
+            value="${deliveryDate}"
+            data-drawer-delivery-date
+          >
         </div>
         <a href="${cartUrl}" class="btn btn--primary cart-drawer__continue-to-cart">
           Continuar al carrito
@@ -1188,7 +1245,7 @@ class CollectionFilters {
           <div class="collection-toolbar__result-info">
             <span class="collection-toolbar__result-title">${product.title}</span>
             ${product.vendor ? `<span class="collection-toolbar__result-vendor">${product.vendor}</span>` : ''}
-            <span class="collection-toolbar__result-price">${this.formatMoney(product.price)}</span>
+            <span class="collection-toolbar__result-price">${this.formatPrice(product.price)}</span>
           </div>
         </a>
       `).join('');
@@ -1204,6 +1261,10 @@ class CollectionFilters {
 
   formatMoney(cents) {
     return '$' + (cents / 100).toFixed(2).replace(/\B(?=(\d{3})+(?!\d))/g, ',') + ' MXN';
+  }
+
+  formatPrice(price) {
+    return '$' + parseFloat(price).toFixed(2).replace(/\B(?=(\d{3})+(?!\d))/g, ',') + ' MXN';
   }
 
   showSearchResults() {
