@@ -301,6 +301,10 @@ class Cart {
     document.querySelectorAll('[data-delivery-date], [data-drawer-delivery-date]').forEach(input => {
       input.setAttribute('min', minDateStr);
     });
+    const readable = minDate.toLocaleDateString('es-MX', { weekday: 'long', day: 'numeric', month: 'long' });
+    document.querySelectorAll('[data-delivery-min-label]').forEach(el => {
+      el.textContent = readable;
+    });
   }
 
   async addToCart(id, quantity = 1, submitBtn = null, form = null) {
@@ -734,6 +738,7 @@ class Cart {
             value="${deliveryDate}"
             data-drawer-delivery-date
           >
+          <p class="cart-drawer__date-hint">Mínimo <span data-delivery-min-label>3 días hábiles</span></p>
         </div>
         <a href="${cartUrl}" class="btn btn--primary cart-drawer__continue-to-cart">
           Continuar al carrito

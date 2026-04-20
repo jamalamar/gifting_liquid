@@ -189,6 +189,10 @@
               value="{{ cart.attributes['Fecha de Entrega'] }}"
               data-delivery-date
             >
+            <p class="cart-page__date-hint">
+              {% render 'icon-truck' %}
+              <span>Tu pedido llegará para esta fecha. Fecha mínima: <strong data-delivery-min-label>3 días hábiles desde hoy</strong>.</span>
+            </p>
           </div>
 
           <!-- Checkout -->
