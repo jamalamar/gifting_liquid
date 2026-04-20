@@ -1,4 +1,4 @@
-<section class="cart-page" data-section-id="{{ section.id }}">
+<section class="cart-page collage-section" data-section-id="{{ section.id }}">
   <div class="container">
     <h1 class="cart-page__title">Tu Carrito</h1>
 
@@ -10,7 +10,12 @@
           <form action="{{ routes.cart_url }}" method="post" class="cart-page__form" id="cart-form" data-cart-form>
             <div class="cart-page__items">
               {%- for item in cart.items -%}
-                <div class="cart-page__item" data-cart-item data-key="{{ item.key }}">
+                {%- assign is_gift_box = false -%}
+                {%- if item.product.tags contains 'is-gift-box' -%}
+                  {%- assign is_gift_box = true -%}
+                {%- endif -%}
+
+                <div class="cart-page__item{% if is_gift_box %} cart-page__item--box-product{% endif %}" data-cart-item data-key="{{ item.key }}"{% if is_gift_box %} data-is-box-product{% endif %}>
                   <div class="cart-page__item-image">
                     {%- if item.image -%}
                       <a href="{{ item.url }}">
@@ -39,39 +44,48 @@
                     {%- if item.vendor -%}
                       <p class="cart-page__item-vendor">{{ item.vendor }}</p>
                     {%- endif -%}
+
+                    {%- unless is_gift_box -%}
+                      {%- comment -%} Box Assignment Dropdown {%- endcomment -%}
+                      <div class="cart-page__item-box-assign">
+                        {% render 'cart-item-box-dropdown', item: item %}
+                      </div>
+                    {%- endunless -%}
                   </div>
 
-                  <div class="cart-page__item-quantity">
-                    <div class="cart-page__qty-group">
-                      <button type="button" class="cart-page__qty-btn" data-quantity-minus data-key="{{ item.key }}" aria-label="Disminuir cantidad">
-                        <span>−</span>
-                      </button>
-                      <input
-                        type="number"
-                        name="updates[]"
-                        value="{{ item.quantity }}"
-                        min="0"
-                        class="cart-page__qty-input"
-                        data-quantity-input
-                        data-key="{{ item.key }}"
-                        aria-label="Cantidad"
-                      >
-                      <button type="button" class="cart-page__qty-btn" data-quantity-plus data-key="{{ item.key }}" aria-label="Aumentar cantidad">
-                        <span>+</span>
-                      </button>
+                  {%- unless is_gift_box -%}
+                    <div class="cart-page__item-quantity">
+                      <div class="cart-page__qty-group">
+                        <button type="button" class="cart-page__qty-btn" data-quantity-minus data-key="{{ item.key }}" aria-label="Disminuir cantidad">
+                          <span>−</span>
+                        </button>
+                        <input
+                          type="number"
+                          name="updates[]"
+                          value="{{ item.quantity }}"
+                          min="0"
+                          class="cart-page__qty-input"
+                          data-quantity-input
+                          data-key="{{ item.key }}"
+                          aria-label="Cantidad"
+                        >
+                        <button type="button" class="cart-page__qty-btn" data-quantity-plus data-key="{{ item.key }}" aria-label="Aumentar cantidad">
+                          <span>+</span>
+                        </button>
+                      </div>
                     </div>
-                  </div>
 
-                  <div class="cart-page__item-price">
-                    {%- if item.original_line_price != item.final_line_price -%}
-                      <span class="cart-page__item-price-compare">{{ item.original_line_price | money }}</span>
-                    {%- endif -%}
-                    <span class="cart-page__item-price-current">{{ item.final_line_price | money }}</span>
-                  </div>
+                    <div class="cart-page__item-price">
+                      {%- if item.original_line_price != item.final_line_price -%}
+                        <span class="cart-page__item-price-compare">{{ item.original_line_price | money }}</span>
+                      {%- endif -%}
+                      <span class="cart-page__item-price-current">{{ item.final_line_price | money }}</span>
+                    </div>
 
-                  <button type="button" class="cart-page__item-remove" data-remove-item data-key="{{ item.key }}" aria-label="Eliminar {{ item.product.title }}">
-                    {% render 'icon-close' %}
-                  </button>
+                    <button type="button" class="cart-page__item-remove" data-remove-item data-key="{{ item.key }}" aria-label="Eliminar {{ item.product.title }}">
+                      {% render 'icon-close' %}
+                    </button>
+                  {%- endunless -%}
                 </div>
               {%- endfor -%}
             </div>
@@ -80,6 +94,9 @@
 
         <!-- Sidebar -->
         <div class="cart-page__sidebar">
+          {%- comment -%} Gift Box Selector {%- endcomment -%}
+          {% render 'cart-box-selector' %}
+
           <!-- Summary -->
           <div class="cart-page__summary">
             <h2 class="cart-page__summary-title">Resumen</h2>
@@ -132,19 +149,50 @@
             <p class="cart-page__summary-note">Impuestos incluidos. Envio calculado en checkout.</p>
           </div>
 
-          <!-- Gift Message -->
+          <!-- Gift Message - Redesigned -->
           <div class="cart-page__gift-note">
-            <h3 class="cart-page__gift-title">
-              {% render 'icon-gift' %}
-              <span>Mensaje personalizado</span>
-            </h3>
-            <p class="cart-page__gift-desc">Lo incluiremos en una tarjeta con tu pedido</p>
+            <div class="cart-page__gift-header">
+              <h3 class="cart-page__gift-title">
+                {% render 'icon-heart' %}
+                <span>Deja un mensaje para tus cajas</span>
+              </h3>
+              <span class="sticker-badge sticker-badge--small sticker-badge--secondary">Opcional</span>
+            </div>
+            <p class="cart-page__gift-desc">
+              Si quieres, puedes incluir un mensaje personalizado que agregaremos en una tarjeta dentro de tu caja de regalo.
+            </p>
             <textarea
               name="note"
               class="cart-page__gift-textarea"
-              placeholder="Escribe tu mensaje aqui..."
+              placeholder="Ej: Feliz cumpleaños Maria! Espero que te encante este regalo..."
               form="cart-form"
             >{{ cart.note }}</textarea>
+          </div>
+
+          <!-- Delivery Date -->
+          <div class="cart-page__delivery-date">
+            <div class="cart-page__gift-header">
+              <h3 class="cart-page__gift-title">
+                {% render 'icon-truck' %}
+                <span>Fecha de entrega deseada</span>
+              </h3>
+              <span class="sticker-badge sticker-badge--small sticker-badge--secondary">Opcional</span>
+            </div>
+            <p class="cart-page__gift-desc">
+              Selecciona la fecha en que te gustaría recibir tu pedido (mínimo 3 días hábiles).
+            </p>
+            <input
+              type="date"
+              name="attributes[Fecha de Entrega]"
+              class="cart-page__date-input"
+              form="cart-form"
+              value="{{ cart.attributes['Fecha de Entrega'] }}"
+              data-delivery-date
+            >
+            <p class="cart-page__date-hint">
+              {% render 'icon-truck' %}
+              <span>Tu pedido llegará para esta fecha. Fecha mínima: <strong data-delivery-min-label>3 días hábiles desde hoy</strong>.</span>
+            </p>
           </div>
 
           <!-- Checkout -->
@@ -153,7 +201,7 @@
             {% render 'icon-arrow-right' %}
           </a>
 
-          <a href="{{ routes.all_products_collection_url }}" class="cart-page__continue">
+          <a href="/collections/catalogo" class="cart-page__continue">
             {% render 'icon-arrow-left' %}
             <span>Seguir comprando</span>
           </a>
@@ -168,8 +216,8 @@
         </div>
         <h2 class="cart-page__empty-title">Tu carrito esta vacio</h2>
         <p class="cart-page__empty-text">Explora nuestros productos y encuentra el regalo perfecto.</p>
-        <a href="{{ routes.all_products_collection_url }}" class="btn btn--primary cart-page__empty-btn">
-          Explorar productos
+        <a href="/collections/catalogo" class="btn btn--primary cart-page__empty-btn">
+          Crear mi Giftbox
           {% render 'icon-arrow-right' %}
         </a>
       </div>

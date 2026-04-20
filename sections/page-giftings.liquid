@@ -1,0 +1,332 @@
+<section class="giftings-page" data-section-id="{{ section.id }}" data-animate="stagger">
+  <!-- Hero -->
+  <div class="giftings-hero"{% if section.settings.hero_image != blank %} style="background-image: url('{{ section.settings.hero_image | image_url: width: 1920 }}')"{% endif %}>
+    <div class="giftings-hero__overlay"></div>
+    <div class="container">
+      <div class="section-header animate-item" style="--i:0">
+        <div class="giftings-hero__badge">
+          {% render 'icon-gift-box' %}
+          <span>{{ section.settings.badge_text | default: 'Regalos listos' }}</span>
+        </div>
+        <h1 class="section-title">{{ section.settings.title | default: 'Giftings' }}</h1>
+        <p class="section-subtitle">{{ section.settings.subtitle }}</p>
+        {%- if section.blocks.size > 0 -%}
+          <p class="giftings-hero__count">{{ section.blocks.size }} paquetes disponibles</p>
+        {%- endif -%}
+      </div>
+    </div>
+  </div>
+
+  <!-- Package Grid -->
+  <div class="giftings-grid">
+    <div class="container">
+      <div class="giftings-grid__wrapper">
+        {%- for block in section.blocks -%}
+          {%- assign pkg_collection = collections[block.settings.collection] -%}
+          {%- assign style_variant = forloop.index | modulo: 4 | plus: 1 -%}
+
+          {%- capture variant_ids -%}[
+            {%- for product in pkg_collection.products limit: 6 -%}
+              {{ product.selected_or_first_available_variant.id }}{% unless forloop.last %},{% endunless %}
+            {%- endfor -%}
+          ]{%- endcapture -%}
+
+          <div
+            class="giftings-card collage-card collage-card--{{ style_variant }} animate-item"
+            data-variant-ids='{{ variant_ids | strip_newlines | strip }}'
+            data-package-name="{{ block.settings.name | escape }}"
+            style="--i:{{ forloop.index }}"
+            {{ block.shopify_attributes }}
+          >
+            <div class="giftings-card__image">
+              {%- if block.settings.image != blank -%}
+                <img
+                  src="{{ block.settings.image | image_url: width: 800 }}"
+                  alt="{{ block.settings.name | escape }}"
+                  width="800"
+                  height="533"
+                  loading="lazy"
+                >
+              {%- elsif pkg_collection != blank and pkg_collection.image != blank -%}
+                <img
+                  src="{{ pkg_collection.image | image_url: width: 800 }}"
+                  alt="{{ block.settings.name | escape }}"
+                  width="800"
+                  height="533"
+                  loading="lazy"
+                >
+              {%- else -%}
+                <div class="giftings-card__placeholder">
+                  {% render 'icon-gift-box' %}
+                </div>
+              {%- endif -%}
+            </div>
+
+            <div class="giftings-card__content">
+              <h3 class="giftings-card__name">{{ block.settings.name }}</h3>
+              {%- if block.settings.description != blank -%}
+                <p class="giftings-card__desc">{{ block.settings.description }}</p>
+              {%- endif -%}
+
+              {%- if pkg_collection != blank and pkg_collection.products.size > 0 -%}
+                <div class="giftings-card__products">
+                  {%- for product in pkg_collection.products limit: 6 -%}
+                    <div class="giftings-card__product-thumb" title="{{ product.title }}">
+                      {%- if product.featured_image != blank -%}
+                        <img
+                          src="{{ product.featured_image | image_url: width: 80 }}"
+                          alt="{{ product.title | escape }}"
+                          width="40"
+                          height="40"
+                          loading="lazy"
+                        >
+                      {%- else -%}
+                        {% render 'icon-gift' %}
+                      {%- endif -%}
+                    </div>
+                  {%- endfor -%}
+                  <span class="giftings-card__product-count">{{ pkg_collection.products.size }} productos</span>
+                </div>
+              {%- endif -%}
+
+              <div class="giftings-card__footer">
+                {%- if block.settings.price != blank -%}
+                  <span class="giftings-card__price">{{ block.settings.price }}</span>
+                {%- endif -%}
+                <button
+                  type="button"
+                  class="btn btn--primary giftings-card__add"
+                  data-add-package
+                  {%- if pkg_collection == blank or pkg_collection.products.size == 0 %} disabled{% endif %}
+                >
+                  Agregar al carrito
+                  {% render 'icon-arrow-right' %}
+                </button>
+              </div>
+            </div>
+          </div>
+        {%- endfor -%}
+      </div>
+
+      {%- if section.blocks.size == 0 -%}
+        <div class="giftings-grid__empty">
+          <p>Proximamente agregaremos paquetes de regalo curados.</p>
+        </div>
+      {%- endif -%}
+    </div>
+  </div>
+
+  <!-- CTA Section -->
+  {%- if section.settings.cta_title != blank -%}
+    <div class="giftings-cta">
+      <div class="container">
+        <div class="giftings-cta__card animate-item" style="--i:{{ section.blocks.size | plus: 1 }}">
+          <div class="giftings-cta__badge">
+            {%- if section.settings.cta_icon != blank -%}
+              <img src="{{ section.settings.cta_icon | image_url: width: 80 }}" alt="" width="40" height="40" loading="lazy">
+            {%- else -%}
+              {% render 'icon-sparkle' %}
+            {%- endif -%}
+          </div>
+          <h2 class="giftings-cta__title">{{ section.settings.cta_title }}</h2>
+          {%- if section.settings.cta_text != blank -%}
+            <p class="giftings-cta__text">{{ section.settings.cta_text }}</p>
+          {%- endif -%}
+          {%- if section.settings.cta_button != blank -%}
+            <a href="{{ section.settings.cta_link }}" class="btn btn--primary">
+              {{ section.settings.cta_button }}
+              {% render 'icon-arrow-right' %}
+            </a>
+          {%- endif -%}
+        </div>
+      </div>
+    </div>
+  {%- endif -%}
+</section>
+
+<script>
+  (function() {
+    var section = document.querySelector('[data-section-id="{{ section.id }}"]');
+    if (!section) return;
+
+    section.addEventListener('click', function(e) {
+      var btn = e.target.closest('[data-add-package]');
+      if (!btn) return;
+
+      var card = btn.closest('.giftings-card');
+      if (!card) return;
+
+      var variantIds;
+      try {
+        variantIds = JSON.parse(card.getAttribute('data-variant-ids'));
+      } catch(err) {
+        return;
+      }
+
+      if (!variantIds || !variantIds.length) return;
+
+      // Save original button HTML before modifying
+      var originalHTML = btn.innerHTML;
+
+      // Loading state
+      btn.classList.add('is-loading');
+      btn.disabled = true;
+
+      var items = variantIds.map(function(id) {
+        return { id: parseInt(id), quantity: 1 };
+      });
+
+      fetch(window.routes.cart_add_url, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'Accept': 'application/json'
+        },
+        body: JSON.stringify({ items: items })
+      })
+      .then(function(response) {
+        if (!response.ok) {
+          return response.json().then(function(err) {
+            throw new Error(err.description || 'Error al agregar al carrito');
+          });
+        }
+        return response.json();
+      })
+      .then(function() {
+        // Use the Cart instance to refresh drawer content
+        if (window.cart) {
+          window.cart.updateCartUI();
+        }
+
+        // Open cart drawer
+        var cartDrawer = document.querySelector('[data-cart-drawer]');
+        if (cartDrawer) {
+          cartDrawer.setAttribute('aria-hidden', 'false');
+          document.body.style.overflow = 'hidden';
+        }
+
+        btn.textContent = '\u00a1Agregado!';
+        setTimeout(function() { btn.innerHTML = originalHTML; }, 2000);
+      })
+      .catch(function(error) {
+        console.error('Package add error:', error);
+        btn.textContent = 'Error - Intenta de nuevo';
+        setTimeout(function() { btn.innerHTML = originalHTML; }, 3000);
+      })
+      .finally(function() {
+        btn.classList.remove('is-loading');
+        btn.disabled = false;
+      });
+    });
+  })();
+</script>
+
+{% schema %}
+{
+  "name": "Pagina Giftings",
+  "tag": "section",
+  "class": "section-giftings-page",
+  "settings": [
+    {
+      "type": "header",
+      "content": "Hero"
+    },
+    {
+      "type": "image_picker",
+      "id": "hero_image",
+      "label": "Imagen de fondo del hero"
+    },
+    {
+      "type": "text",
+      "id": "badge_text",
+      "label": "Texto del badge",
+      "default": "Regalos listos"
+    },
+    {
+      "type": "text",
+      "id": "title",
+      "label": "Título",
+      "default": "Giftings"
+    },
+    {
+      "type": "textarea",
+      "id": "subtitle",
+      "label": "Subtítulo",
+      "default": "Paquetes de regalo curados y listos para sorprender. Elige tu favorito y con un solo clic se agrega todo al carrito."
+    },
+    {
+      "type": "header",
+      "content": "CTA Final"
+    },
+    {
+      "type": "text",
+      "id": "cta_title",
+      "label": "Título del CTA"
+    },
+    {
+      "type": "textarea",
+      "id": "cta_text",
+      "label": "Texto del CTA"
+    },
+    {
+      "type": "text",
+      "id": "cta_button",
+      "label": "Texto del botón",
+      "default": "Arma tu propio regalo"
+    },
+    {
+      "type": "url",
+      "id": "cta_link",
+      "label": "Enlace del botón"
+    },
+    {
+      "type": "image_picker",
+      "id": "cta_icon",
+      "label": "Ícono del CTA"
+    }
+  ],
+  "blocks": [
+    {
+      "type": "package",
+      "name": "Paquete de regalo",
+      "settings": [
+        {
+          "type": "collection",
+          "id": "collection",
+          "label": "Colección de productos"
+        },
+        {
+          "type": "text",
+          "id": "name",
+          "label": "Nombre del paquete",
+          "default": "Paquete de regalo"
+        },
+        {
+          "type": "textarea",
+          "id": "description",
+          "label": "Descripción"
+        },
+        {
+          "type": "image_picker",
+          "id": "image",
+          "label": "Imagen del paquete"
+        },
+        {
+          "type": "text",
+          "id": "price",
+          "label": "Precio (ej: $599)"
+        }
+      ]
+    }
+  ],
+  "presets": [
+    {
+      "name": "Pagina Giftings",
+      "blocks": [
+        { "type": "package", "settings": { "name": "Paquete Relax", "description": "Todo lo que necesitas para un momento de paz." } },
+        { "type": "package", "settings": { "name": "Paquete Gourmet", "description": "Sabores artesanales para los que aman la buena mesa." } }
+      ]
+    }
+  ]
+}
+{% endschema %}

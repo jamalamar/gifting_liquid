@@ -1,39 +1,35 @@
-<section class="how-it-works collage-section collage-section--alt" data-section-id="{{ section.id }}" data-animate="steps">
+<section class="how-it-works" data-section-id="{{ section.id }}" data-animate="steps">
   <div class="container">
     <div class="section-header animate-item" style="--i:0">
-      <h2 class="section-title collage-heading collage-heading--underline">
+      <h2 class="section-title">
         {{ section.settings.title | default: 'Regalar nunca fue tan facil (en serio)' }}
       </h2>
     </div>
 
     <div class="how-it-works__steps">
       {%- for block in section.blocks -%}
-        <div class="step collage-card collage-card--step animate-item" style="--i:{{ forloop.index }}" {{ block.shopify_attributes }}>
-          <div class="step__number collage-sticker collage-sticker--circle">
-            <span>{{ block.settings.number | default: forloop.index }}</span>
-          </div>
-          <div class="step__content collage-paper collage-paper--note">
+        <div class="step animate-item" style="--i:{{ forloop.index }}" {{ block.shopify_attributes }}>
+          <div class="step__card">
             <div class="step__icon">
-              {%- case block.settings.icon -%}
-                {%- when 'person' -%}
-                  {% render 'icon-user' %}
-                {%- when 'box' -%}
-                  {% render 'icon-gift-box' %}
-                {%- when 'heart' -%}
-                  {% render 'icon-heart' %}
-                {%- when 'truck' -%}
-                  {% render 'icon-truck' %}
-                {%- else -%}
-                  {% render 'icon-star' %}
-              {%- endcase -%}
+              {%- if block.settings.image != blank -%}
+                <img
+                  src="{{ block.settings.image | image_url: width: 128 }}"
+                  alt="{{ block.settings.title }}"
+                  width="64"
+                  height="64"
+                  loading="lazy"
+                >
+              {%- else -%}
+                {% render 'icon-star' %}
+              {%- endif -%}
             </div>
             <h3 class="step__title">{{ block.settings.title }}</h3>
             <p class="step__description">{{ block.settings.description }}</p>
           </div>
           {%- unless forloop.last -%}
             <div class="step__connector">
-              <svg class="connector-line" viewBox="0 0 100 20" preserveAspectRatio="none">
-                <path d="M0 10 Q 25 0, 50 10 T 100 10" stroke="currentColor" stroke-width="2" fill="none" stroke-dasharray="5,5"/>
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <path d="M5 12h14M12 5l7 7-7 7"/>
               </svg>
             </div>
           {%- endunless -%}
@@ -42,18 +38,11 @@
     </div>
 
     <div class="how-it-works__cta animate-item" style="--i:{{ section.blocks.size | plus: 1 }}">
-      <a href="{{ section.settings.cta_link | default: routes.all_products_collection_url }}" class="btn btn--primary collage-button collage-button--large">
-        {{ section.settings.cta_text | default: 'Empezar ahora' }}
+      <a href="{{ section.settings.cta_link | default: '/collections/catalogo' }}" class="btn btn--primary btn--large">
+        {{ section.settings.cta_text | default: 'Crear mi Giftbox' }}
         {% render 'icon-arrow-right' %}
       </a>
     </div>
-  </div>
-
-  <div class="how-it-works__decorations">
-    <div class="collage-element collage-element--paper-airplane">
-      {% render 'icon-paper-airplane' %}
-    </div>
-    <div class="collage-element collage-element--confetti"></div>
   </div>
 </section>
 
@@ -87,10 +76,9 @@
       "name": "Paso",
       "settings": [
         {
-          "type": "number",
-          "id": "number",
-          "label": "Numero del paso",
-          "default": 1
+          "type": "image_picker",
+          "id": "image",
+          "label": "Icono o imagen"
         },
         {
           "type": "text",
@@ -103,19 +91,6 @@
           "id": "description",
           "label": "Descripcion",
           "default": "¿Es para tu novia, tu mama, tu compa? Empezamos por ahi."
-        },
-        {
-          "type": "select",
-          "id": "icon",
-          "label": "Icono",
-          "options": [
-            { "value": "person", "label": "Persona" },
-            { "value": "box", "label": "Caja de regalo" },
-            { "value": "heart", "label": "Corazon" },
-            { "value": "truck", "label": "Entrega" },
-            { "value": "star", "label": "Estrella" }
-          ],
-          "default": "person"
         }
       ]
     }
@@ -124,10 +99,10 @@
     {
       "name": "Como funciona",
       "blocks": [
-        { "type": "step", "settings": { "number": 1, "title": "Elige a quien va el regalo", "description": "¿Es para tu novia, tu mama, tu compa? Empezamos por ahi.", "icon": "person" } },
-        { "type": "step", "settings": { "number": 2, "title": "Arma tu caja perfecta", "description": "Explora productos de emprendedores mexicanos y selecciona los que mas le van a gustar.", "icon": "box" } },
-        { "type": "step", "settings": { "number": 3, "title": "Personalizalo con amor", "description": "Agrega una tarjeta con tu mensaje. Nosotros lo armamos bonito.", "icon": "heart" } },
-        { "type": "step", "settings": { "number": 4, "title": "Lo entregamos por ti", "description": "Tu solo dinos cuando y donde. Nosotros hacemos la magia.", "icon": "truck" } }
+        { "type": "step", "settings": { "title": "Elige a quien va el regalo", "description": "¿Es para tu novia, tu mama, tu compa? Empezamos por ahi." } },
+        { "type": "step", "settings": { "title": "Arma tu caja perfecta", "description": "Explora productos de emprendedores mexicanos y selecciona los que mas le van a gustar." } },
+        { "type": "step", "settings": { "title": "Personalizalo con amor", "description": "Agrega una tarjeta con tu mensaje. Nosotros lo armamos bonito." } },
+        { "type": "step", "settings": { "title": "Lo entregamos por ti", "description": "Tu solo dinos cuando y donde. Nosotros hacemos la magia." } }
       ]
     }
   ]

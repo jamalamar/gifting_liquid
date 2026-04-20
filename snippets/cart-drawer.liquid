@@ -2,6 +2,26 @@
   Cart drawer / mini cart - Clean style
 {%- endcomment -%}
 
+{%- comment -%} Box products data - placed outside drawer body so it persists during JS re-renders {%- endcomment -%}
+{%- assign box_collection = collections['cajas-de-regalo'] -%}
+{%- if box_collection.products.size > 0 -%}
+  <script type="application/json" data-box-products>
+    [
+      {%- for product in box_collection.products -%}
+        {%- if product.tags contains 'is-gift-box' -%}
+          {
+            "id": {{ product.id }},
+            "variantId": {{ product.selected_or_first_available_variant.id }},
+            "title": {{ product.title | json }},
+            "image": {{ product.featured_media | image_url: width: 100 | json }},
+            "handle": {{ product.handle | json }}
+          }{% unless forloop.last %},{% endunless %}
+        {%- endif -%}
+      {%- endfor -%}
+    ]
+  </script>
+{%- endif -%}
+
 <div class="cart-drawer" data-cart-drawer data-free-shipping-threshold="{{ settings.free_shipping_threshold | default: 0 }}" aria-hidden="true">
   <div class="cart-drawer__overlay" data-cart-drawer-close></div>
 
@@ -19,9 +39,17 @@
 
     <div class="cart-drawer__body" data-cart-drawer-body>
       {%- if cart.item_count > 0 -%}
+        {%- comment -%} Gift Box Selector {%- endcomment -%}
+        {% render 'cart-box-selector' %}
+
         <div class="cart-drawer__items">
           {%- for item in cart.items -%}
-            <div class="cart-drawer__item" data-cart-drawer-item data-key="{{ item.key }}">
+            {%- assign is_gift_box = false -%}
+            {%- if item.product.tags contains 'is-gift-box' -%}
+              {%- assign is_gift_box = true -%}
+            {%- endif -%}
+
+            <div class="cart-drawer__item{% if is_gift_box %} cart-drawer__item--box-product{% endif %}" data-cart-drawer-item data-key="{{ item.key }}"{% if is_gift_box %} data-is-box-product{% endif %}>
               <div class="cart-drawer__item-image">
                 {%- if item.image -%}
                   <a href="{{ item.url }}">
@@ -48,23 +76,32 @@
                   <p class="cart-drawer__item-variant">{{ item.variant.title }}</p>
                 {%- endunless -%}
 
-                <div class="cart-drawer__qty-group">
-                  <button type="button" class="cart-drawer__qty-btn" data-drawer-qty-minus data-key="{{ item.key }}" aria-label="Disminuir cantidad">
-                    <span>−</span>
-                  </button>
-                  <span class="cart-drawer__qty-value" data-drawer-qty-value>{{ item.quantity }}</span>
-                  <button type="button" class="cart-drawer__qty-btn" data-drawer-qty-plus data-key="{{ item.key }}" aria-label="Aumentar cantidad">
-                    <span>+</span>
-                  </button>
-                </div>
+                {%- unless is_gift_box -%}
+                  <div class="cart-drawer__qty-group">
+                    <button type="button" class="cart-drawer__qty-btn" data-drawer-qty-minus data-key="{{ item.key }}" aria-label="Disminuir cantidad">
+                      <span>−</span>
+                    </button>
+                    <span class="cart-drawer__qty-value" data-drawer-qty-value>{{ item.quantity }}</span>
+                    <button type="button" class="cart-drawer__qty-btn" data-drawer-qty-plus data-key="{{ item.key }}" aria-label="Aumentar cantidad">
+                      <span>+</span>
+                    </button>
+                  </div>
+
+                  {%- comment -%} Box Assignment Dropdown {%- endcomment -%}
+                  <div class="cart-drawer__item-box-assign">
+                    {% render 'cart-item-box-dropdown', item: item %}
+                  </div>
+                {%- endunless -%}
               </div>
 
-              <div class="cart-drawer__item-price">
-                {%- if item.original_line_price != item.final_line_price -%}
-                  <span class="cart-drawer__item-price-compare">{{ item.original_line_price | money }}</span>
-                {%- endif -%}
-                <span class="cart-drawer__item-price-current">{{ item.final_line_price | money }}</span>
-              </div>
+              {%- unless is_gift_box -%}
+                <div class="cart-drawer__item-price">
+                  {%- if item.original_line_price != item.final_line_price -%}
+                    <span class="cart-drawer__item-price-compare">{{ item.original_line_price | money }}</span>
+                  {%- endif -%}
+                  <span class="cart-drawer__item-price-current">{{ item.final_line_price | money }}</span>
+                </div>
+              {%- endunless -%}
 
               <button type="button" class="cart-drawer__item-remove" data-drawer-remove-item data-key="{{ item.key }}" aria-label="Eliminar {{ item.product.title }}">
                 {% render 'icon-close' %}
@@ -79,7 +116,7 @@
           </div>
           <p class="cart-drawer__empty-title">Tu carrito esta vacio</p>
           <p class="cart-drawer__empty-text">Explora nuestros productos y encuentra el regalo perfecto.</p>
-          <a href="{{ routes.all_products_collection_url }}" class="btn btn--secondary cart-drawer__empty-btn" data-cart-drawer-close>
+          <a href="/collections/catalogo" class="btn btn--secondary cart-drawer__empty-btn" data-cart-drawer-close>
             Ver productos
           </a>
         </div>
@@ -119,13 +156,24 @@
           <span data-drawer-subtotal>{{ cart.total_price | money }}</span>
         </div>
 
-        <a href="{{ routes.checkout_url }}" class="btn btn--primary cart-drawer__checkout">
-          Continuar al checkout
-          {% render 'icon-arrow-right' %}
-        </a>
+        <div class="cart-drawer__delivery-date">
+          <label class="cart-drawer__delivery-label" for="drawer-delivery-date">
+            {% render 'icon-truck' %}
+            <span>Fecha de entrega</span>
+          </label>
+          <input
+            type="date"
+            id="drawer-delivery-date"
+            class="cart-drawer__date-input"
+            value="{{ cart.attributes['Fecha de Entrega'] }}"
+            data-drawer-delivery-date
+          >
+          <p class="cart-drawer__date-hint">Mínimo <span data-delivery-min-label>3 días hábiles</span></p>
+        </div>
 
-        <a href="{{ routes.cart_url }}" class="cart-drawer__view-cart">
-          Ver carrito completo
+        <a href="{{ routes.cart_url }}" class="btn btn--primary cart-drawer__continue-to-cart">
+          Continuar al carrito
+          {% render 'icon-arrow-right' %}
         </a>
       </div>
     {%- endif -%}

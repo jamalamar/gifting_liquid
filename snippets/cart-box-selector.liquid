@@ -1,0 +1,39 @@
+{%- comment -%}
+  Gift Box Selector UI
+  Renders box style selection for cart items
+  Usage: {% render 'cart-box-selector' %}
+  Note: Box products data is in cart-drawer.liquid to persist during JS re-renders
+{%- endcomment -%}
+
+{%- assign box_collection = collections['cajas-de-regalo'] -%}
+
+{%- if box_collection.products.size > 0 -%}
+  {%- comment -%} Calculate required boxes based on regular items {%- endcomment -%}
+  {%- assign regular_item_count = 0 -%}
+  {%- for item in cart.items -%}
+    {%- unless item.product.tags contains 'is-gift-box' -%}
+      {%- assign regular_item_count = regular_item_count | plus: item.quantity -%}
+    {%- endunless -%}
+  {%- endfor -%}
+
+  {%- if regular_item_count > 0 -%}
+    <div class="gift-box-selector" data-gift-box-selector>
+      <div class="gift-box-selector__header">
+        <svg class="gift-box-selector__icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+          <path d="M12 8v13m0-13V6a4 4 0 00-4-4H6a4 4 0 00-4 4v2h10zm0 0V6a4 4 0 014-4h2a4 4 0 014 4v2H12z"/>
+          <rect x="2" y="8" width="20" height="13" rx="2"/>
+        </svg>
+        <h3 class="gift-box-selector__title">Selecciona tus cajas de regalo</h3>
+        <p class="gift-box-selector__subtitle">Cada caja puede contener hasta 6 productos - incluida gratis</p>
+      </div>
+
+      <div class="gift-box-selector__boxes" data-box-selectors-container>
+        {%- comment -%} JS will populate box slots based on item count {%- endcomment -%}
+      </div>
+
+      <div class="gift-box-selector__validation" data-box-validation hidden>
+        <p class="gift-box-selector__error" data-box-error></p>
+      </div>
+    </div>
+  {%- endif -%}
+{%- endif -%}

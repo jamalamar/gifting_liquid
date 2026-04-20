@@ -1,0 +1,15 @@
+{%- comment -%}
+  Box Assignment Dropdown for Cart Items
+  Usage: {% render 'cart-item-box-dropdown', item: item %}
+{%- endcomment -%}
+
+{%- unless item.product.tags contains 'is-gift-box' -%}
+  <div class="cart-item-box-dropdown" data-box-dropdown-container data-item-key="{{ item.key }}">
+    {%- comment -%} JS will populate the select options based on required boxes {%- endcomment -%}
+    <select class="cart-item-box-dropdown__select collage-select"
+            data-box-select
+            data-item-key="{{ item.key }}">
+      <option value="">Seleccionar caja...</option>
+    </select>
+  </div>
+{%- endunless -%}

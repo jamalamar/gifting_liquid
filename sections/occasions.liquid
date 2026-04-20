@@ -1,4 +1,4 @@
-<section class="occasions collage-section collage-section--alt" data-section-id="{{ section.id }}" data-animate="stagger">
+<section class="occasions collage-section" data-section-id="{{ section.id }}" data-animate="stagger">
   <div class="container">
     <div class="section-header animate-item" style="--i:0">
       <h2 class="section-title collage-heading">
@@ -70,12 +70,15 @@
         </button>
       </div>
     </div>
+
+    <div class="occasions__cta animate-item" style="--i:{{ section.blocks.size | plus: 1 }}">
+      <a href="/collections/catalogo" class="btn btn--primary collage-button">
+        Crear mi Giftbox
+        {% render 'icon-arrow-right' %}
+      </a>
+    </div>
   </div>
 
-  <div class="occasions__decorations">
-    <div class="collage-element collage-element--confetti occasions-confetti-1"></div>
-    <div class="collage-element collage-element--stamp occasions-stamp-1"></div>
-  </div>
 </section>
 
 {% schema %}

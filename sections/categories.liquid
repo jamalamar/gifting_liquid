@@ -1,21 +1,26 @@
-<section class="categories collage-section" data-section-id="{{ section.id }}" data-animate="stagger">
+<section id="categories" class="categories collage-section" data-section-id="{{ section.id }}" data-animate="stagger">
   <div class="container">
     <div class="section-header animate-item" style="--i:0">
-      <h2 class="section-title">{{ section.settings.title | default: '¿A quien quieres consentir hoy?' }}</h2>
+      <h2 class="section-title">{{ section.settings.title | default: '¿Para quién es este gifting?' }}</h2>
       <p class="section-subtitle">{{ section.settings.subtitle | default: 'Dinos quien se merece ese detalle y te ayudamos a encontrar el regalo ideal.' }}</p>
     </div>
 
     <div class="categories__grid">
       {%- for block in section.blocks -%}
-        <a href="{{ block.settings.link | default: '#' }}" class="category-card collage-card collage-card--{{ forloop.index | modulo: 4 | plus: 1 }} animate-item" style="--i:{{ forloop.index }}" {{ block.shopify_attributes }}>
+        {%- assign card_link = block.settings.link | default: '#' -%}
+        {%- if block.settings.filter_value != blank -%}
+          {%- assign encoded_filter = block.settings.filter_value | url_param_escape -%}
+          {%- assign card_link = card_link | append: '?filter.p.m.custom.para_quien=' | append: encoded_filter -%}
+        {%- endif -%}
+        <a href="{{ card_link }}" class="category-card animate-item" style="--i:{{ forloop.index }}" {{ block.shopify_attributes }}>
           <div class="category-card__inner">
-            <div class="category-card__image-wrapper collage-photo collage-photo--{{ block.settings.style | default: 'tape' }}">
+            <div class="category-card__image-wrapper">
               {%- if block.settings.image != blank -%}
                 <img
-                  src="{{ block.settings.image | image_url: width: 400 }}"
+                  src="{{ block.settings.image | image_url: width: 600 }}"
                   alt="{{ block.settings.name }}"
-                  width="200"
-                  height="250"
+                  width="400"
+                  height="500"
                   loading="lazy"
                   class="category-card__image"
                 >
@@ -24,13 +29,21 @@
                   {% render 'icon-gift' %}
                 </div>
               {%- endif -%}
+              <span class="category-card__label">
+                {%- if block.settings.name contains 'ella' or block.settings.name contains 'Ella' -%}
+                  {% render 'icon-heart' %}
+                {%- else -%}
+                  {% render 'icon-sparkle' %}
+                {%- endif -%}
+                {{ block.settings.name }}
+              </span>
+              <div class="category-card__sticker">
+                {% render 'icon-arrow-right' %}
+              </div>
             </div>
             <div class="category-card__content">
               <h3 class="category-card__name">{{ block.settings.name }}</h3>
               <p class="category-card__tagline">{{ block.settings.tagline }}</p>
-            </div>
-            <div class="category-card__sticker collage-sticker collage-sticker--small">
-              {% render 'icon-arrow-right' %}
             </div>
           </div>
         </a>
@@ -46,14 +59,6 @@
     {%- endif -%}
   </div>
 
-  <div class="categories__decorations">
-    <div class="collage-element collage-element--washi-tape categories-tape-1"></div>
-    <div class="collage-element collage-element--doodle categories-doodle-1">
-      <svg viewBox="0 0 100 100">
-        <circle cx="50" cy="50" r="45" fill="none" stroke="currentColor" stroke-width="2" stroke-dasharray="10,5"/>
-      </svg>
-    </div>
-  </div>
 </section>
 
 {% schema %}
@@ -66,7 +71,7 @@
       "type": "text",
       "id": "title",
       "label": "Titulo",
-      "default": "¿A quien quieres consentir hoy?"
+      "default": "¿Para quién es este gifting?"
     },
     {
       "type": "textarea",
@@ -78,7 +83,7 @@
       "type": "checkbox",
       "id": "show_view_all",
       "label": "Mostrar boton ver todo",
-      "default": true
+      "default": false
     },
     {
       "type": "text",
@@ -120,16 +125,10 @@
           "label": "Enlace"
         },
         {
-          "type": "select",
-          "id": "style",
-          "label": "Estilo de foto",
-          "options": [
-            { "value": "tape", "label": "Con cinta" },
-            { "value": "pin", "label": "Con pin" },
-            { "value": "polaroid", "label": "Polaroid" },
-            { "value": "torn", "label": "Rasgado" }
-          ],
-          "default": "tape"
+          "type": "text",
+          "id": "filter_value",
+          "label": "Filtro para quién (valor exacto del metafield)",
+          "info": "Ej: Para Ella, Para El. Se añade como filtro para_quien en la URL."
         }
       ]
     }
@@ -138,8 +137,8 @@
     {
       "name": "Categorias por persona",
       "blocks": [
-        { "type": "category", "settings": { "name": "Para El", "tagline": "Regalos que lo sorprenderan" } },
-        { "type": "category", "settings": { "name": "Para Ella", "tagline": "Detalles que la haran sonreir" } },
+        { "type": "category", "settings": { "name": "Para Ella", "tagline": "Mamá, novia, suegra o mejor amiga. Regalos que celebran su lugar en tu vida." } },
+        { "type": "category", "settings": { "name": "Para El", "tagline": "Pareja, papá, amigo o hermano. Detalles con intención para alguien especial." } },
         { "type": "category", "settings": { "name": "Para Todos", "tagline": "Opciones para cualquier persona" } }
       ]
     }

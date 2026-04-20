@@ -73,27 +73,10 @@
   transform: scale(1.02) rotate(1deg);
 }
 
+/* Tape effect removed - using sticker badges instead */
 .collage-photo--tape::before,
 .collage-photo--tape::after {
-  content: '';
-  position: absolute;
-  width: 40px;
-  height: 20px;
-  background: linear-gradient(to bottom, rgba(255,255,255,0.6) 0%, rgba(200,200,200,0.4) 100%);
-  opacity: 0.9;
-  z-index: 2;
-}
-
-.collage-photo--tape::before {
-  top: -8px;
-  left: 20%;
-  transform: rotate(-5deg);
-}
-
-.collage-photo--tape::after {
-  top: -8px;
-  right: 20%;
-  transform: rotate(5deg);
+  display: none;
 }
 
 .collage-photo--pin::before {
@@ -197,25 +180,8 @@
   height: 1rem;
 }
 
-/* ===== Tape Effect ===== */
-.collage-tape {
-  background: linear-gradient(to bottom, rgba(255,255,255,0.7) 0%, rgba(220,220,220,0.5) 100%);
-  padding: 0.75rem 1.5rem;
-}
-
-.collage-element--tape {
-  position: absolute;
-  width: 60px;
-  height: 25px;
-  background: linear-gradient(to bottom, rgba(255,255,255,0.6) 0%, rgba(200,200,200,0.4) 100%);
-  opacity: 0.85;
-  z-index: 10;
-}
-
-.collage-element--tape-1 { transform: rotate(-15deg); }
-.collage-element--tape-2 { transform: rotate(10deg); }
-.collage-element--tape-3 { transform: rotate(-5deg); }
-.collage-element--tape-4 { transform: rotate(8deg); }
+/* ===== Tape Effect (REMOVED) ===== */
+/* Tape elements have been removed from the design */
 
 /* ===== Pin Effect ===== */
 .collage-pin {
@@ -332,17 +298,7 @@
   opacity: 1;
 }
 
-.collage-button--tape::after {
-  content: '';
-  position: absolute;
-  top: -10px;
-  right: 15%;
-  width: 35px;
-  height: 18px;
-  background: linear-gradient(to bottom, rgba(255,255,255,0.6) 0%, rgba(200,200,200,0.4) 100%);
-  transform: rotate(5deg);
-  opacity: 0.8;
-}
+/* .collage-button--tape removed from design */
 
 /* ===== Collage Icon Button ===== */
 .collage-icon-btn {
@@ -402,7 +358,10 @@
   background: linear-gradient(135deg, rgba(var(--color-accent-rgb), 0.2) 0%, rgba(var(--color-accent-rgb), 0.05) 100%);
 }
 
-/* ===== Global Decorations ===== */
+/* =============================================
+   RANDOM DECORATIONS WITH DEPTH
+   ============================================= */
+
 .collage-decorations {
   position: fixed;
   top: 0;
@@ -414,99 +373,84 @@
   overflow: hidden;
 }
 
-.collage-deco {
-  position: absolute;
-  opacity: 0.1;
+.global-deco {
+  position: fixed;
+  pointer-events: none;
+  opacity: 0;
+  transition: opacity 0.5s ease;
 }
 
-.collage-deco--paper-1 {
-  top: 10%;
-  left: -50px;
-  width: 150px;
-  height: 200px;
-  background: var(--color-accent);
-  transform: rotate(-15deg);
+.global-deco.is-visible {
+  opacity: 1;
 }
 
-.collage-deco--paper-2 {
-  bottom: 20%;
-  right: -30px;
-  width: 120px;
-  height: 160px;
-  background: var(--color-navy-light);
-  transform: rotate(10deg);
+.global-deco img {
+  width: var(--deco-size);
+  height: var(--deco-size);
+  object-fit: contain;
 }
 
-.collage-deco--tape-1 {
-  top: 30%;
-  right: 5%;
-  width: 80px;
-  height: 30px;
-  background: var(--color-primary);
-  transform: rotate(45deg);
-  opacity: 0.15;
-}
+/* === DEPTH LAYERS === */
 
-.collage-deco--tape-2 {
-  bottom: 40%;
-  left: 3%;
-  width: 60px;
-  height: 25px;
-  background: var(--color-secondary);
-  transform: rotate(-30deg);
-  opacity: 0.15;
+/* Far - background, faint, slow float */
+.global-deco--far {
+  --deco-size: 100px;
+  z-index: -3;
+  filter: blur(0.5px);
+  animation: float-slow 14s ease-in-out infinite;
 }
-
-.collage-deco--star-1,
-.collage-deco--star-2 {
-  color: var(--color-accent);
-  animation: float 6s ease-in-out infinite;
-}
-
-.collage-deco--star-1 {
-  top: 15%;
-  right: 10%;
-  width: 30px;
-  height: 30px;
-}
-
-.collage-deco--star-2 {
-  bottom: 25%;
-  left: 8%;
-  width: 20px;
-  height: 20px;
-  animation-delay: 3s;
-}
-
-.collage-deco--dot-1,
-.collage-deco--dot-2,
-.collage-deco--dot-3 {
-  border-radius: 50%;
-  background: var(--color-primary);
-}
-
-.collage-deco--dot-1 {
-  top: 50%;
-  left: 2%;
-  width: 8px;
-  height: 8px;
+.global-deco--far.is-visible {
   opacity: 0.2;
 }
 
-.collage-deco--dot-2 {
-  top: 70%;
-  right: 3%;
-  width: 12px;
-  height: 12px;
-  opacity: 0.15;
+/* Mid - medium size and visibility */
+.global-deco--mid {
+  --deco-size: 160px;
+  z-index: -2;
+  animation: float-mid 9s ease-in-out infinite;
+}
+.global-deco--mid.is-visible {
+  opacity: 0.35;
 }
 
-.collage-deco--dot-3 {
-  top: 25%;
-  left: 90%;
-  width: 6px;
-  height: 6px;
-  opacity: 0.25;
+/* Near - larger, more visible, faster */
+.global-deco--near {
+  --deco-size: 220px;
+  z-index: -1;
+  animation: float-fast 6s ease-in-out infinite;
+}
+.global-deco--near.is-visible {
+  opacity: 0.5;
+}
+
+/* === ANIMATIONS === */
+@keyframes float-slow {
+  0%, 100% { transform: translateY(0) rotate(var(--deco-rotation, 0deg)); }
+  33% { transform: translateY(-8px) rotate(calc(var(--deco-rotation, 0deg) + 3deg)); }
+  66% { transform: translateX(5px) rotate(calc(var(--deco-rotation, 0deg) - 2deg)); }
+}
+
+@keyframes float-mid {
+  0%, 100% { transform: translateY(0) rotate(var(--deco-rotation, 0deg)); }
+  25% { transform: translate(6px, -10px) rotate(calc(var(--deco-rotation, 0deg) + 4deg)); }
+  50% { transform: translate(-4px, -14px) rotate(calc(var(--deco-rotation, 0deg) - 3deg)); }
+  75% { transform: translate(3px, -5px) rotate(calc(var(--deco-rotation, 0deg) + 2deg)); }
+}
+
+@keyframes float-fast {
+  0%, 100% { transform: translateY(0) rotate(var(--deco-rotation, 0deg)); }
+  25% { transform: translate(-8px, -16px) rotate(calc(var(--deco-rotation, 0deg) - 5deg)); }
+  50% { transform: translate(6px, -22px) rotate(calc(var(--deco-rotation, 0deg) + 4deg)); }
+  75% { transform: translate(-3px, -10px) rotate(calc(var(--deco-rotation, 0deg) - 2deg)); }
+}
+
+/* Hide on mobile */
+@media screen and (max-width: 749px) {
+  .global-deco { display: none; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .global-deco { animation: none; }
 }
 
 /* ===== Doodle Elements ===== */
@@ -715,4 +659,64 @@
 .collage-placeholder .icon {
   width: 3rem;
   height: 3rem;
+}
+
+/* ===== Sticker Badges (New Pop-up Magazine Style) ===== */
+.sticker-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.5rem 1rem;
+  background: var(--color-accent);
+  border: 2px solid var(--color-navy);
+  border-radius: 100px;
+  font-family: var(--font-body);
+  font-weight: 700;
+  font-size: 0.875rem;
+  color: var(--color-navy);
+  transform: rotate(-2deg);
+  box-shadow: 3px 3px 0 var(--color-navy);
+  transition: all 0.2s ease;
+}
+
+.sticker-badge:hover {
+  transform: rotate(0deg) scale(1.05);
+  box-shadow: 4px 4px 0 var(--color-navy);
+}
+
+.sticker-badge--small {
+  padding: 0.25rem 0.75rem;
+  font-size: 0.75rem;
+  box-shadow: 2px 2px 0 var(--color-navy);
+}
+
+.sticker-badge--large {
+  padding: 0.75rem 1.5rem;
+  font-size: 1rem;
+  box-shadow: 4px 4px 0 var(--color-navy);
+}
+
+.sticker-badge--primary {
+  background: var(--color-primary);
+  color: var(--color-white);
+  border-color: var(--color-primary);
+  box-shadow: 3px 3px 0 rgba(0, 0, 0, 0.2);
+}
+
+.sticker-badge--secondary {
+  background: var(--color-white);
+  color: var(--color-navy);
+  border-color: var(--color-navy);
+}
+
+.sticker-badge--accent {
+  background: var(--color-accent);
+  color: var(--color-navy);
+  border-color: var(--color-brown);
+  box-shadow: 3px 3px 0 var(--color-brown);
+}
+
+.sticker-badge .icon {
+  width: 1rem;
+  height: 1rem;
 }

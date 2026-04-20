@@ -1,0 +1,261 @@
+<section class="creators-page" data-section-id="{{ section.id }}" data-animate="stagger">
+  <!-- Hero -->
+  <div class="creators-hero">
+    <div class="container">
+      <div class="section-header animate-item" style="--i:0">
+        <div class="creators-hero__badge">
+          {% render 'icon-heart' %}
+          <span>{{ section.settings.badge_text | default: 'Hecho en Mexico' }}</span>
+        </div>
+        <h1 class="section-title">{{ section.settings.title | default: 'Nuestros Creadores' }}</h1>
+        <p class="section-subtitle">{{ section.settings.subtitle | default: 'Conoce a los emprendedores mexicanos que ponen el corazon en cada producto.' }}</p>
+        {%- if section.blocks.size > 0 -%}
+          <p class="creators-hero__count">{{ section.blocks.size }} marcas y contando</p>
+        {%- endif -%}
+      </div>
+    </div>
+  </div>
+
+  <!-- Card Grid -->
+  <div class="creators-grid">
+    <div class="container">
+      <div class="creators-grid__wrapper">
+        {%- for block in section.blocks -%}
+          <a
+            href="/collections/catalogo?filter.p.vendor={{ block.settings.vendor_handle | default: block.settings.name | url_param_escape }}"
+            class="creator-card animate-item"
+            style="--i:{{ forloop.index }}"
+            {{ block.shopify_attributes }}
+          >
+            <div class="creator-card__image-wrapper" data-image-cycle>
+              {%- assign has_images = false -%}
+              {%- if block.settings.image != blank -%}
+                {%- assign has_images = true -%}
+                <img
+                  src="{{ block.settings.image | image_url: width: 600 }}"
+                  alt="{{ block.settings.name }}"
+                  width="600"
+                  height="600"
+                  loading="lazy"
+                  class="creator-card__image is-active"
+                >
+              {%- endif -%}
+              {%- if block.settings.image_hover != blank -%}
+                <img
+                  src="{{ block.settings.image_hover | image_url: width: 600 }}"
+                  alt="{{ block.settings.name }}"
+                  width="600"
+                  height="600"
+                  loading="lazy"
+                  class="creator-card__image"
+                >
+              {%- endif -%}
+              {%- if block.settings.image_alt_1 != blank -%}
+                <img
+                  src="{{ block.settings.image_alt_1 | image_url: width: 600 }}"
+                  alt="{{ block.settings.name }}"
+                  width="600"
+                  height="600"
+                  loading="lazy"
+                  class="creator-card__image"
+                >
+              {%- endif -%}
+              {%- if block.settings.image_alt_2 != blank -%}
+                <img
+                  src="{{ block.settings.image_alt_2 | image_url: width: 600 }}"
+                  alt="{{ block.settings.name }}"
+                  width="600"
+                  height="600"
+                  loading="lazy"
+                  class="creator-card__image"
+                >
+              {%- endif -%}
+              {%- unless has_images -%}
+                <div class="creator-card__placeholder">
+                  {% render 'icon-user' %}
+                </div>
+              {%- endunless -%}
+            </div>
+
+            <div class="creator-card__content">
+              <h3 class="creator-card__name">{{ block.settings.name }}</h3>
+              {%- if block.settings.tagline != blank -%}
+                <p class="creator-card__tagline">{{ block.settings.tagline }}</p>
+              {%- endif -%}
+              <span class="creator-card__link">
+                Ver productos
+                {% render 'icon-arrow-right' %}
+              </span>
+            </div>
+          </a>
+        {%- endfor -%}
+      </div>
+
+      {%- if section.blocks.size == 0 -%}
+        <div class="creators-grid__empty">
+          <p>Proximamente agregaremos a nuestros increibles creadores.</p>
+        </div>
+      {%- endif -%}
+    </div>
+  </div>
+
+  <!-- CTA Section -->
+  <div class="creators-cta">
+    <div class="container">
+      <div class="creators-cta__card animate-item" style="--i:{{ section.blocks.size | plus: 1 }}">
+        <div class="creators-cta__badge">
+          {%- if section.settings.cta_icon != blank -%}
+            <img src="{{ section.settings.cta_icon | image_url: width: 80 }}" alt="" width="40" height="40" loading="lazy">
+          {%- else -%}
+            {% render 'icon-sparkle' %}
+          {%- endif -%}
+        </div>
+        <h2 class="creators-cta__title">{{ section.settings.cta_title | default: '¿Quieres ser parte de la comunidad?' }}</h2>
+        <p class="creators-cta__text">{{ section.settings.cta_text | default: 'Si eres emprendedor y quieres que tus productos lleguen a mas personas, unete a nuestra familia.' }}</p>
+        <a href="{{ section.settings.cta_link | default: '/pages/vende' }}" class="btn btn--primary">
+          {{ section.settings.cta_button | default: 'Quiero ser parte de la comunidad' }}
+          {% render 'icon-arrow-right' %}
+        </a>
+      </div>
+    </div>
+  </div>
+</section>
+
+<script>
+  (function() {
+    var wrappers = document.querySelectorAll('[data-image-cycle]');
+    wrappers.forEach(function(wrapper) {
+      var images = wrapper.querySelectorAll('.creator-card__image');
+      if (images.length < 2) return;
+
+      var current = 0;
+      var delay = 2500 + Math.random() * 1500;
+
+      setInterval(function() {
+        images[current].classList.remove('is-active');
+        current = (current + 1) % images.length;
+        images[current].classList.add('is-active');
+      }, delay);
+    });
+  })();
+</script>
+
+{% schema %}
+{
+  "name": "Pagina de Creadores",
+  "tag": "section",
+  "class": "section-creators-page",
+  "settings": [
+    {
+      "type": "header",
+      "content": "Hero"
+    },
+    {
+      "type": "text",
+      "id": "badge_text",
+      "label": "Texto del badge",
+      "default": "Hecho en Mexico"
+    },
+    {
+      "type": "text",
+      "id": "title",
+      "label": "Titulo",
+      "default": "Nuestros Creadores"
+    },
+    {
+      "type": "textarea",
+      "id": "subtitle",
+      "label": "Subtitulo",
+      "default": "Conoce a los emprendedores mexicanos que ponen el corazon en cada producto."
+    },
+    {
+      "type": "header",
+      "content": "CTA Final"
+    },
+    {
+      "type": "text",
+      "id": "cta_title",
+      "label": "Titulo del CTA",
+      "default": "¿Quieres ser parte de la comunidad?"
+    },
+    {
+      "type": "textarea",
+      "id": "cta_text",
+      "label": "Texto del CTA",
+      "default": "Si eres emprendedor y quieres que tus productos lleguen a mas personas, unete a nuestra familia."
+    },
+    {
+      "type": "text",
+      "id": "cta_button",
+      "label": "Texto del boton",
+      "default": "Quiero ser parte de la comunidad"
+    },
+    {
+      "type": "url",
+      "id": "cta_link",
+      "label": "Enlace del boton"
+    },
+    {
+      "type": "image_picker",
+      "id": "cta_icon",
+      "label": "Icono del CTA"
+    }
+  ],
+  "blocks": [
+    {
+      "type": "creator",
+      "name": "Creador/Marca",
+      "settings": [
+        {
+          "type": "image_picker",
+          "id": "image",
+          "label": "Imagen principal"
+        },
+        {
+          "type": "image_picker",
+          "id": "image_hover",
+          "label": "Imagen al pasar el cursor"
+        },
+        {
+          "type": "image_picker",
+          "id": "image_alt_1",
+          "label": "Imagen adicional 1"
+        },
+        {
+          "type": "image_picker",
+          "id": "image_alt_2",
+          "label": "Imagen adicional 2"
+        },
+        {
+          "type": "text",
+          "id": "name",
+          "label": "Nombre de la marca",
+          "default": "Nombre de la marca"
+        },
+        {
+          "type": "text",
+          "id": "tagline",
+          "label": "Tagline",
+          "default": "Una breve descripcion"
+        },
+        {
+          "type": "text",
+          "id": "vendor_handle",
+          "label": "Vendor handle (para filtro de coleccion)",
+          "info": "El handle del vendor en Shopify, usado para construir el enlace de filtro"
+        }
+      ]
+    }
+  ],
+  "presets": [
+    {
+      "name": "Pagina de Creadores",
+      "blocks": [
+        { "type": "creator", "settings": { "name": "Marca Ejemplo 1", "tagline": "Productos artesanales con amor", "vendor_handle": "marca-ejemplo-1" } },
+        { "type": "creator", "settings": { "name": "Marca Ejemplo 2", "tagline": "Diseño mexicano contemporaneo", "vendor_handle": "marca-ejemplo-2" } },
+        { "type": "creator", "settings": { "name": "Marca Ejemplo 3", "tagline": "Tradicion y modernidad", "vendor_handle": "marca-ejemplo-3" } }
+      ]
+    }
+  ]
+}
+{% endschema %}

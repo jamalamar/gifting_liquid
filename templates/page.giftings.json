@@ -1,0 +1,15 @@
+{
+  "sections": {
+    "main": {
+      "type": "page-giftings",
+      "settings": {
+        "badge_text": "Regalos listos",
+        "title": "Giftings",
+        "subtitle": "Paquetes de regalo curados y listos para sorprender. Elige tu favorito y con un solo clic se agrega todo al carrito."
+      },
+      "blocks": {},
+      "block_order": []
+    }
+  },
+  "order": ["main"]
+}

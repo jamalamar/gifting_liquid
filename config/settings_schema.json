@@ -17,38 +17,38 @@
       {
         "type": "color",
         "id": "color_primary",
-        "label": "Color primario (Terracotta)",
-        "default": "#ac5134"
+        "label": "Color primario (Naranja)",
+        "default": "#AC583B"
       },
       {
         "type": "color",
         "id": "color_secondary",
-        "label": "Color secundario (Coral)",
-        "default": "#ac5b3c"
+        "label": "Color secundario (Naranja oscuro)",
+        "default": "#934A32"
       },
       {
         "type": "color",
         "id": "color_accent",
-        "label": "Color acento (Dusty Pink)",
-        "default": "#dcae9c"
+        "label": "Color acento (Blanco)",
+        "default": "#E3E2DE"
       },
       {
         "type": "color",
         "id": "color_navy",
-        "label": "Color azul oscuro",
-        "default": "#3c4c6c"
+        "label": "Color azul (titulos)",
+        "default": "#414F69"
       },
       {
         "type": "color",
         "id": "color_navy_light",
         "label": "Color azul claro",
-        "default": "#5c6484"
+        "default": "#5A6B85"
       },
       {
         "type": "color",
         "id": "color_brown",
-        "label": "Color café",
-        "default": "#713c27"
+        "label": "Color cafe",
+        "default": "#8B4730"
       },
       {
         "type": "header",
@@ -57,14 +57,14 @@
       {
         "type": "color",
         "id": "color_background",
-        "label": "Fondo principal",
-        "default": "#faf8f5"
+        "label": "Fondo principal (Menta)",
+        "default": "#A0C2B4"
       },
       {
         "type": "color",
         "id": "color_background_alt",
         "label": "Fondo alternativo",
-        "default": "#f5f0eb"
+        "default": "#8FB3A5"
       },
       {
         "type": "header",
@@ -73,14 +73,14 @@
       {
         "type": "color",
         "id": "color_text",
-        "label": "Texto principal",
-        "default": "#2d2d2d"
+        "label": "Texto principal (Azul)",
+        "default": "#414F69"
       },
       {
         "type": "color",
         "id": "color_text_light",
         "label": "Texto secundario",
-        "default": "#666666"
+        "default": "#5A6B85"
       }
     ]
   },
@@ -214,45 +214,101 @@
     ]
   },
   {
-    "name": "Estilo collage",
+    "name": "Decoraciones de fondo",
     "settings": [
       {
-        "type": "header",
-        "content": "Elementos decorativos"
+        "type": "paragraph",
+        "content": "Sube hasta 18 imagenes/iconos. En cada carga de pagina apareceran aleatoriamente con diferentes profundidades (algunos mas lejos, otros mas cerca)."
       },
       {
-        "type": "checkbox",
-        "id": "show_collage_elements",
-        "label": "Mostrar elementos de collage",
-        "default": true
+        "type": "image_picker",
+        "id": "deco_image_1",
+        "label": "Imagen 1"
       },
       {
-        "type": "checkbox",
-        "id": "show_paper_textures",
-        "label": "Mostrar texturas de papel",
-        "default": true
+        "type": "image_picker",
+        "id": "deco_image_2",
+        "label": "Imagen 2"
       },
       {
-        "type": "checkbox",
-        "id": "show_tape_elements",
-        "label": "Mostrar elementos de cinta adhesiva",
-        "default": true
+        "type": "image_picker",
+        "id": "deco_image_3",
+        "label": "Imagen 3"
       },
       {
-        "type": "checkbox",
-        "id": "show_sticker_effects",
-        "label": "Mostrar efectos de sticker",
-        "default": true
+        "type": "image_picker",
+        "id": "deco_image_4",
+        "label": "Imagen 4"
       },
       {
-        "type": "range",
-        "id": "collage_rotation_max",
-        "label": "Rotacion maxima de elementos",
-        "min": 0,
-        "max": 15,
-        "step": 1,
-        "default": 5,
-        "unit": "deg"
+        "type": "image_picker",
+        "id": "deco_image_5",
+        "label": "Imagen 5"
+      },
+      {
+        "type": "image_picker",
+        "id": "deco_image_6",
+        "label": "Imagen 6"
+      },
+      {
+        "type": "image_picker",
+        "id": "deco_image_7",
+        "label": "Imagen 7"
+      },
+      {
+        "type": "image_picker",
+        "id": "deco_image_8",
+        "label": "Imagen 8"
+      },
+      {
+        "type": "image_picker",
+        "id": "deco_image_9",
+        "label": "Imagen 9"
+      },
+      {
+        "type": "image_picker",
+        "id": "deco_image_10",
+        "label": "Imagen 10"
+      },
+      {
+        "type": "image_picker",
+        "id": "deco_image_11",
+        "label": "Imagen 11"
+      },
+      {
+        "type": "image_picker",
+        "id": "deco_image_12",
+        "label": "Imagen 12"
+      },
+      {
+        "type": "image_picker",
+        "id": "deco_image_13",
+        "label": "Imagen 13"
+      },
+      {
+        "type": "image_picker",
+        "id": "deco_image_14",
+        "label": "Imagen 14"
+      },
+      {
+        "type": "image_picker",
+        "id": "deco_image_15",
+        "label": "Imagen 15"
+      },
+      {
+        "type": "image_picker",
+        "id": "deco_image_16",
+        "label": "Imagen 16"
+      },
+      {
+        "type": "image_picker",
+        "id": "deco_image_17",
+        "label": "Imagen 17"
+      },
+      {
+        "type": "image_picker",
+        "id": "deco_image_18",
+        "label": "Imagen 18"
       }
     ]
   }

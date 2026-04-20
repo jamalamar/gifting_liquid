@@ -183,8 +183,12 @@ class Cart {
       if (e.target.closest('[data-quantity-plus]')) {
         const input = e.target.closest('[data-quantity-plus]').parentElement.querySelector('input');
         if (input) {
-          input.value = parseInt(input.value) + 1;
-          this.updateQuantity(input);
+          const newVal = parseInt(input.value) + 1;
+          const max = input.hasAttribute('max') ? parseInt(input.max) : Infinity;
+          if (newVal <= max) {
+            input.value = newVal;
+            this.updateQuantity(input);
+          }
         }
       }
 
@@ -228,6 +232,79 @@ class Cart {
         this.addToCart(formData.get('id'), formData.get('quantity') || 1, submitBtn, form);
       });
     });
+
+    // Cart note textarea - save on blur with debounce
+    const cartNoteTextarea = document.querySelector('.cart-page__gift-textarea');
+    if (cartNoteTextarea) {
+      let noteTimeout;
+      cartNoteTextarea.addEventListener('input', () => {
+        clearTimeout(noteTimeout);
+        noteTimeout = setTimeout(() => {
+          this.saveCartNote(cartNoteTextarea.value);
+        }, 500);
+      });
+      cartNoteTextarea.addEventListener('blur', () => {
+        clearTimeout(noteTimeout);
+        this.saveCartNote(cartNoteTextarea.value);
+      });
+    }
+
+    // Delivery date inputs - delegated for both cart page and drawer
+    document.addEventListener('change', (e) => {
+      if (e.target.matches('[data-delivery-date], [data-drawer-delivery-date]')) {
+        this.saveDeliveryDate(e.target.value);
+        // Sync both inputs
+        document.querySelectorAll('[data-delivery-date], [data-drawer-delivery-date]').forEach(input => {
+          input.value = e.target.value;
+        });
+      }
+    });
+
+    // Set min date on all delivery date inputs
+    this.setMinDeliveryDate();
+  }
+
+  async saveCartNote(note) {
+    try {
+      await fetch('/cart/update.js', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'Accept': 'application/json'
+        },
+        body: JSON.stringify({ note })
+      });
+    } catch (error) {
+      console.error('Error saving cart note:', error);
+    }
+  }
+
+  async saveDeliveryDate(date) {
+    try {
+      await fetch('/cart/update.js', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'Accept': 'application/json'
+        },
+        body: JSON.stringify({ attributes: { 'Fecha de Entrega': date } })
+      });
+    } catch (error) {
+      console.error('Error saving delivery date:', error);
+    }
+  }
+
+  setMinDeliveryDate() {
+    const minDate = new Date();
+    minDate.setDate(minDate.getDate() + 3);
+    const minDateStr = minDate.toISOString().split('T')[0];
+    document.querySelectorAll('[data-delivery-date], [data-drawer-delivery-date]').forEach(input => {
+      input.setAttribute('min', minDateStr);
+    });
+    const readable = minDate.toLocaleDateString('es-MX', { weekday: 'long', day: 'numeric', month: 'long' });
+    document.querySelectorAll('[data-delivery-min-label]').forEach(el => {
+      el.textContent = readable;
+    });
   }
 
   async addToCart(id, quantity = 1, submitBtn = null, form = null) {
@@ -238,6 +315,10 @@ class Cart {
     }
 
     try {
+      // Add unique instance ID so same product can be added as separate line items
+      // This allows assigning the same product to different gift boxes
+      const instanceId = `${Date.now()}-${Math.random().toString(36).substr(2, 9)}`;
+
       const response = await fetch(window.routes.cart_add_url, {
         method: 'POST',
         headers: {
@@ -246,7 +327,10 @@ class Cart {
         },
         body: JSON.stringify({
           id: parseInt(id),
-          quantity: parseInt(quantity)
+          quantity: parseInt(quantity),
+          properties: {
+            _instance_id: instanceId
+          }
         })
       });
 
@@ -435,18 +519,55 @@ class Cart {
           </div>
           <p class="cart-drawer__empty-title">Tu carrito esta vacio</p>
           <p class="cart-drawer__empty-text">Explora nuestros productos y encuentra el regalo perfecto.</p>
-          <a href="/collections/all" class="btn btn--secondary cart-drawer__empty-btn" data-cart-drawer-close>
+          <a href="/collections/catalogo" class="btn btn--secondary cart-drawer__empty-btn" data-cart-drawer-close>
             Ver productos
           </a>
         </div>
       `;
+      // Notify gift box manager of empty cart
+      if (window.giftBoxManager) {
+        window.giftBoxManager.renderAfterCartUpdate(cart);
+      }
       return;
     }
+
+    // Check if item is a gift box product
+    const isGiftBoxProduct = (item) => {
+      return item.properties && item.properties._is_gift_box === 'true';
+    };
 
     // Build items HTML
     const itemsHtml = cart.items.map(item => {
       const hasVariant = item.variant_title && item.variant_title !== 'Default Title';
       const imageUrl = item.image ? this.getSizedImageUrl(item.image, '150x') : null;
+      const isGiftBox = isGiftBoxProduct(item);
+
+      // Gift box products don't show quantity controls or box assignment
+      if (isGiftBox) {
+        return `
+          <div class="cart-drawer__item cart-drawer__item--box-product" data-cart-drawer-item data-key="${item.key}" data-is-box-product>
+            <div class="cart-drawer__item-image">
+              ${imageUrl ? `
+                <a href="${item.url}">
+                  <img src="${imageUrl}" alt="${item.title}" width="70" height="70" loading="lazy">
+                </a>
+              ` : `
+                <div class="cart-drawer__item-placeholder">
+                  <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+                    <path d="M12 8v13m0-13V6a4 4 0 00-4-4H6a4 4 0 00-4 4v2h10zm0 0V6a4 4 0 014-4h2a4 4 0 014 4v2H12z"/>
+                  </svg>
+                </div>
+              `}
+            </div>
+            <div class="cart-drawer__item-info">
+              <h3 class="cart-drawer__item-title">
+                <a href="${item.url}">${item.product_title}</a>
+              </h3>
+              ${hasVariant ? `<p class="cart-drawer__item-variant">${item.variant_title}</p>` : ''}
+            </div>
+          </div>
+        `;
+      }
 
       return `
         <div class="cart-drawer__item" data-cart-drawer-item data-key="${item.key}">
@@ -477,6 +598,13 @@ class Cart {
                 <span>+</span>
               </button>
             </div>
+            <div class="cart-drawer__item-box-assign">
+              <div class="cart-item-box-dropdown" data-box-dropdown-container data-item-key="${item.key}">
+                <select class="cart-item-box-dropdown__select collage-select" data-box-select data-item-key="${item.key}">
+                  <option value="">Seleccionar caja...</option>
+                </select>
+              </div>
+            </div>
           </div>
           <div class="cart-drawer__item-price">
             ${item.original_line_price !== item.final_line_price ? `
@@ -493,11 +621,58 @@ class Cart {
       `;
     }).join('');
 
-    drawerBody.innerHTML = `<div class="cart-drawer__items">${itemsHtml}</div>`;
+    // Build gift box selector HTML
+    const giftBoxSelectorHtml = this.buildGiftBoxSelector(cart);
+
+    drawerBody.innerHTML = `
+      ${giftBoxSelectorHtml}
+      <div class="cart-drawer__items">${itemsHtml}</div>
+    `;
 
     // Build and append footer
     const footerHtml = this.buildCartDrawerFooter(cart);
     drawerPanel.insertAdjacentHTML('beforeend', footerHtml);
+
+    // Set min delivery date on new footer inputs
+    this.setMinDeliveryDate();
+
+    // Notify gift box manager of cart update
+    if (window.giftBoxManager) {
+      window.giftBoxManager.renderAfterCartUpdate(cart);
+    }
+  }
+
+  buildGiftBoxSelector(cart) {
+    // Check if we have box products data
+    const boxProductsData = document.querySelector('[data-box-products]');
+    if (!boxProductsData) return '';
+
+    // Count regular items (not gift boxes)
+    const regularItemCount = cart.items
+      .filter(item => !(item.properties && item.properties._is_gift_box === 'true'))
+      .reduce((sum, item) => sum + item.quantity, 0);
+
+    if (regularItemCount === 0) return '';
+
+    return `
+      <div class="gift-box-selector" data-gift-box-selector>
+        <div class="gift-box-selector__header">
+          <svg class="gift-box-selector__icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+            <path d="M12 8v13m0-13V6a4 4 0 00-4-4H6a4 4 0 00-4 4v2h10zm0 0V6a4 4 0 014-4h2a4 4 0 014 4v2H12z"/>
+            <rect x="2" y="8" width="20" height="13" rx="2"/>
+          </svg>
+          <h3 class="gift-box-selector__title">Selecciona tus cajas de regalo</h3>
+          <p class="gift-box-selector__subtitle">Cada caja puede contener hasta 6 productos - incluida gratis</p>
+        </div>
+
+        <div class="gift-box-selector__boxes" data-box-selectors-container>
+        </div>
+
+        <div class="gift-box-selector__validation" data-box-validation hidden>
+          <p class="gift-box-selector__error" data-box-error></p>
+        </div>
+      </div>
+    `;
   }
 
   buildCartDrawerFooter(cart) {
@@ -539,8 +714,8 @@ class Cart {
       }
     }
 
-    const checkoutUrl = window.routes?.checkout_url || '/checkout';
     const cartUrl = window.routes?.cart_url || '/cart';
+    const deliveryDate = cart.attributes?.['Fecha de Entrega'] || '';
 
     return `
       <div class="cart-drawer__footer">
@@ -549,14 +724,27 @@ class Cart {
           <span>Subtotal</span>
           <span data-drawer-subtotal>${this.formatMoney(cart.total_price)}</span>
         </div>
-        <a href="${checkoutUrl}" class="btn btn--primary cart-drawer__checkout">
-          Continuar al checkout
+        <div class="cart-drawer__delivery-date">
+          <label class="cart-drawer__delivery-label" for="drawer-delivery-date">
+            <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" width="16" height="16">
+              <path d="M13 16V6a1 1 0 00-1-1H4a1 1 0 00-1 1v10a1 1 0 001 1h1m8-1a1 1 0 01-1 1H9m4-1V8a1 1 0 011-1h2.586a1 1 0 01.707.293l3.414 3.414a1 1 0 01.293.707V16a1 1 0 01-1 1h-1m-6-1a1 1 0 001 1h1M5 17a2 2 0 104 0m-4 0a2 2 0 114 0m6 0a2 2 0 104 0m-4 0a2 2 0 114 0"/>
+            </svg>
+            <span>Fecha de entrega</span>
+          </label>
+          <input
+            type="date"
+            id="drawer-delivery-date"
+            class="cart-drawer__date-input"
+            value="${deliveryDate}"
+            data-drawer-delivery-date
+          >
+          <p class="cart-drawer__date-hint">Mínimo <span data-delivery-min-label>3 días hábiles</span></p>
+        </div>
+        <a href="${cartUrl}" class="btn btn--primary cart-drawer__continue-to-cart">
+          Continuar al carrito
           <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="16" height="16">
             <path d="M14 5l7 7m0 0l-7 7m7-7H3"/>
           </svg>
-        </a>
-        <a href="${cartUrl}" class="cart-drawer__view-cart">
-          Ver carrito completo
         </a>
       </div>
     `;
@@ -605,10 +793,18 @@ class ProductForm {
   constructor(container) {
     this.container = container;
     this.productJson = JSON.parse(container.querySelector('[data-product-json]')?.textContent || '{}');
+    this.inventoryData = JSON.parse(container.querySelector('[data-variant-inventory]')?.textContent || '{}');
     this.variantInput = container.querySelector('[data-variant-id]');
     this.optionSelectors = container.querySelectorAll('[data-option-selector]');
     this.mainImage = container.querySelector('[data-main-image]');
     this.thumbnails = container.querySelectorAll('[data-thumbnail]');
+    this.priceCurrent = container.querySelector('.product-page__price-current');
+    this.priceCompare = container.querySelector('.product-page__price-compare');
+    this.addToCartBtn = container.querySelector('[data-add-to-cart]');
+    this.soldoutBadge = container.querySelector('.product-page__badge--soldout');
+    this.saleBadge = container.querySelector('.product-page__badge--sale');
+    this.stockDisplay = container.querySelector('[data-stock-display]');
+    this.quantityInput = container.querySelector('[data-quantity-input]');
     this.selectedOptions = {};
 
     this.init();
@@ -682,14 +878,102 @@ class ProductForm {
       return JSON.stringify(v.options) === JSON.stringify(selectedOptionsArray);
     });
 
-    if (variant && this.variantInput) {
-      this.variantInput.value = variant.id;
+    if (!variant) return;
 
-      // Update variant image if available
-      if (variant.featured_image && this.mainImage) {
-        this.mainImage.src = variant.featured_image.src;
+    if (this.variantInput) {
+      this.variantInput.value = variant.id;
+    }
+
+    // Update variant image
+    if (variant.featured_image && this.mainImage) {
+      this.mainImage.src = variant.featured_image.src;
+      // Sync active thumbnail
+      this.thumbnails.forEach(t => {
+        t.classList.toggle('is-active', t.dataset.src === variant.featured_image.src);
+      });
+    }
+
+    // Update price
+    if (this.priceCurrent) {
+      this.priceCurrent.textContent = this.formatMoney(variant.price);
+    }
+    if (this.priceCompare) {
+      if (variant.compare_at_price && variant.compare_at_price > variant.price) {
+        this.priceCompare.textContent = this.formatMoney(variant.compare_at_price);
+        this.priceCompare.style.display = '';
+      } else {
+        this.priceCompare.textContent = '';
+        this.priceCompare.style.display = 'none';
       }
     }
+
+    // Update sale badge
+    if (this.saleBadge) {
+      if (variant.compare_at_price && variant.compare_at_price > variant.price) {
+        const discount = Math.round((variant.compare_at_price - variant.price) / variant.compare_at_price * 100);
+        this.saleBadge.textContent = `-${discount}%`;
+        this.saleBadge.style.display = '';
+      } else {
+        this.saleBadge.style.display = 'none';
+      }
+    }
+
+    // Update add-to-cart button and soldout badge
+    if (this.addToCartBtn) {
+      const btnText = this.addToCartBtn.querySelector('.product-page__add-btn-text');
+      if (variant.available) {
+        this.addToCartBtn.disabled = false;
+        if (btnText) {
+          btnText.innerHTML = `<svg class="icon icon-cart" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="9" cy="21" r="1"/><circle cx="20" cy="21" r="1"/><path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"/></svg> <span>Agregar a Carrito</span>`;
+        }
+        if (this.soldoutBadge) this.soldoutBadge.style.display = 'none';
+      } else {
+        this.addToCartBtn.disabled = true;
+        if (btnText) {
+          btnText.innerHTML = '<span>Agotado</span>';
+        }
+        if (this.soldoutBadge) this.soldoutBadge.style.display = '';
+      }
+    }
+
+    // Look up inventory from Liquid-generated data (not available in product JSON)
+    const inventory = this.inventoryData[variant.id] || {};
+    const invQty = inventory.inventory_quantity || 0;
+    const invManaged = inventory.inventory_management === 'shopify';
+
+    // Update stock display
+    if (this.stockDisplay) {
+      if (invManaged) {
+        this.stockDisplay.style.display = '';
+        if (invQty > 0) {
+          this.stockDisplay.textContent = `${invQty} en stock`;
+          this.stockDisplay.classList.remove('product-page__stock--out');
+        } else {
+          this.stockDisplay.textContent = 'Agotado';
+          this.stockDisplay.classList.add('product-page__stock--out');
+        }
+      } else {
+        this.stockDisplay.style.display = 'none';
+      }
+    }
+
+    // Update quantity max
+    if (this.quantityInput) {
+      if (invManaged && invQty > 0) {
+        this.quantityInput.max = invQty;
+        if (parseInt(this.quantityInput.value) > invQty) {
+          this.quantityInput.value = invQty;
+        }
+      } else {
+        this.quantityInput.removeAttribute('max');
+      }
+      // Reset to 1 on variant change
+      this.quantityInput.value = 1;
+    }
+  }
+
+  formatMoney(cents) {
+    return '$' + (cents / 100).toFixed(2).replace(/\B(?=(\d{3})+(?!\d))/g, ',') + ' MXN';
   }
 }
 
@@ -775,6 +1059,10 @@ class CollectionFilters {
     this.filterCount = this.section.querySelector('[data-filter-count]');
     this.applyButton = this.section.querySelector('[data-apply-filters]');
 
+    // Guided filters (catalog page)
+    this.guidedFiltersContainer = this.section.querySelector('[data-guided-filters]');
+    this.clearGuidedButton = this.section.querySelector('[data-clear-guided-filters]');
+
     // State
     this.isLoading = false;
     this.searchQuery = '';
@@ -792,6 +1080,7 @@ class CollectionFilters {
     this.bindSearch();
     this.bindPagination();
     this.bindActiveFilters();
+    this.bindGuidedChips();
     this.updateFilterCount();
   }
 
@@ -902,11 +1191,9 @@ class CollectionFilters {
       }
     });
 
-    // Update "See all" link with query
+    // Always prevent form submit — keep results in dropdown only
     this.searchForm?.addEventListener('submit', (e) => {
-      if (!this.searchQuery) {
-        e.preventDefault();
-      }
+      e.preventDefault();
     });
   }
 
@@ -963,7 +1250,7 @@ class CollectionFilters {
           <div class="collection-toolbar__result-info">
             <span class="collection-toolbar__result-title">${product.title}</span>
             ${product.vendor ? `<span class="collection-toolbar__result-vendor">${product.vendor}</span>` : ''}
-            <span class="collection-toolbar__result-price">${this.formatMoney(product.price)}</span>
+            <span class="collection-toolbar__result-price">${this.formatPrice(product.price)}</span>
           </div>
         </a>
       `).join('');
@@ -979,6 +1266,10 @@ class CollectionFilters {
 
   formatMoney(cents) {
     return '$' + (cents / 100).toFixed(2).replace(/\B(?=(\d{3})+(?!\d))/g, ',') + ' MXN';
+  }
+
+  formatPrice(price) {
+    return '$' + parseFloat(price).toFixed(2).replace(/\B(?=(\d{3})+(?!\d))/g, ',') + ' MXN';
   }
 
   showSearchResults() {
@@ -1021,6 +1312,110 @@ class CollectionFilters {
         this.clearAllFilters();
       }
     });
+  }
+
+  // ========== GUIDED CHIPS (Catalog Page) ==========
+  bindGuidedChips() {
+    if (!this.guidedFiltersContainer) return;
+
+    // Event delegation for chip clicks
+    this.guidedFiltersContainer.addEventListener('click', (e) => {
+      const chip = e.target.closest('[data-guided-chip]');
+      if (chip) {
+        e.preventDefault();
+        this.handleGuidedChipClick(chip);
+      }
+    });
+
+    // Clear guided filters button
+    this.clearGuidedButton?.addEventListener('click', () => {
+      this.clearAllGuidedFilters();
+    });
+  }
+
+  handleGuidedChipClick(chip) {
+    const tagValue = chip.dataset.tagValue;
+    const filterType = chip.dataset.filterType;
+    const isActive = chip.classList.contains('is-active');
+
+    // For recipient: single select (toggle off others in same group)
+    if (filterType === 'recipient' && !isActive) {
+      this.clearGuidedGroup('recipient');
+    }
+
+    // Toggle the clicked chip
+    chip.classList.toggle('is-active');
+    chip.setAttribute('aria-pressed', !isActive);
+
+    // Apply filters via AJAX
+    this.applyGuidedFilters();
+  }
+
+  clearGuidedGroup(filterType) {
+    const chips = this.guidedFiltersContainer?.querySelectorAll(
+      `[data-filter-type="${filterType}"][data-guided-chip].is-active`
+    );
+    chips?.forEach(chip => {
+      chip.classList.remove('is-active');
+      chip.setAttribute('aria-pressed', 'false');
+    });
+  }
+
+  clearAllGuidedFilters() {
+    const allChips = this.guidedFiltersContainer?.querySelectorAll('[data-guided-chip].is-active');
+    allChips?.forEach(chip => {
+      chip.classList.remove('is-active');
+      chip.setAttribute('aria-pressed', 'false');
+    });
+
+    this.applyGuidedFilters();
+  }
+
+  applyGuidedFilters() {
+    const url = this.buildUrlWithGuidedFilters();
+    // Reset to page 1 when filters change
+    url.searchParams.delete('page');
+    this.fetchAndRender(url);
+  }
+
+  buildUrlWithGuidedFilters() {
+    const url = new URL(this.collectionUrl, window.location.origin);
+
+    // Clear existing tag filters
+    const keysToDelete = [];
+    for (const key of url.searchParams.keys()) {
+      if (key.startsWith('filter.v.tag')) keysToDelete.push(key);
+    }
+    keysToDelete.forEach(key => url.searchParams.delete(key));
+
+    // Add active guided chip filters
+    const activeChips = this.guidedFiltersContainer?.querySelectorAll('[data-guided-chip].is-active');
+    activeChips?.forEach(chip => {
+      url.searchParams.append('filter.v.tag', chip.dataset.tagValue);
+    });
+
+    // Preserve sort
+    if (this.sortSelect?.value) {
+      url.searchParams.set('sort_by', this.sortSelect.value);
+    }
+
+    // Preserve other filters (price, etc.)
+    this.section.querySelectorAll('[data-filter-checkbox]:checked').forEach(checkbox => {
+      if (!checkbox.name.includes('filter.v.tag')) {
+        url.searchParams.append(checkbox.name, checkbox.value);
+      }
+    });
+
+    const minPrice = this.section.querySelector('[data-filter-price-min]');
+    const maxPrice = this.section.querySelector('[data-filter-price-max]');
+    if (minPrice?.value) {
+      url.searchParams.set(minPrice.name, parseFloat(minPrice.value));
+    }
+    if (maxPrice?.value) {
+      url.searchParams.set(maxPrice.name, parseFloat(maxPrice.value));
+    }
+
+    return url;
   }
 
   removeFilter(paramName, value) {
@@ -1085,10 +1480,10 @@ class CollectionFilters {
     const minPrice = this.section.querySelector('[data-filter-price-min]');
     const maxPrice = this.section.querySelector('[data-filter-price-max]');
     if (minPrice?.value) {
-      url.searchParams.set(minPrice.name, Math.round(parseFloat(minPrice.value) * 100));
+      url.searchParams.set(minPrice.name, parseFloat(minPrice.value));
     }
     if (maxPrice?.value) {
-      url.searchParams.set(maxPrice.name, Math.round(parseFloat(maxPrice.value) * 100));
+      url.searchParams.set(maxPrice.name, parseFloat(maxPrice.value));
     }
 
     // Add sort
@@ -1192,6 +1587,28 @@ class CollectionFilters {
       this.applyButton.textContent = newApplyButton.textContent;
     }
 
+    // Update guided chips state (catalog page)
+    const newGuidedFilters = doc.querySelector('[data-guided-filters]');
+    if (newGuidedFilters && this.guidedFiltersContainer) {
+      // Update chip active states from new HTML
+      const newChips = newGuidedFilters.querySelectorAll('[data-guided-chip]');
+      newChips.forEach(newChip => {
+        const tagValue = newChip.dataset.tagValue;
+        const currentChip = this.guidedFiltersContainer.querySelector(`[data-tag-value="${tagValue}"]`);
+        if (currentChip) {
+          const isActive = newChip.classList.contains('is-active');
+          currentChip.classList.toggle('is-active', isActive);
+          currentChip.setAttribute('aria-pressed', isActive);
+        }
+      });
+
+      // Update clear button visibility
+      const newClearButton = doc.querySelector('[data-clear-guided-filters]');
+      if (newClearButton && this.clearGuidedButton) {
+        this.clearGuidedButton.hidden = newClearButton.hidden;
+      }
+    }
+
     // Update products container reference (it was replaced)
     this.productsContainer = this.section.querySelector('[data-products-container]');
 
@@ -1209,6 +1626,7 @@ class CollectionFilters {
     this.isLoading = loading;
     this.section.classList.toggle('is-loading', loading);
     this.productGrid?.setAttribute('aria-busy', loading);
+    this.guidedFiltersContainer?.classList.toggle('is-loading', loading);
   }
 
   updateFilterCount() {
@@ -1236,7 +1654,7 @@ class CollectionFilters {
 // Initialize
 document.addEventListener('DOMContentLoaded', () => {
   new Header();
-  new Cart();
+  window.cart = new Cart();
   new NewsletterPopup();
   new CollectionFilters();
 

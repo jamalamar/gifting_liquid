@@ -1,0 +1,65 @@
+{%- comment -%}
+  Guided Filter Chips Component
+
+  Renders filter chips for a specific filter type (recipient or occasion).
+  Works with the catalog collection's guided filtering system.
+
+  Parameters:
+    - type: 'recipient' or 'occasion'
+    - blocks: section blocks to iterate through
+    - collection: the collection object to check active filters
+
+  Usage:
+    {% render 'guided-filter-chips',
+       type: 'recipient',
+       blocks: section.blocks,
+       collection: collection %}
+{%- endcomment -%}
+
+{%- comment -%} Get active tag filters from URL {%- endcomment -%}
+{%- assign active_tags = '' -%}
+{%- for filter in collection.filters -%}
+  {%- if filter.param_name contains 'filter.v.tag' -%}
+    {%- for value in filter.active_values -%}
+      {%- assign active_tags = active_tags | append: value.value | append: ',' -%}
+    {%- endfor -%}
+  {%- endif -%}
+{%- endfor -%}
+
+<div class="guided-chips" data-guided-chips data-filter-type="{{ type }}">
+  {%- for block in blocks -%}
+    {%- if block.type == type -%}
+      {%- assign tag_value = type | append: ':' | append: block.settings.tag_value -%}
+      {%- assign is_active = false -%}
+      {%- if active_tags contains tag_value -%}
+        {%- assign is_active = true -%}
+      {%- endif -%}
+
+      <button
+        type="button"
+        class="guided-chip{% if is_active %} is-active{% endif %}"
+        data-guided-chip
+        data-tag-value="{{ tag_value }}"
+        data-filter-type="{{ type }}"
+        aria-pressed="{% if is_active %}true{% else %}false{% endif %}"
+        {{ block.shopify_attributes }}
+      >
+        {%- if block.settings.icon != blank -%}
+          <span class="guided-chip__icon">
+            {%- case block.settings.icon -%}
+              {%- when 'heart' -%}
+                {% render 'icon-heart' %}
+              {%- when 'star' -%}
+                {% render 'icon-star' %}
+              {%- when 'gift' -%}
+                {% render 'icon-gift' %}
+              {%- when 'sparkle' -%}
+                {% render 'icon-sparkle' %}
+            {%- endcase -%}
+          </span>
+        {%- endif -%}
+        <span class="guided-chip__label">{{ block.settings.label }}</span>
+      </button>
+    {%- endif -%}
+  {%- endfor -%}
+</div>

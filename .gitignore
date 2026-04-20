@@ -14,3 +14,7 @@ node_modules/
 
 # Logs
 *.log
+
+# Claude
+.claude/
+CLAUDE.md

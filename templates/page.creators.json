@@ -1,0 +1,75 @@
+{
+  "sections": {
+    "main": {
+      "type": "page-creators",
+      "settings": {
+        "badge_text": "Hecho en Mexico",
+        "title": "Nuestros Creadores",
+        "subtitle": "Conoce a los emprendedores mexicanos que ponen el corazon en cada producto. Cada compra apoya suenos locales.",
+        "cta_title": "¿Quieres ser parte de la comunidad?",
+        "cta_text": "Si eres emprendedor y quieres que tus productos lleguen a mas personas, unete a nuestra familia de creadores.",
+        "cta_button": "Quiero ser parte de la comunidad",
+        "cta_link": "/pages/vende-con-nosotros"
+      },
+      "blocks": {
+        "creator_1": {
+          "type": "creator",
+          "settings": {
+            "name": "Alma Botanica",
+            "tagline": "Cuidado natural con ingredientes mexicanos",
+            "vendor_handle": "alma-botanica"
+          }
+        },
+        "creator_2": {
+          "type": "creator",
+          "settings": {
+            "name": "Casa Miel",
+            "tagline": "Velas artesanales de cera de soya",
+            "vendor_handle": "casa-miel"
+          }
+        },
+        "creator_3": {
+          "type": "creator",
+          "settings": {
+            "name": "Taller Oaxaca",
+            "tagline": "Ceramica hecha a mano con tradicion",
+            "vendor_handle": "taller-oaxaca"
+          }
+        },
+        "creator_4": {
+          "type": "creator",
+          "settings": {
+            "name": "Raiz Chocolate",
+            "tagline": "Chocolate de origen con cacao mexicano",
+            "vendor_handle": "raiz-chocolate"
+          }
+        },
+        "creator_5": {
+          "type": "creator",
+          "settings": {
+            "name": "Milpa Textil",
+            "tagline": "Textiles contemporaneos con tecnicas ancestrales",
+            "vendor_handle": "milpa-textil"
+          }
+        },
+        "creator_6": {
+          "type": "creator",
+          "settings": {
+            "name": "Nube Cafe",
+            "tagline": "Cafe de especialidad de Chiapas",
+            "vendor_handle": "nube-cafe"
+          }
+        }
+      },
+      "block_order": [
+        "creator_1",
+        "creator_2",
+        "creator_3",
+        "creator_4",
+        "creator_5",
+        "creator_6"
+      ]
+    }
+  },
+  "order": ["main"]
+}
