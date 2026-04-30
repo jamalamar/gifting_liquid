@@ -156,21 +156,6 @@
           <span data-drawer-subtotal>{{ cart.total_price | money }}</span>
         </div>
 
-        <div class="cart-drawer__delivery-date">
-          <label class="cart-drawer__delivery-label" for="drawer-delivery-date">
-            {% render 'icon-truck' %}
-            <span>Fecha de entrega</span>
-          </label>
-          <input
-            type="date"
-            id="drawer-delivery-date"
-            class="cart-drawer__date-input"
-            value="{{ cart.attributes['Fecha de Entrega'] }}"
-            data-drawer-delivery-date
-          >
-          <p class="cart-drawer__date-hint">Mínimo <span data-delivery-min-label>3 días hábiles</span></p>
-        </div>
-
         <a href="{{ routes.cart_url }}" class="btn btn--primary cart-drawer__continue-to-cart">
           Continuar al carrito
           {% render 'icon-arrow-right' %}

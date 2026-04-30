@@ -96,19 +96,20 @@
     gap: 0.75rem;
   }
 
-  .collection-toolbar__filter-toggle {
-    order: -1;
-    flex: 0 0 auto;
-  }
-
   .collection-toolbar__search-wrapper {
     flex: 1 1 100%;
     order: 1;
   }
 
   .collection-toolbar__right {
-    flex: 1 1 100%;
+    flex: 1 1 auto;
     order: 2;
-    justify-content: space-between;
+    justify-content: flex-start;
+  }
+
+  .collection-toolbar__filter-toggle {
+    order: 3;
+    flex: 0 0 auto;
+    margin-left: auto;
   }
 }
