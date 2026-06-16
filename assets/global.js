@@ -1020,7 +1020,81 @@ class CollectionFilters {
     this.bindPagination();
     this.bindActiveFilters();
     this.bindGuidedChips();
+    this.bindFilterSlider();
+    this.syncPriceChips();
     this.updateFilterCount();
+  }
+
+  // ========== MOBILE FILTER SLIDER (catalog) ==========
+  // Returns the checkbox source that matches the currently-visible filter UI,
+  // so the hidden desktop sidebar and the mobile slider never double-count.
+  getFilterScope() {
+    const slider = this.section.querySelector('[data-filter-slider]');
+    if (slider && slider.offsetParent !== null) return slider; // mobile: slider visible
+    return this.section.querySelector('[data-filter-sidebar]') || this.section; // desktop: sidebar
+  }
+
+  bindFilterSlider() {
+    const slider = this.section.querySelector('[data-filter-slider]');
+    if (!slider) return;
+
+    // Avoid stacking duplicate listeners after re-render
+    if (this._sliderClickHandler) {
+      slider.removeEventListener('click', this._sliderClickHandler);
+    }
+    this._sliderClickHandler = (e) => {
+      const cat = e.target.closest('[data-fs-cat]');
+      if (cat) {
+        this.openSliderCategory(slider, cat.dataset.fsCat);
+        return;
+      }
+      const priceChip = e.target.closest('[data-fs-price]');
+      if (priceChip) {
+        e.preventDefault();
+        const wasActive = priceChip.classList.contains('is-active');
+        if (wasActive) {
+          this.applyPriceRange('', '');
+        } else {
+          this.applyPriceRange(priceChip.dataset.priceGte, priceChip.dataset.priceLte);
+        }
+      }
+      // Value pills are <label> checkboxes — handled by bindFilterInputs() change events.
+    };
+    slider.addEventListener('click', this._sliderClickHandler);
+  }
+
+  openSliderCategory(slider, index) {
+    slider.querySelectorAll('[data-fs-cat]').forEach(btn => {
+      const active = btn.dataset.fsCat === index;
+      btn.classList.toggle('is-active', active);
+      btn.setAttribute('aria-selected', active ? 'true' : 'false');
+    });
+    slider.querySelectorAll('[data-fs-values]').forEach(panel => {
+      panel.hidden = panel.dataset.fsValues !== index;
+    });
+  }
+
+  // Reflect the applied price range onto the preset chips' active state.
+  // Normalize numerically so "200" (chip) matches "200.00" (money-formatted input).
+  syncPriceChips() {
+    const slider = this.section.querySelector('[data-filter-slider]');
+    if (!slider) return;
+    const norm = v => { const n = parseFloat(v); return isNaN(n) ? '' : String(n); };
+    const minInput = this.section.querySelector('[data-filter-price-min]');
+    const maxInput = this.section.querySelector('[data-filter-price-max]');
+    const curGte = norm(minInput?.value);
+    const curLte = norm(maxInput?.value);
+    slider.querySelectorAll('[data-fs-price]').forEach(chip => {
+      const match = norm(chip.dataset.priceGte) === curGte && norm(chip.dataset.priceLte) === curLte;
+      chip.classList.toggle('is-active', match);
+    });
+  }
+
+  // Single-select price preset: write into the canonical price inputs, then apply.
+  applyPriceRange(gte, lte) {
+    this.section.querySelectorAll('[data-filter-price-min]').forEach(i => { i.value = gte || ''; });
+    this.section.querySelectorAll('[data-filter-price-max]').forEach(i => { i.value = lte || ''; });
+    this.applyFilters();
   }
 
   // ========== FILTER DRAWER ==========
@@ -1065,15 +1139,21 @@ class CollectionFilters {
   }
 
   // ========== FILTER INPUTS (checkboxes, price) ==========
+  // Idempotent: a data-bound marker prevents double-binding when called after
+  // multiple partial re-renders (sidebar + mobile slider) in one pass.
   bindFilterInputs() {
     // Checkboxes - immediate AJAX
     this.section.querySelectorAll('[data-filter-checkbox]').forEach(checkbox => {
+      if (checkbox.dataset.bound) return;
+      checkbox.dataset.bound = 'true';
       checkbox.addEventListener('change', () => this.applyFilters());
     });
 
     // Price range - debounced
     const priceInputs = this.section.querySelectorAll('[data-filter-price-min], [data-filter-price-max]');
     priceInputs.forEach(input => {
+      if (input.dataset.bound) return;
+      input.dataset.bound = 'true';
       input.addEventListener('input', debounce(() => this.applyFilters(), 500));
     });
   }
@@ -1338,8 +1418,8 @@ class CollectionFilters {
       url.searchParams.set('sort_by', this.sortSelect.value);
     }
 
-    // Preserve other filters (price, etc.)
-    this.section.querySelectorAll('[data-filter-checkbox]:checked').forEach(checkbox => {
+    // Preserve other filters (price, etc.) — scoped to the visible UI
+    this.getFilterScope().querySelectorAll('[data-filter-checkbox]:checked').forEach(checkbox => {
       if (!checkbox.name.includes('filter.v.tag')) {
         url.searchParams.append(checkbox.name, checkbox.value);
       }
@@ -1365,13 +1445,12 @@ class CollectionFilters {
       if (minInput) minInput.value = '';
       if (maxInput) maxInput.value = '';
     } else {
-      // Find and uncheck the corresponding checkbox
-      const checkbox = this.section.querySelector(
+      // Uncheck every matching copy (mobile slider + desktop sidebar)
+      this.section.querySelectorAll(
         `[data-filter-checkbox][name="${paramName}"][value="${value}"]`
-      );
-      if (checkbox) {
+      ).forEach(checkbox => {
         checkbox.checked = false;
-      }
+      });
     }
 
     this.applyFilters();
@@ -1410,8 +1489,9 @@ class CollectionFilters {
     keysToDelete.forEach(key => url.searchParams.delete(key));
     url.searchParams.delete('q');
 
-    // Add checked filters
-    this.section.querySelectorAll('[data-filter-checkbox]:checked').forEach(checkbox => {
+    // Add checked filters (scoped to the visible UI so the hidden sidebar and
+    // mobile slider never double-count the same value)
+    this.getFilterScope().querySelectorAll('[data-filter-checkbox]:checked').forEach(checkbox => {
       url.searchParams.append(checkbox.name, checkbox.value);
     });
 
@@ -1514,6 +1594,19 @@ class CollectionFilters {
       this.bindFilterGroups();
     }
 
+    // Update mobile filter slider (counts/active states), preserving open category
+    const newSlider = doc.querySelector('[data-filter-slider]');
+    const currentSlider = this.section.querySelector('[data-filter-slider]');
+    if (newSlider && currentSlider) {
+      const openCat = currentSlider.querySelector('[data-fs-cat].is-active')?.dataset.fsCat;
+      currentSlider.innerHTML = newSlider.innerHTML;
+      const refreshed = this.section.querySelector('[data-filter-slider]');
+      if (openCat != null && refreshed) this.openSliderCategory(refreshed, openCat);
+      this.bindFilterInputs();
+      this.bindFilterSlider();
+      this.syncPriceChips();
+    }
+
     // Update results count
     const newResultsCount = doc.querySelector('[data-search-results-count]');
     if (newResultsCount && this.resultsCount) {
@@ -1569,7 +1662,7 @@ class CollectionFilters {
   }
 
   updateFilterCount() {
-    const checkedCount = this.section.querySelectorAll('[data-filter-checkbox]:checked').length;
+    const checkedCount = this.getFilterScope().querySelectorAll('[data-filter-checkbox]:checked').length;
     const minPrice = this.section.querySelector('[data-filter-price-min]');
     const maxPrice = this.section.querySelector('[data-filter-price-max]');
     const priceCount = (minPrice?.value || maxPrice?.value) ? 1 : 0;

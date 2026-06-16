@@ -66,6 +66,16 @@
   }
 }
 
+/* On mobile the two-tier filter slider replaces the drawer + toggle button */
+@media screen and (max-width: 989px) {
+  .collection-toolbar__filter-toggle {
+    display: none;
+  }
+  .collection-filters {
+    display: none;
+  }
+}
+
 /* Animation for filter updates */
 @keyframes filter-update {
   0% {
@@ -91,20 +101,23 @@
 
 /* Responsive adjustments */
 @media screen and (max-width: 749px) {
+  /* Keep search + sort (Características) on one line */
   .collection-toolbar__inner {
-    flex-wrap: wrap;
+    flex-wrap: nowrap;
     gap: 0.75rem;
+    align-items: center;
   }
 
   .collection-toolbar__search-wrapper {
-    flex: 1 1 100%;
+    flex: 1 1 auto;
+    min-width: 0;
     order: 1;
   }
 
   .collection-toolbar__right {
-    flex: 1 1 auto;
+    flex: 0 0 auto;
     order: 2;
-    justify-content: flex-start;
+    justify-content: flex-end;
   }
 
   .collection-toolbar__filter-toggle {

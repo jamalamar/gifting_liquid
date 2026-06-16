@@ -1,0 +1,156 @@
+{%- comment -%}
+  Mobile-only two-tier horizontal filter slider.
+  Tier 1: horizontal slider of filter categories.
+  Tier 2: horizontal slider of the selected category's values.
+  Hidden on desktop (>=990px) via CSS; the sticky sidebar handles desktop.
+  Reuses the same data-filter-checkbox inputs as collection-filters.liquid so
+  the existing CollectionFilters AJAX engine drives filtering unchanged.
+  Usage: {% render 'collection-filter-slider', collection: collection %}
+{%- endcomment -%}
+
+{%- comment -%} Determine which category opens by default: first with active values, else first. {%- endcomment -%}
+{%- assign default_open = 0 -%}
+{%- for filter in collection.filters -%}
+  {%- assign f_active = filter.active_values.size -%}
+  {%- if filter.type == 'price_range' and filter.min_value.value != nil or filter.max_value.value != nil -%}
+    {%- assign f_active = 1 -%}
+  {%- endif -%}
+  {%- if f_active > 0 -%}
+    {%- assign default_open = forloop.index0 -%}
+    {%- break -%}
+  {%- endif -%}
+{%- endfor -%}
+
+<div class="filter-slider" data-filter-slider>
+  <p class="filter-slider__hint">Desliza para ver los filtros</p>
+
+  {%- comment -%} Tier 1: category chips {%- endcomment -%}
+  <div class="filter-slider__categories" data-fs-categories role="tablist">
+    {%- for filter in collection.filters -%}
+      {%- assign active_count = filter.active_values.size -%}
+      {%- if filter.type == 'price_range' and filter.min_value.value != nil or filter.max_value.value != nil -%}
+        {%- assign active_count = 1 -%}
+      {%- endif -%}
+
+      {%- assign cat_label = filter.label -%}
+      {%- if filter.param_name == 'filter.p.vendor' -%}
+        {%- assign cat_label = 'Marcas Gifting' -%}
+      {%- elsif filter.param_name == 'filter.p.product_type' -%}
+        {%- assign cat_label = 'Categoria' -%}
+      {%- endif -%}
+
+      <button
+        type="button"
+        class="filter-slider__cat{% if forloop.index0 == default_open %} is-active{% endif %}"
+        data-fs-cat="{{ forloop.index0 }}"
+        role="tab"
+        aria-selected="{% if forloop.index0 == default_open %}true{% else %}false{% endif %}"
+      >
+        <span class="filter-slider__cat-label">{{ cat_label }}</span>
+        {%- if active_count > 0 -%}
+          <span class="filter-slider__cat-badge collage-badge">{{ active_count }}</span>
+        {%- endif -%}
+      </button>
+    {%- endfor -%}
+  </div>
+
+  {%- comment -%} Tier 2: one values track per category, only the active one shown {%- endcomment -%}
+  {%- for filter in collection.filters -%}
+    <div
+      class="filter-slider__values"
+      data-fs-values="{{ forloop.index0 }}"
+      role="tabpanel"
+      {% unless forloop.index0 == default_open %}hidden{% endunless %}
+    >
+      {%- case filter.type -%}
+        {%- when 'list' -%}
+          {%- assign is_vendor_filter = false -%}
+          {%- if filter.param_name == 'filter.p.vendor' -%}
+            {%- assign is_vendor_filter = true -%}
+          {%- endif -%}
+
+          {%- for value in filter.values -%}
+            {%- assign label_lower = value.label | downcase -%}
+            {%- assign icon_name = 'gift' -%}
+
+            {%- if is_vendor_filter -%}
+              {%- assign icon_name = 'package' -%}
+            {%- elsif label_lower contains 'ella' or label_lower contains 'novia' or label_lower contains 'madre' or label_lower contains 'mamá' or label_lower contains 'mama' -%}
+              {%- assign icon_name = 'heart' -%}
+            {%- elsif label_lower contains 'él' or label_lower contains 'el ' or label_lower contains 'papá' or label_lower contains 'papa' or label_lower contains 'padre' or label_lower contains 'hermano' or label_lower contains 'amigo' -%}
+              {%- assign icon_name = 'star' -%}
+            {%- elsif label_lower contains 'cumple' or label_lower contains 'birthday' -%}
+              {%- assign icon_name = 'gift-box' -%}
+            {%- elsif label_lower contains 'valentin' or label_lower contains 'amor' or label_lower contains 'aniversario' -%}
+              {%- assign icon_name = 'heart' -%}
+            {%- elsif label_lower contains 'navidad' or label_lower contains 'christmas' -%}
+              {%- assign icon_name = 'sparkle' -%}
+            {%- elsif label_lower contains 'boda' or label_lower contains 'wedding' -%}
+              {%- assign icon_name = 'bow' -%}
+            {%- elsif label_lower contains 'baby' or label_lower contains 'bebé' or label_lower contains 'bebe' -%}
+              {%- assign icon_name = 'heart' -%}
+            {%- elsif label_lower contains 'gradua' -%}
+              {%- assign icon_name = 'star' -%}
+            {%- elsif label_lower contains 'porque' or label_lower contains 'just because' -%}
+              {%- assign icon_name = 'sparkle' -%}
+            {%- elsif label_lower contains 'todos' or label_lower contains 'unisex' -%}
+              {%- assign icon_name = 'users' -%}
+            {%- elsif label_lower contains 'comida' or label_lower contains 'gourmet' or label_lower contains 'food' or label_lower contains 'chocolate' -%}
+              {%- assign icon_name = 'gift' -%}
+            {%- elsif label_lower contains 'relax' or label_lower contains 'spa' or label_lower contains 'bienestar' or label_lower contains 'wellness' -%}
+              {%- assign icon_name = 'sparkle' -%}
+            {%- elsif label_lower contains 'corporat' or label_lower contains 'empresa' or label_lower contains 'oficina' -%}
+              {%- assign icon_name = 'package' -%}
+            {%- elsif label_lower contains 'mascota' or label_lower contains 'pet' -%}
+              {%- assign icon_name = 'heart' -%}
+            {%- endif -%}
+
+            <label
+              class="filter-pill filter-slider__pill{% if value.active %} is-active{% endif %}{% if value.count == 0 and value.active == false %} is-disabled{% endif %}"
+              role="listitem"
+              data-label="{{ value.label | escape }}"
+            >
+              <input
+                type="checkbox"
+                name="{{ value.param_name }}"
+                value="{{ value.value }}"
+                {% if value.active %}checked{% endif %}
+                {% if value.count == 0 and value.active == false %}disabled{% endif %}
+                data-filter-checkbox
+                class="filter-pill__input visually-hidden"
+              >
+              <span class="filter-pill__icon">
+                {%- case icon_name -%}
+                  {%- when 'heart' -%}{% render 'icon-heart' %}
+                  {%- when 'star' -%}{% render 'icon-star' %}
+                  {%- when 'gift-box' -%}{% render 'icon-gift-box' %}
+                  {%- when 'sparkle' -%}{% render 'icon-sparkle' %}
+                  {%- when 'bow' -%}{% render 'icon-bow' %}
+                  {%- when 'users' -%}{% render 'icon-users' %}
+                  {%- when 'package' -%}{% render 'icon-package' %}
+                  {%- else -%}{% render 'icon-gift' %}
+                {%- endcase -%}
+              </span>
+              <span class="filter-pill__label">{{ value.label }}</span>
+              <span class="filter-pill__count">{{ value.count }}</span>
+            </label>
+          {%- endfor -%}
+
+        {%- when 'price_range' -%}
+          {%- comment -%} Preset price chips (single-select). Bounds are MXN major units; JS sets active state. {%- endcomment -%}
+          <button type="button" class="filter-pill filter-slider__pill filter-slider__price" data-fs-price data-price-gte="" data-price-lte="200">
+            <span class="filter-pill__label">Menos de $200</span>
+          </button>
+          <button type="button" class="filter-pill filter-slider__pill filter-slider__price" data-fs-price data-price-gte="200" data-price-lte="500">
+            <span class="filter-pill__label">$200 – $500</span>
+          </button>
+          <button type="button" class="filter-pill filter-slider__pill filter-slider__price" data-fs-price data-price-gte="500" data-price-lte="1000">
+            <span class="filter-pill__label">$500 – $1,000</span>
+          </button>
+          <button type="button" class="filter-pill filter-slider__pill filter-slider__price" data-fs-price data-price-gte="1000" data-price-lte="">
+            <span class="filter-pill__label">Más de $1,000</span>
+          </button>
+      {%- endcase -%}
+    </div>
+  {%- endfor -%}
+</div>
